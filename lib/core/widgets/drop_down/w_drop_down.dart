@@ -79,7 +79,7 @@ class _DropdownStatefulWrapperState<T>
   @override
   void didUpdateWidget(covariant _DropdownStatefulWrapper<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // 👇 If external value changed, sync it with form field
+    // 👇 If external value changed, sync it with form field state
     if (widget.selectedValue != oldWidget.selectedValue &&
         widget.selectedValue != widget.state.value) {
       WidgetsBinding.instance.addPostFrameCallback((_) {

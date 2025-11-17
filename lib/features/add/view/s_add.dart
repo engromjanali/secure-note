@@ -63,6 +63,7 @@ class _SAddTaskState extends State<SAddTask> with RouteAware {
   }
 
   void startTimer() {
+    if (_timer?.isActive ?? false) return;
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (mounted) {
         // setState(() {});

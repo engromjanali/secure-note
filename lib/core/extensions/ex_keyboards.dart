@@ -18,8 +18,12 @@ extension KeyboardExtension on BuildContext {
   }
 
   /// Unfocuses [unfocusNode] and requests focus on [nextFocusNode]
-  void switchFocus({required FocusNode unfocusNode, required FocusNode nextFocusNode}) {
-    unfocusNode.unfocus();
+  void switchFocus({
+    // required FocusNode unfocusNode,
+    required FocusNode nextFocusNode,
+  }) {
+    // unfocusNode.unfocus();
+    this.unFocus();
     FocusScope.of(this).requestFocus(nextFocusNode);
   }
 }

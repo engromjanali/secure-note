@@ -31,7 +31,7 @@ class WBottomNavButton extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(PTheme.borderRadius),
           color: isEnabled
-              ? context.primaryTextColor
+              ? context.button?.primary
               : context.secondaryTextColor,
         ),
         alignment: Alignment.center,

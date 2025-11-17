@@ -54,6 +54,8 @@ class PColors {
   static const secondaryTextColorDark = Color(0XFFFFFFFF);
   static const additionalTextColorLight = Colors.green;
   static const additionalTextColorDark = Colors.green;
+  static const hintTextColorLight = Color(0xFFAAAAAA);
+  static const hintTextColorDark = Color(0xFFAAAAAA);
 
   // image filter color
   static Gradient imageFG = LinearGradient(

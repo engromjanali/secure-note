@@ -87,6 +87,19 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+  fonts:
+    - family: Custom
+      fonts:
+        - asset: assets/fonts/SF-Compact-Rounded-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/SF-Compact-Rounded-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/SF-Compact-Rounded-Ultralight.ttf
+          weight: 300
+
+
+
+
   assets:
     - assets/images/
     - assets/images/good/

@@ -3,7 +3,7 @@ import 'package:daily_info/features/note/view/s_note.dart';
 import 'package:daily_info/features/profile/view/s_profile.dart';
 import 'package:daily_info/features/profile/view/s_profile.dart';
 import 'package:daily_info/features/stopwatch/view/s_stopwatch.dart';
-import 'package:daily_info/features/task/s_task.dart';
+import 'package:daily_info/features/task/view/s_task.dart';
 import 'package:daily_info/gen/assets.gen.dart';
 import 'm_nav_bar_item.dart';
 

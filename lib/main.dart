@@ -25,7 +25,7 @@ void main() async {
   await SharedPrefService.instance.init();
   runApp(
     // DevicePreview(enabled: !kReleaseMode, builder: (context) => _SCheckPoint()),
-    DevicePreview(enabled: false, builder: (context) => _SCheckPoint()),
+    DevicePreview(enabled: true, builder: (context) => _SCheckPoint()),
   );
   // runApp(const _SCheckPoint());
 }

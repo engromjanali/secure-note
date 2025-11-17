@@ -5,7 +5,7 @@ import 'package:daily_info/core/functions/f_url_launcher.dart';
 import 'package:daily_info/core/services/navigation_service.dart';
 import 'package:daily_info/core/widgets/w_dialog.dart';
 import 'package:daily_info/features/profile/view/s_faq.dart';
-import 'package:daily_info/features/profile/view/s_secondary_auth.dart';
+import 'package:daily_info/features/profile/view/secret/view/s_secondary_auth.dart';
 import 'package:daily_info/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

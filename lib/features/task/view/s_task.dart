@@ -171,7 +171,6 @@ class WTimerTaskSectionSlivers extends StatefulWidget {
   State<WTimerTaskSectionSlivers> createState() =>
       _WTimerTaskSectionSliversState();
 }
-
 class _WTimerTaskSectionSliversState extends State<WTimerTaskSectionSlivers>
     with RouteAware {
   PageRoute<dynamic>? _currentRoute;

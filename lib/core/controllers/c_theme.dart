@@ -121,7 +121,7 @@ class CTheme extends CBase {
       filled: true,
       fillColor: PColors.fillColorLight,
       hintStyle: TextStyle(
-        color: PColors.secondaryTextColorLight,
+        color: PColors.hintTextColorLight,
         fontSize: 15.sp,
         fontWeight: FontWeight.w400,
       ),
@@ -283,7 +283,7 @@ class CTheme extends CBase {
       filled: true,
       fillColor: PColors.fillColorDark,
       hintStyle: TextStyle(
-        color: PColors.secondaryTextColorDark,
+        color: PColors.hintTextColorDark,
         fontSize: 15.sp,
         fontWeight: FontWeight.w400,
       ),

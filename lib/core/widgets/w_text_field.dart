@@ -36,6 +36,7 @@ class WTextField extends StatefulWidget {
   final FocusNode? focusNode;
   final TextInputAction? textInputAction;
   final int? maxLines;
+  final int? minLines;
   final bool? expands;
   final AutovalidateMode? autovalidateMode;
   const WTextField({
@@ -55,6 +56,7 @@ class WTextField extends StatefulWidget {
     this.initialText,
     this.focusNode,
     this.maxLines = 1,
+    this.minLines,
     this.textInputAction = TextInputAction.next,
     this.expands,
     this.autovalidateMode,
@@ -79,6 +81,7 @@ class WTextField extends StatefulWidget {
     this.focusNode,
     this.isRequired = true,
     this.maxLines = 1,
+    this.minLines,
     this.textInputAction = TextInputAction.next,
     this.expands,
     this.autovalidateMode,
@@ -100,6 +103,7 @@ class WTextField extends StatefulWidget {
     this.initialText,
     this.focusNode,
     this.maxLines = 1,
+    this.minLines,
     this.textInputAction = TextInputAction.next,
     this.expands,
     this.autovalidateMode,
@@ -190,6 +194,7 @@ class _WTextFieldState extends State<WTextField> {
       keyboardType: widget.keyboardType,
       focusNode: widget.focusNode,
       maxLines: widget.maxLines,
+      minLines: widget.minLines,
       autovalidateMode:
           widget.autovalidateMode ?? AutovalidateMode.onUserInteraction,
       textInputAction: widget.textInputAction,
