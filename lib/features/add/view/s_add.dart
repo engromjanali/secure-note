@@ -7,6 +7,7 @@ import 'package:daily_info/core/extensions/ex_expanded.dart';
 import 'package:daily_info/core/extensions/ex_keyboards.dart';
 import 'package:daily_info/core/extensions/ex_padding.dart';
 import 'package:daily_info/core/functions/f_is_null.dart';
+import 'package:daily_info/core/functions/f_pick_date_time.dart';
 import 'package:daily_info/core/functions/f_printer.dart';
 import 'package:daily_info/core/services/navigation_service.dart';
 import 'package:daily_info/core/widgets/w_button.dart';
@@ -16,16 +17,18 @@ import 'package:daily_info/core/widgets/w_dialog.dart';
 import 'package:daily_info/core/widgets/w_text_field.dart';
 import 'package:daily_info/features/add/widgets/w_select_duration.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SAddTask extends StatefulWidget {
-  const SAddTask({super.key});
+class SAdd extends StatefulWidget {
+  final bool onlyNote;
+  final bool isEditPage;
+
+  const SAdd({super.key, this.onlyNote = false, this.isEditPage = false});
 
   @override
-  State<SAddTask> createState() => _SAddTaskState();
+  State<SAdd> createState() => _SAddState();
 }
 
-class _SAddTaskState extends State<SAddTask> with RouteAware {
+class _SAddState extends State<SAdd> with RouteAware {
   PageRoute<dynamic>? _currentRoute;
   Timer? _timer;
   bool depandOnTime = true;
@@ -36,29 +39,24 @@ class _SAddTaskState extends State<SAddTask> with RouteAware {
   ValueNotifier<Duration?> targetedDurationListener = ValueNotifier<Duration?>(
     null,
   );
-  // ValueNotifier<bool> isTaskListener = ValueNotifier<bool>(false);
+  ValueNotifier<bool> isTaskListener = ValueNotifier<bool>(false);
   int selectedButton = 0;
-  bool isTask = true;
   DateTime currentDateTime = DateTime.now();
   late DateTime startDateTime = currentDateTime;
   late DateTime endDateTime = currentDateTime;
   TextEditingController titleController = TextEditingController();
   TextEditingController detailsController = TextEditingController();
+  TextEditingController pointTController = TextEditingController();
   final double spacing = 20;
-  Future<DateTime?> getPickedDateTime({
-    required BuildContext buildContext,
-    DateTime? initialDateTime,
-  }) async {
-    DateTime? date = await _getPickedDate(context, initialDateTime);
-    if (date == null) return null;
-    TimeOfDay? timeOfDay = await _getPickedTime(context, initialDateTime);
-    if (timeOfDay == null) return null;
-    return date.add(Duration(hours: timeOfDay.hour, minutes: timeOfDay.minute));
-  }
 
   @override
   void initState() {
     super.initState();
+    isTaskListener.value = widget.onlyNote
+        ? false
+        : widget.isEditPage
+        ? true // set here given value from parent.
+        : false;
     startTimer();
   }
 
@@ -121,41 +119,22 @@ class _SAddTaskState extends State<SAddTask> with RouteAware {
     super.dispose();
   }
 
-  Future<DateTime?> _getPickedDate(
-    BuildContext context,
-    DateTime? initialDateTime,
-  ) async {
-    DateTime? date = await showDatePicker(
-      context: context,
-      firstDate: DateTime.now(),
-      lastDate: DateTime(3000),
-      initialDate: initialDateTime ?? DateTime.now(),
-      initialEntryMode: DatePickerEntryMode.calendar,
-    );
-    return date;
-  }
-
   Future<void> submit() async {
     context.unFocus();
     fromKey.currentState?.validate();
   }
 
-  Future<TimeOfDay?> _getPickedTime(
-    BuildContext context,
-    DateTime? dateTime,
-  ) async {
-    TimeOfDay? timeOfDay = await showTimePicker(
-      context: context,
-      initialEntryMode: TimePickerEntryMode.dial,
-      initialTime: TimeOfDay.fromDateTime(dateTime ?? DateTime.now()),
-    );
-    return timeOfDay;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(isTask ? "Add Task" : "Add Note")),
+      appBar: AppBar(
+        title: ValueListenableBuilder(
+          valueListenable: isTaskListener,
+          builder: (context, isTask, child) {
+            return Text(isTask ? "Add Task" : "Add Note");
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(
@@ -166,98 +145,113 @@ class _SAddTaskState extends State<SAddTask> with RouteAware {
                 child: Column(
                   spacing: spacing,
                   children: [
-                    WTextField(label: "Title", controller: titleController),
-                    SizedBox(
-                      height: 400.h,
-                      child: Column(
-                        children: [
-                          WTextField.requiredField(
-                            label: "Details",
-                            controller: detailsController,
-                            maxLines: null,
-                            validator: (value) {
-                              if (value?.trim().isEmpty ?? true) {
-                                return "Invalid Details";
-                              }
-                              return null;
-                            },
-                            textInputAction: TextInputAction.newline,
-                            expands: true,
+                    WTextField(label: "Points", controller: titleController),
+                    WTextField(
+                      label: "Points",
+                      hintText: "Points-1\nPoints-2",
+                      controller: pointTController,
+                      minLines: 1,
+                      maxLines: 6,
+                    ),
+                    Column(
+                      children: [
+                        WTextField.requiredField(
+                          label: "Details",
+                          controller: detailsController,
+                          maxLines: 14,
+                          minLines: 4,
+                          validator: (value) {
+                            if (value?.trim().isEmpty ?? true) {
+                              return "Invalid Details";
+                            }
+                            return null;
+                          },
+                          textInputAction: TextInputAction.newline,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              ValueListenableBuilder(
+                valueListenable: isTaskListener,
+                builder: (context, isTask, child) {
+                  return Column(
+                    children: [
+                      // switch
+                      WCard(
+                        child: SwitchListTile.adaptive(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                          title: Text(
+                            "Add As Task",
+                            style: context.textTheme?.labelMedium,
                           ),
-                        ],
+                          value: isTask,
+                          onChanged: (value) {
+                            // puse action if edit page or only note
+                            if (widget.onlyNote || widget.isEditPage) return;
+                            isTaskListener.value = value;
+                          },
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              // switch
-              WCard(
-                child: SwitchListTile.adaptive(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 5),
-                  title: Text(
-                    "Add As Task",
-                    style: context.textTheme?.labelMedium,
-                  ),
-                  value: isTask,
-                  onChanged: (value) {
-                    isTask = value;
-                    setState(() {});
-                  },
-                ),
-              ),
-              // date time
-              if (isTask)
-                Column(
-                  children: [
-                    // time
-                    ValueListenableBuilder(
-                      valueListenable: targetdDateTimeListener,
-                      builder: (context, value, child) {
-                        printer(value);
-                        return Column(
+                      // date time
+                      if (isTaskListener.value)
+                        Column(
                           children: [
-                            WDate(
-                              isDepamdedWidget: depandOnTime,
-                              dateTime: value,
-                              onTap: () async {
-                                targetdDateTimeListener.value =
-                                    await getPickedDateTime(
-                                      buildContext: context,
-                                    );
-                                depandOnTime = true;
+                            // time
+                            ValueListenableBuilder(
+                              valueListenable: targetdDateTimeListener,
+                              builder: (context, value, child) {
+                                printer(value);
+                                return Column(
+                                  children: [
+                                    WDate(
+                                      isDepamdedWidget: depandOnTime,
+                                      dateTime: value,
+                                      onTap: () async {
+                                        targetdDateTimeListener.value =
+                                            await pickeDateTime(
+                                              context: context,
+                                            );
+                                        depandOnTime = true;
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            ).pB(),
+                            // duration
+                            ValueListenableBuilder(
+                              valueListenable: targetedDurationListener,
+                              builder: (context, value, child) {
+                                printer(value);
+                                return Column(
+                                  children: [
+                                    WDate(
+                                      duration: value,
+                                      isDuration: true,
+                                      isDepamdedWidget: !depandOnTime,
+                                      dateTime: targetdDateTimeListener.value,
+                                      onTap: () async {
+                                        targetedDurationListener.value =
+                                            await WDialog.showCustom(
+                                              children: [WSDuration()],
+                                              context: context,
+                                            );
+                                        depandOnTime = false;
+                                      },
+                                    ),
+                                  ],
+                                );
                               },
                             ),
                           ],
-                        );
-                      },
-                    ).pB(),
-                    // duration
-                    ValueListenableBuilder(
-                      valueListenable: targetedDurationListener,
-                      builder: (context, value, child) {
-                        printer(value);
-                        return Column(
-                          children: [
-                            WDate(
-                              duration: value,
-                              isDuration: true,
-                              isDepamdedWidget: !depandOnTime,
-                              dateTime: targetdDateTimeListener.value,
-                              onTap: () async {
-                                targetedDurationListener.value =
-                                    await WDialog.showCustom(
-                                      children: [WSDuration()],
-                                      context: context,
-                                    );
-                                depandOnTime = false;
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                        ),
+                    ],
+                  );
+                },
+              ),
+
               WPrimaryButton(text: "Submit", onTap: submit),
             ],
           ).pAll(),

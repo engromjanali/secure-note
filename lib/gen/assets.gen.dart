@@ -46,6 +46,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/after_before.svg
   String get afterBefore => 'assets/icons/after_before.svg';
 
+  /// File path: assets/icons/clear.svg
+  String get clear => 'assets/icons/clear.svg';
+
   /// File path: assets/icons/close-2.png
   AssetGenImage get close2 => const AssetGenImage('assets/icons/close-2.png');
 
@@ -82,11 +85,15 @@ class $AssetsIconsGen {
   /// File path: assets/icons/trams_of_use.svg
   String get tramsOfUse => 'assets/icons/trams_of_use.svg';
 
+  /// File path: assets/icons/vault.svg
+  String get vault => 'assets/icons/vault.svg';
+
   /// List of all assets
   List<dynamic> get values => [
     explore,
     tiktok,
     afterBefore,
+    clear,
     close2,
     close,
     dashicons,
@@ -99,6 +106,7 @@ class $AssetsIconsGen {
     rating,
     restorePurchase,
     tramsOfUse,
+    vault,
   ];
 }
 

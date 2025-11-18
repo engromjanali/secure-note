@@ -25,7 +25,7 @@ List<MNavBarItem> homeNevItem = [
     title: "Add",
     unSelectedIcon: Assets.icons.profile,
     icon: Assets.icons.faq,
-    child: SAddTask(),
+    child: SAdd(),
   ),
   MNavBarItem(
     title: "Note",

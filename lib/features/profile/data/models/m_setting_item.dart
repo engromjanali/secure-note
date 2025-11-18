@@ -25,7 +25,7 @@ class MSItem {
 
 List<MSItem> profileItem = [
   MSItem(
-    icon: Assets.icons.insta.path,
+    icon: Assets.icons.clear,
     label: "Clear All History",
     onTap: () {
       WDialog.show(
@@ -39,7 +39,7 @@ List<MSItem> profileItem = [
     },
   ),
   MSItem(
-    icon: Assets.icons.tiktok.path,
+    icon: Assets.icons.vault,
     label: "Secret Vault",
     onTap: () {
       SSAuth().push();

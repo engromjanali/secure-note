@@ -75,10 +75,7 @@ class _SProfileState extends State<SProfile> {
             ),
 
             // version label
-            Text(
-              "Version 2.9.1",
-              style: context.textTheme?.bodyMedium,
-            ),
+            Text("Version 2.9.1", style: context.textTheme?.bodyMedium),
           ],
         ).pAll(),
       ),
@@ -201,25 +198,22 @@ class _WSItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isPng = iconData.endsWith(".png");
     return Column(
       children: [
         GestureDetector(
           onTap: onTap,
           child: Row(
             children: [
-              isPng
-                  ? Image.asset(iconData, height: 20.w, width: 20.w)
-                  : SvgPicture.asset(
-                      iconData,
-                      colorFilter: ColorFilter.mode(
-                        context.primaryTextColor ?? Colors.grey,
-                        BlendMode.srcIn,
-                      ),
-                      errorBuilder: (context, error, stackTrace) =>
-                          Image.asset(Assets.images.x.path),
-                      height: 20.w,
-                    ),
+              SvgPicture.asset(
+                iconData,
+                colorFilter: ColorFilter.mode(
+                  context.primaryTextColor ?? Colors.grey,
+                  BlendMode.srcIn,
+                ),
+                errorBuilder: (context, error, stackTrace) =>
+                    Image.asset(Assets.images.x.path),
+                height: 20.w,
+              ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),

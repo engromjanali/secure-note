@@ -10,13 +10,14 @@ import 'package:daily_info/core/widgets/w_card.dart';
 import 'package:daily_info/core/widgets/w_text_field.dart';
 import 'package:flutter/material.dart';
 
-class SSecreteNote extends StatelessWidget {
+class SASNote extends StatelessWidget {
+  final bool viewOnly;
   GlobalKey<FormState> fromKey = GlobalKey();
   ValueNotifier<List<String>> backupCodeListeners = ValueNotifier([]);
   final TextEditingController titleController = TextEditingController();
   final TextEditingController passController = TextEditingController();
   final TextEditingController backupController = TextEditingController();
-  SSecreteNote({super.key});
+  SASNote({super.key, this.viewOnly = false});
 
   @override
   Widget build(BuildContext context) {
@@ -30,21 +31,25 @@ class SSecreteNote extends StatelessWidget {
               spacing: PTheme.paddingY,
               children: [
                 WTextField.requiredField(
+                  enable: !viewOnly,
                   label: "Title",
                   controller: titleController,
                 ),
-                WTextField(label: "Password", controller: passController),
-                BackupCodeWapper("Backup Codes", context, backupCodeListeners),
                 WTextField(
-                  label: "Backup Code",
-                  hintText: "xxxxxxx xxxxxx xxxxxx\nxxxxxxx xxxxxx",
-                  minLines: 2,
-                  maxLines: 5,
-                  controller: backupController,
-
-                  suffixIcon: Container(
-                    // color: Colors.amber,
-                    child: Column(
+                  enable: !viewOnly,
+                  label: "Password",
+                  controller: passController,
+                ),
+                BackupCodeWapper("Backup Codes", context, backupCodeListeners),
+                if (!viewOnly)
+                  WTextField(
+                    enable: !viewOnly,
+                    label: "Backup Code",
+                    hintText: "xxxxxxx xxxxxx xxxxxx\nxxxxxxx xxxxxx",
+                    minLines: 2,
+                    maxLines: 5,
+                    controller: backupController,
+                    suffixIcon: Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,15 +74,15 @@ class SSecreteNote extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
                 WTextField(
+                  enable: !viewOnly,
                   label: "Note",
                   // controller: backupController,
                   maxLines: 6,
                   minLines: 1,
                 ),
                 gapY(50),
-                WBottomNavButton(label: "Submit", ontap: submit),
+                if (!viewOnly) WBottomNavButton(label: "Submit", ontap: submit),
               ],
             ).pAll(),
           ),

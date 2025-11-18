@@ -8,7 +8,8 @@ import 'package:daily_info/core/services/navigation_service.dart';
 import 'package:daily_info/core/widgets/image/m_image_payload.dart';
 import 'package:daily_info/core/widgets/image/w_image.dart';
 import 'package:daily_info/core/widgets/w_bottom_nav_button.dart';
-import 'package:daily_info/features/profile/view/secret/view/s_add_social_note.dart';
+import 'package:daily_info/features/profile/view/secret/view/s_add_sencitive_note.dart';
+import 'package:daily_info/features/profile/view/secret/view/s_serets.dart';
 import 'package:daily_info/features/profile/view/secret/widgets/w_opt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,6 +31,7 @@ class _SSAuthState extends State<SSAuth> {
   Widget build(BuildContext context) {
     (int, int) enabledPairOTP = getEnabledOTPBox();
     return Scaffold(
+      appBar: AppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -107,7 +109,7 @@ class _SSAuthState extends State<SSAuth> {
   void submit() {
     if (fromKey.currentState?.validate() ?? false) {
       showSnackBar("valided \$${controller1.text} \$${controller2.text}");
-      SSecreteNote().push();
+      SSerets().push();
     } else {
       showSnackBar(
         snackBarType: SnackBarType.warning,

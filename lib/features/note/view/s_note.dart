@@ -3,8 +3,10 @@ import 'package:daily_info/core/extensions/ex_build_context.dart';
 import 'package:daily_info/core/extensions/ex_expanded.dart';
 import 'package:daily_info/core/extensions/ex_padding.dart';
 import 'package:daily_info/core/functions/f_printer.dart';
+import 'package:daily_info/core/services/navigation_service.dart';
 import 'package:daily_info/core/widgets/w_card.dart';
 import 'package:daily_info/core/widgets/w_listtile.dart';
+import 'package:daily_info/features/note/view/s_view_note.dart';
 import 'package:flutter/material.dart';
 
 class SNote extends StatefulWidget {
@@ -28,7 +30,9 @@ class _SNoteState extends State<SNote> {
             fillColor: context.theme.brightness == Brightness.light
                 ? PColors.secondaryFillColorLight
                 : PColors.secondaryFillColorDark,
-            onTap: () {},
+            onTap: () {
+              SViewNote().push();
+            },
             index: index,
           );
         },

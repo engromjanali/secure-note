@@ -24,7 +24,6 @@ class _SHomeState extends State<SHome> {
     // TODO: implement initState
     super.initState();
     currentIndex.value = widget.selectedPage;
-    
   }
 
   @override
@@ -59,7 +58,7 @@ class _SHomeState extends State<SHome> {
               currentIndex: value,
               onChanged: (index) {
                 if (index == 2) {
-                  SAddTask().push();
+                  SAdd().push();
                   return;
                 }
                 currentIndex.value = index;

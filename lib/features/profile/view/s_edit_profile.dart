@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:daily_info/core/functions/f_printer.dart';
 import 'package:daily_info/core/services/image_picker_services.dart';
 import 'package:daily_info/core/widgets/w_bottom_nav_button.dart';
+import 'package:daily_info/core/widgets/w_image_source_dialog.dart';
 import '/core/extensions/ex_build_context.dart';
 import '/core/extensions/ex_keyboards.dart';
 import '/core/extensions/ex_padding.dart';
@@ -96,10 +97,15 @@ class _SEditProfileState extends State<SEditProfile> {
                       builder: (_, image, __) {
                         return InkWell(
                           onTap: () async {
-                            selectedImage.value =
-                                await SvImagePicker().pickSingleImage() ??
-                                selectedImage.value;
-                            payload.image = selectedImage.value.path;
+                            ImageSource? res = await WISSDialog(context);
+                            if (isNotNull(res)) {
+                              selectedImage.value =
+                                  await SvImagePicker().pickSingleImage(
+                                    choseFrom: res!,
+                                  ) ??
+                                  selectedImage.value;
+                              payload.image = selectedImage.value.path;
+                            }
                           },
                           child: isNull(image.path)
                               ? PowerBuilder<CProfile>(
@@ -153,8 +159,24 @@ class _SEditProfileState extends State<SEditProfile> {
                   },
                 ).pB(),
                 WTextField.obsecureText(
-                  isRequired: false,
+                  isRequired: true,
                   label: "Password",
+                  hintText: "Enter password",
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) return null;
+                    if (value.contains(" ")) return "Spaces not allowed!";
+                    if (value.trim().length < 6) {
+                      return "Use minimum of six letters!";
+                    }
+                    return null;
+                  },
+                  onChanged: (v) {
+                    payload.password = v;
+                  },
+                ).pB(value: 16),
+                WTextField.obsecureText(
+                  isRequired: false,
+                  label: "New Password",
                   hintText: "Enter password (ignore, if you don't want change)",
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) return null;

@@ -10,6 +10,8 @@ import 'package:daily_info/core/extensions/ex_padding.dart';
 import 'package:daily_info/core/functions/f_is_null.dart';
 import 'package:daily_info/core/services/navigation_service.dart';
 import 'package:daily_info/core/widgets/w_listtile.dart';
+import 'package:daily_info/features/note/view/s_view_note.dart';
+import 'package:daily_info/features/task/view/s_view_task.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -136,7 +138,9 @@ class WTaskSection extends StatelessWidget {
                   : "Time-Out";
               return WListTile(
                 leadingColor: leadingColor,
-                onTap: () {},
+                onTap: () {
+                  SViewNote().push();
+                },
                 index: index,
                 title:
                     "Mobile App Reacharch Application has Created By Md Romjan Ali",
@@ -171,6 +175,7 @@ class WTimerTaskSectionSlivers extends StatefulWidget {
   State<WTimerTaskSectionSlivers> createState() =>
       _WTimerTaskSectionSliversState();
 }
+
 class _WTimerTaskSectionSliversState extends State<WTimerTaskSectionSlivers>
     with RouteAware {
   PageRoute<dynamic>? _currentRoute;
