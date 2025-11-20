@@ -40,8 +40,8 @@ class $AssetsIconsGen {
   /// File path: assets/icons/Explore.svg
   String get explore => 'assets/icons/Explore.svg';
 
-  /// File path: assets/icons/Tiktok.png
-  AssetGenImage get tiktok => const AssetGenImage('assets/icons/Tiktok.png');
+  /// File path: assets/icons/add.svg
+  String get add => 'assets/icons/add.svg';
 
   /// File path: assets/icons/after_before.svg
   String get afterBefore => 'assets/icons/after_before.svg';
@@ -64,8 +64,8 @@ class $AssetsIconsGen {
   /// File path: assets/icons/feedback.svg
   String get feedback => 'assets/icons/feedback.svg';
 
-  /// File path: assets/icons/insta.png
-  AssetGenImage get insta => const AssetGenImage('assets/icons/insta.png');
+  /// File path: assets/icons/notebook.svg
+  String get notebook => 'assets/icons/notebook.svg';
 
   /// File path: assets/icons/oneshot.svg
   String get oneshot => 'assets/icons/oneshot.svg';
@@ -82,6 +82,12 @@ class $AssetsIconsGen {
   /// File path: assets/icons/restore_purchase.svg
   String get restorePurchase => 'assets/icons/restore_purchase.svg';
 
+  /// File path: assets/icons/stopwatch.svg
+  String get stopwatch => 'assets/icons/stopwatch.svg';
+
+  /// File path: assets/icons/task-checklist.svg
+  String get taskChecklist => 'assets/icons/task-checklist.svg';
+
   /// File path: assets/icons/trams_of_use.svg
   String get tramsOfUse => 'assets/icons/trams_of_use.svg';
 
@@ -91,7 +97,7 @@ class $AssetsIconsGen {
   /// List of all assets
   List<dynamic> get values => [
     explore,
-    tiktok,
+    add,
     afterBefore,
     clear,
     close2,
@@ -99,12 +105,14 @@ class $AssetsIconsGen {
     dashicons,
     faq,
     feedback,
-    insta,
+    notebook,
     oneshot,
     privacyAndPolicy,
     profile,
     rating,
     restorePurchase,
+    stopwatch,
+    taskChecklist,
     tramsOfUse,
     vault,
   ];

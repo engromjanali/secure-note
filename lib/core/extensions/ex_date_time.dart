@@ -19,17 +19,18 @@ extension DateTimeFormattingExtension on DateTime {
   static const String formatDDMMMYYYY_I_HHMMA = 'dd MMM yyyy | hh:mm a';
 
   /// Format this DateTime to a string
-  String format(String pattern) => DateFormat(pattern).format(this);
+  String format(String pattern) => DateFormat(pattern).format(toLocal());
 
   /// Remaining duration from now to this date
   String get remainingFormatedDuration {
-    final now = DateTime.now();
+    final now = DateTime.now().toUtc();
     String hours = difference(now).inHours.toString().padLeft(2, '0');
 
     String minutes = (difference(now).inMinutes % 60).toString().padLeft(
       2,
       '0',
     );
+    String second = (difference(now).inSeconds % 60).toString().padLeft(2, '0');
     return '$hours Hours $minutes Minute $second Seconds';
   }
 
@@ -39,7 +40,7 @@ extension DateTimeFormattingExtension on DateTime {
 
 extension StringToDateTimeExtension on String {
   /// Parse a string to DateTime with a given format
-  DateTime toDateTime(String pattern) => DateFormat(pattern).parse(this);
+  DateTime toDateTime(String pattern) => DateFormat(pattern).parse(this).toUtc();
 }
 
 extension NowDateHelper on DateTime {

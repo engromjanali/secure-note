@@ -7,6 +7,7 @@ import 'package:daily_info/core/functions/f_is_null.dart';
 import 'package:daily_info/core/services/navigation_service.dart';
 import 'package:daily_info/core/widgets/w_dialog.dart';
 import 'package:daily_info/core/widgets/w_image_source_dialog.dart';
+import 'package:daily_info/core/widgets/w_task_section.dart';
 import 'package:daily_info/features/add/view/s_add.dart';
 import 'package:daily_info/features/profile/view/secret/view/s_add_sencitive_note.dart';
 import 'package:daily_info/features/profile/view/secret/widgets/w_select_note_type.dart';
@@ -70,13 +71,13 @@ class _SSeretsState extends State<SSerets> {
                 SliverToBoxAdapter(child: gapY(20)),
                 WTaskSection(
                   leadingColor: PColors.pendingColor,
-                  itemCount: 6,
+                  items: [],
                   title: 'Reguler Note',
                   taskState: TaskState.timeOut,
                 ),
                 WTaskSection(
                   leadingColor: PColors.completedColor,
-                  itemCount: 20,
+                  items: [],
                   title: 'Sencetive Note',
                   taskState: TaskState.completed,
                 ),

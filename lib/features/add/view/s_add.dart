@@ -16,13 +16,27 @@ import 'package:daily_info/core/widgets/w_container.dart';
 import 'package:daily_info/core/widgets/w_dialog.dart';
 import 'package:daily_info/core/widgets/w_text_field.dart';
 import 'package:daily_info/features/add/widgets/w_select_duration.dart';
+import 'package:daily_info/features/note/data/model/m_note.dart';
+import 'package:daily_info/features/task/controller/c_task.dart';
+import 'package:daily_info/features/task/data/datasource/demo_data.dart';
+import 'package:daily_info/features/task/data/model/m_task.dart';
+import 'package:daily_info/features/task/data/repository/task_repository_impl.dart';
 import 'package:flutter/material.dart';
+import 'package:power_state/power_state.dart';
 
 class SAdd extends StatefulWidget {
   final bool onlyNote;
   final bool isEditPage;
+  final MTask? mTask;
+  final MNote? mNote;
 
-  const SAdd({super.key, this.onlyNote = false, this.isEditPage = false});
+  const SAdd({
+    super.key,
+    this.onlyNote = false,
+    this.isEditPage = false,
+    this.mTask,
+    this.mNote,
+  });
 
   @override
   State<SAdd> createState() => _SAddState();
@@ -116,12 +130,51 @@ class _SAddState extends State<SAdd> with RouteAware {
     if (_currentRoute != null) {
       NavigationService.routeObserver.unsubscribe(this);
     }
+    PowerVault.delete<CTask>();
     super.dispose();
   }
 
   Future<void> submit() async {
     context.unFocus();
-    fromKey.currentState?.validate();
+    if (fromKey.currentState?.validate() ?? false) {
+      // normal datetime or DateTime.now() dose not contain utc it's only contain date and time.
+      // final now = DateTime.now().toUtc();// way 1
+      final now = DateTime.timestamp(); // way 2
+      if (isTaskListener.value) {
+        final cTask = PowerVault.put(CTask(TaskRepositoryImpl()));
+
+        MTask payload = MTask(
+          id: widget.mTask?.id ?? now.millisecondsSinceEpoch,
+          title: titleController.text,
+          points: titleController.text,
+          details: titleController.text,
+          createdAt: widget.mTask?.createdAt ?? now,
+          endAt: targetdDateTimeListener.value,
+          updatedAt: widget.isEditPage ? now : null,
+          finishedAt: widget.mTask?.finishedAt,
+        );
+
+        if (widget.isEditPage) {
+          cTask.updateTask(payload);
+        } else {
+          cTask.addTask(payload);
+        }
+      } else {
+        MNote payload = MNote(
+          id: widget.mNote?.id ?? DateTime.now().millisecondsSinceEpoch,
+          title: titleController.text,
+          points: titleController.text,
+          details: titleController.text,
+          createdAt: widget.mNote?.createdAt ?? now,
+          updatedAt: widget.isEditPage ? now : null,
+        );
+        if (widget.isEditPage) {
+          // cNote.updateTask(payload);
+        } else {
+          // cNote.addTask(payload);
+        }
+      }
+    }
   }
 
   @override
@@ -187,6 +240,7 @@ class _SAddState extends State<SAdd> with RouteAware {
                             style: context.textTheme?.labelMedium,
                           ),
                           value: isTask,
+                          activeTrackColor: context.button?.primary,
                           onChanged: (value) {
                             // puse action if edit page or only note
                             if (widget.onlyNote || widget.isEditPage) return;
@@ -212,7 +266,8 @@ class _SAddState extends State<SAdd> with RouteAware {
                                         targetdDateTimeListener.value =
                                             await pickeDateTime(
                                               context: context,
-                                            );
+                                            ) ??
+                                            targetdDateTimeListener.value;
                                         depandOnTime = true;
                                       },
                                     ),
@@ -237,7 +292,8 @@ class _SAddState extends State<SAdd> with RouteAware {
                                             await WDialog.showCustom(
                                               children: [WSDuration()],
                                               context: context,
-                                            );
+                                            ) ??
+                                            targetedDurationListener.value;
                                         depandOnTime = false;
                                       },
                                     ),

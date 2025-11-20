@@ -259,7 +259,7 @@ class CTheme extends CBase {
       bodySmall: TextStyle(
         color: PColors.secondaryTextColorDark,
         fontSize: 12.sp,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w600,
       ),
       labelLarge: TextStyle(
         color: PColors.primayTextColorDark,

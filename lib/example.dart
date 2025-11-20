@@ -1,165 +1,170 @@
-// import 'package:flutter/material.dart';
+import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-// void main() => runApp(const MyApp());
+class InfinityScroll extends StatefulWidget {
+  const InfinityScroll({super.key});
 
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
+  @override
+  State<InfinityScroll> createState() => _InfinityScrollState();
+}
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       title: 'Dismissible Demo',
-//       theme: ThemeData(primarySwatch: Colors.blue),
-//       home: const DismissibleExample(),
-//     );
-//   }
-// }
+class _InfinityScrollState extends State<InfinityScroll> {
+  double? lastPosition = 0;
+  final ItemScrollController itemScrollController = ItemScrollController();
+  final ScrollOffsetController scrollOffsetController =
+      ScrollOffsetController();
+  final ItemPositionsListener itemPositionsListener =
+      ItemPositionsListener.create();
+  final ScrollOffsetListener scrollOffsetListener =
+      ScrollOffsetListener.create();
 
-// class DismissibleExample extends StatefulWidget {
-//   const DismissibleExample({super.key});
+  int x = 0;
 
-//   @override
-//   State<DismissibleExample> createState() => _DismissibleExampleState();
-// }
+  bool alreadyLoading = false;
 
-// class _DismissibleExampleState extends State<DismissibleExample> {
-//   final List<String> _items = List.generate(10, (index) => 'Item ${index + 1}');
+  List<(int, int)> itemList = [];
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text("Dismissible Widget Demo")),
-//       body: ListView.builder(
-//         itemCount: _items.length,
-//         itemBuilder: (context, index) {
-//           final item = _items[index];
+  @override
+  void initState() {
+    super.initState();
 
-//           return Dismissible(
-//             key: ValueKey(item), // 🧠 Must be unique
-//             direction: DismissDirection.horizontal, // both sides allowed
-//             resizeDuration: const Duration(
-//               milliseconds: 300,
-//             ), // shrink animation speed
-//             movementDuration: const Duration(
-//               milliseconds: 200,
-//             ), // swipe animation speed
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      for (int i = 0; i < 55; i++) {
+        itemList.add((i, Random().nextInt(200) + 100));
+      }
 
-//             confirmDismiss: (direction) async {
-//               // 🧭 Before dismiss — decide what to do
-//               if (direction == DismissDirection.startToEnd) {
-//                 // Left to right
-//                 final confirm = await _confirmDialog(context, "Mark as Done?");
-//                 return confirm;
-//               } else if (direction == DismissDirection.endToStart) {
-//                 // Right to left
-//                 // Navigate instead of deleting
-//                 Navigator.push(
-//                   context,
-//                   MaterialPageRoute(builder: (_) => DetailPage(data: item)),
-//                 );
-//                 return false; // prevent dismissal
-//               }
-//               return false;
-//             },
+      // 🔹 Listen to item positions (which items are visible)
+      itemPositionsListener.itemPositions.addListener(() {
+        final positions = itemPositionsListener.itemPositions.value;
 
-//             onDismissed: (direction) {
-//               // 🗑 Called after confirmed dismiss
-//               setState(() {
-//                 _items.removeAt(index);
-//               });
-//               ScaffoldMessenger.of(
-//                 context,
-//               ).showSnackBar(SnackBar(content: Text("$item dismissed")));
-//             },
+        // Print all visible indexes
+        final visibleIndexes = positions.map((e) => e.index).toList();
+        debugPrint("Visible indexes: $visibleIndexes");
 
-//             onResize: () {
-//               // ⚙️ Called when widget is shrinking
-//               debugPrint("Resizing $item");
-//             },
+        if (visibleIndexes.isNotEmpty) {
+          int firstVisibleIndex = visibleIndexes.reduce(
+            (a, b) => a < b ? a : b,
+          );
+          int lastVisibleIndex = visibleIndexes.reduce((a, b) => a > b ? a : b);
+          removeData(lastVisibleIndex: visibleIndexes.last);
+          loadData(lastVisibleIndex: lastVisibleIndex);
 
-//             onUpdate: (details) {
-//               // 📈 Called during swipe gesture
-//               debugPrint(
-//                 "Swipe progress: ${details.progress} direction: ${details.direction}",
-//               );
-//             },
+          // cache scroll direction
+          final firstItem = positions
+              .where((element) => element.index == firstVisibleIndex)
+              .first;
 
-//             background: Container(
-//               color: Colors.green,
-//               alignment: Alignment.centerLeft,
-//               padding: const EdgeInsets.symmetric(horizontal: 20),
-//               child: const Icon(Icons.done, color: Colors.white),
-//             ),
+          double currentPosition = firstItem.itemLeadingEdge;
 
-//             secondaryBackground: Container(
-//               color: Colors.blue,
-//               alignment: Alignment.centerRight,
-//               padding: const EdgeInsets.symmetric(horizontal: 20),
-//               child: const Icon(Icons.open_in_new, color: Colors.white),
-//             ),
+          if (currentPosition > lastPosition!) {
+            print("⬇️ Scrolling Forward");
+          } else if (currentPosition < lastPosition!) {
+            print("⬆️ Scrolling Reverse");
+          }
 
-//             dismissThresholds: const {
-//               DismissDirection.startToEnd: 0.4,
-//               DismissDirection.endToStart: 0.4,
-//             },
+          lastPosition = currentPosition;
+        }
+        print(scrollOffsetListener.changes);
+        // scrollOffsetListener.changes.reduce((a,b)=>a<b?a:b);
+      });
+    });
+  }
 
-//             crossAxisEndOffset: 0.5, // pushes dismissed item up/down at end
+  Future<void> removeData({required int lastVisibleIndex}) async {
+    /// Note :
+    /// when i call "jumpTo" it's automitically rebuild ScrollablePositionedList, for "scrollTo" to we must have to call setState.
+    /// using scrollTo
+    // if (lastVisibleIndex > 100 && !alreadyLoading) {
+    //   debugPrint("removed few data");
+    //   alreadyLoading = true;
+    //   Duration duration = Duration(milliseconds: 200);
+    //   itemList.removeRange(0, 70); // remove 80 item
+    //   setState(() {
+    //     // Get.snackbar("title", "message ${itemList.length}");
+    //   });
+    //   // must use await here.
+    //   await itemScrollController.scrollTo(
+    //     index: lastVisibleIndex - 70,
+    //     duration: duration,
+    //     alignment: 1,
+    //   );
+    //   alreadyLoading = false;
+    // }
 
-//             child: Card(
-//               margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-//               elevation: 3,
-//               shape: RoundedRectangleBorder(
-//                 borderRadius: BorderRadius.circular(12),
-//               ),
-//               child: ListTile(
-//                 title: Text(item),
-//                 subtitle: const Text("Swipe left to open, right to delete"),
-//                 leading: const Icon(Icons.list),
-//               ),
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
+    // using "jumpTo"
+    if (lastVisibleIndex > 100 && !alreadyLoading) {
+      debugPrint("removed few data");
+      alreadyLoading = true;
 
-//   Future<bool> _confirmDialog(BuildContext context, String message) async {
-//     return await showDialog<bool>(
-//           context: context,
-//           builder: (context) => AlertDialog(
-//             title: const Text("Confirm"),
-//             content: Text(message),
-//             actions: [
-//               TextButton(
-//                 onPressed: () => Navigator.pop(context, false),
-//                 child: const Text("Cancel"),
-//               ),
-//               TextButton(
-//                 onPressed: () => Navigator.pop(context, true),
-//                 child: const Text("Yes"),
-//               ),
-//             ],
-//           ),
-//         ) ??
-//         false;
-//   }
-// }
+      itemList.removeRange(0, 80); // remove 80 item
+      itemScrollController.jumpTo(index: lastVisibleIndex - 80, alignment: 1);
+      alreadyLoading = false;
+    }
+  }
 
-// class DetailPage extends StatelessWidget {
-//   final String data;
-//   const DetailPage({super.key, required this.data});
+  Future<void> loadData({required int lastVisibleIndex}) async {
+    if (lastVisibleIndex >= itemList.length - 10 && !alreadyLoading) {
+      debugPrint("⚡ Near the end! Loading more...");
+      alreadyLoading = true;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text("Details Page")),
-//       body: Center(
-//         child: Text(
-//           "You swiped to open: $data",
-//           style: const TextStyle(fontSize: 20),
-//         ),
-//       ),
-//     );
-//   }
-// }
+      int i = itemList.last.$1 + 1;
+      int n = i + 10;
+      for (; i < n; i++) {
+        // adding 10 item every call
+        itemList.add((i, Random().nextInt(200) + 100));
+      }
+
+      setState(() {}); // Update UI
+      alreadyLoading = false;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print("object");
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Infinity Scroll $x"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                debugPrint("Removed first 20 items");
+                itemList.removeRange(0, 20);
+              });
+            },
+            icon: Icon(Icons.cancel),
+          ),
+        ],
+      ),
+      body: SizedBox(
+        height: 700,
+        child: ScrollablePositionedList.builder(
+          itemCount: itemList.length,
+          itemBuilder: (context, index) {
+            x = index;
+
+            return Card(
+              child: Container(
+                height: itemList[index].$2.toDouble(),
+                width: double.maxFinite,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("index: ${itemList[index].$1}"),
+                    Text("height: ${itemList[index].$2}"),
+                  ],
+                ),
+              ),
+            );
+          },
+          itemScrollController: itemScrollController,
+          scrollOffsetController: scrollOffsetController,
+          itemPositionsListener: itemPositionsListener,
+          scrollOffsetListener: scrollOffsetListener,
+        ),
+      ),
+    );
+  }
+}

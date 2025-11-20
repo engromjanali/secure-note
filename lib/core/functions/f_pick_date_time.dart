@@ -8,7 +8,7 @@ Future<DateTime?> pickeDateTime({
   if (date == null) return null;
   TimeOfDay? timeOfDay = await pickTime(context, initialDateTime);
   if (timeOfDay == null) return null;
-  return date.add(Duration(hours: timeOfDay.hour, minutes: timeOfDay.minute));
+  return date.add(Duration(hours: timeOfDay.hour, minutes: timeOfDay.minute)).toUtc();
 }
 
 Future<DateTime?> pickDate(

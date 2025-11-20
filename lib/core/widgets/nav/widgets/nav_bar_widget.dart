@@ -1,8 +1,6 @@
-import './/core/constants/colors.dart';
 import './/core/constants/dimension_theme.dart';
 import './/core/extensions/ex_build_context.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../models/m_nav_bar_item.dart';
 import 'w_nav_body.dart';
 

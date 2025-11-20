@@ -1,5 +1,3 @@
-import 'package:intl/intl.dart';
-
 /// 📅 DateTimeFormattingExtension
 /// Extends `DateTime` to format dates, get timestamps,
 /// and calculate remaining days from now.
@@ -12,7 +10,6 @@ import 'package:intl/intl.dart';
 /// Useful when working with server date strings or custom formats.
 /// ⏰ NowDateHelper
 /// Static helper to get current date formatted instantly.
-
 extension DurationFormattingExtension on Duration {
   /// Remaining duration from now to this date
   /// 00 Hours 00 Minute 00 Seconds

@@ -6,7 +6,7 @@ import 'package:daily_info/core/functions/f_printer.dart';
 import 'package:daily_info/core/services/navigation_service.dart';
 import 'package:daily_info/core/widgets/w_card.dart';
 import 'package:daily_info/core/widgets/w_listtile.dart';
-import 'package:daily_info/features/note/view/s_view_note.dart';
+import 'package:daily_info/features/note/view/s_details.dart';
 import 'package:flutter/material.dart';
 
 class SNote extends StatefulWidget {
@@ -31,7 +31,7 @@ class _SNoteState extends State<SNote> {
                 ? PColors.secondaryFillColorLight
                 : PColors.secondaryFillColorDark,
             onTap: () {
-              SViewNote().push();
+              SDetails().push();
             },
             index: index,
           );

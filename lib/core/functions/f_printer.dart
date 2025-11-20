@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 
 void printer(dynamic value) {
   if (kDebugMode) {
-    print(value);
+    print("📌 $value 📌");
   }
 }
 

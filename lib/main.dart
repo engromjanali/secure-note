@@ -3,6 +3,7 @@ import 'package:daily_info/core/extensions/ex_build_context.dart';
 import 'package:daily_info/core/functions/f_default_scrolling.dart';
 import 'package:daily_info/core/services/navigation_service.dart';
 import 'package:daily_info/core/services/shared_preference_service.dart';
+import 'package:daily_info/example.dart';
 import 'package:daily_info/firebase_options.dart';
 import 'package:daily_info/spalsh.dart';
 import 'package:device_preview/device_preview.dart';
@@ -99,8 +100,8 @@ class __SCheckPointState extends State<_SCheckPoint> {
                 );
               },
 
-              home: SpalshScreen(),
-              // home: DismissibleExample(),
+              // home: SpalshScreen(),
+              home: InfinityScroll(),
             );
           },
         );

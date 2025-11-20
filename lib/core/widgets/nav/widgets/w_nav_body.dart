@@ -1,6 +1,5 @@
 import 'package:daily_info/core/extensions/ex_padding.dart';
 import 'package:daily_info/core/functions/f_is_null.dart';
-import './/core/constants/colors.dart';
 import './/core/extensions/ex_build_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -58,23 +57,21 @@ class WBody extends StatelessWidget {
                         width: 25.w,
                         colorFilter: ColorFilter.mode(
                           isSelected
-                              ? context.theme.brightness == Brightness.dark
-                                    ? PColors.primayTextColorDark
-                                    : PColors.primayTextColorLight
-                              : context.theme.brightness == Brightness.dark
-                              ? PColors.secondaryTextColorDark
-                              : PColors.secondaryTextColorLight,
+                              ? context.primaryTextColor!
+                              : const Color.fromARGB(255, 78, 76, 76),
+                          // : context.theme.brightness == Brightness.dark
+                          // ? PColors.secondaryTextColorDark
+                          // : PColors.secondaryTextColorLight,
                           BlendMode.srcIn,
                         ),
                       ),
 
-                      if (!isNull(item.title))
+                      if (isNotNull(item.title))
                         Text(
                           item.title!,
-                          style: TextStyle(
-                            color: isSelected
-                                ? context.primaryTextColor
-                                : context.secondaryTextColor,
+                          style: context.textTheme?.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Custom",
                           ),
                         ),
                     ],

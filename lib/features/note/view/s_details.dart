@@ -1,27 +1,65 @@
+import 'dart:async';
+
 import 'package:daily_info/core/extensions/ex_build_context.dart';
 import 'package:daily_info/core/extensions/ex_date_time.dart';
+import 'package:daily_info/core/extensions/ex_duration.dart';
 import 'package:daily_info/core/extensions/ex_padding.dart';
+import 'package:daily_info/core/functions/f_call_back.dart';
+import 'package:daily_info/core/functions/f_printer.dart';
+import 'package:daily_info/core/functions/f_timer.dart';
 import 'package:daily_info/core/services/navigation_service.dart';
 import 'package:daily_info/features/add/view/s_add.dart';
 import 'package:flutter/material.dart';
 
-class SViewNote extends StatefulWidget {
-  const SViewNote({super.key});
-
+class SDetails extends StatefulWidget {
+  final bool isTask;
+  SDetails({super.key, this.isTask = false});
   @override
-  State<SViewNote> createState() => _SViewNoteState();
+  State<SDetails> createState() => _SDetailsState();
 }
 
-class _SViewNoteState extends State<SViewNote> {
+class _SDetailsState extends State<SDetails> {
+  final ValueNotifier<Duration?> targetedDurationListener =
+      ValueNotifier<Duration?>(null);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    callBackFunction(() async {
+      TimerService().listen(() {
+        if (mounted) {
+          targetedDurationListener.value = DateTime(
+            2026,
+            8,
+            12,
+            12,
+            10,
+          ).difference(DateTime.now());
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // TimerService().stop();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Note"),
+        title: Text(widget.isTask ? "Task" : "Note"),
         actions: [
           IconButton(
             onPressed: () {
-              SAdd(isEditPage: true, onlyNote: true).pushReplacement();
+              if (widget.isTask) {
+                SAdd(isEditPage: true,).pushReplacement();
+              } else {
+                SAdd(isEditPage: true, onlyNote: true).pushReplacement();
+              }
             },
             icon: Icon(Icons.edit),
           ),
@@ -32,18 +70,38 @@ class _SViewNoteState extends State<SViewNote> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // title section
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [Text(title, style: context.textTheme?.titleSmall)],
               ).pDivider().pB(),
+              // details section
               Text(details, style: context.textTheme?.bodyMedium).pB(),
+              // info section
               Text("Info", style: context.textTheme?.titleSmall),
               SizedBox.shrink().pDivider(),
-              Text(
-                "Created At: ${DateTime(2025, 8, 12, 12, 10).format(DateTimeFormattingExtension.formatDDMMMYYYY_I_HHMMA)}",
-              ),
+              if (widget.isTask)
+                ValueListenableBuilder(
+                  valueListenable: targetedDurationListener,
+                  builder: (context, value, child) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Reamining : ${DateTime(2026, 8, 12, 12, 10).difference(DateTime.now()).as_XX_Hours_XX_Minute_XX_Seconds}",
+                        ),
+                        Text(
+                          "End At: ${DateTime(2025, 8, 12, 12, 10).format(DateTimeFormattingExtension.formatDDMMMYYYY_I_HHMMA)}",
+                        ),
+                      ],
+                    );
+                  },
+                ),
               Text(
                 "Updated At: ${DateTime.now().format(DateTimeFormattingExtension.formatDDMMMYYYY_I_HHMMA)}",
+              ),
+              Text(
+                "Created At: ${DateTime(2025, 8, 12, 12, 10).format(DateTimeFormattingExtension.formatDDMMMYYYY_I_HHMMA)}",
               ),
             ],
           ).pAll(),

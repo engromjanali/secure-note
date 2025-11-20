@@ -10,27 +10,27 @@ import 'm_nav_bar_item.dart';
 List<MNavBarItem> homeNevItem = [
   MNavBarItem(
     title: "Task",
-    unSelectedIcon: Assets.icons.profile,
-    icon: Assets.icons.profile,
+    unSelectedIcon: Assets.icons.taskChecklist,
+    icon: Assets.icons.taskChecklist,
     child: STask(),
   ),
   MNavBarItem(
     title: "S Watch",
-    unSelectedIcon: Assets.icons.profile,
-    icon: Assets.icons.profile,
+    unSelectedIcon: Assets.icons.stopwatch,
+    icon: Assets.icons.stopwatch,
     child: SStopwatch(),
   ),
 
   MNavBarItem(
     title: "Add",
-    unSelectedIcon: Assets.icons.profile,
-    icon: Assets.icons.faq,
+    unSelectedIcon: Assets.icons.add,
+    icon: Assets.icons.add,
     child: SAdd(),
   ),
   MNavBarItem(
     title: "Note",
-    unSelectedIcon: Assets.icons.profile,
-    icon: Assets.icons.profile,
+    unSelectedIcon: Assets.icons.notebook,
+    icon: Assets.icons.notebook,
     child: SNote(),
   ),
   MNavBarItem(
