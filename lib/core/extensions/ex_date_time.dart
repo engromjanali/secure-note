@@ -19,7 +19,7 @@ extension DateTimeFormattingExtension on DateTime {
   static const String formatDDMMMYYYY_I_HHMMA = 'dd MMM yyyy | hh:mm a';
 
   /// Format this DateTime to a string
-  String format(String pattern) => DateFormat(pattern).format(toLocal());
+  String format(String pattern) => DateFormat(pattern).format(this.toLocal());
 
   /// Remaining duration from now to this date
   String get remainingFormatedDuration {
@@ -34,13 +34,14 @@ extension DateTimeFormattingExtension on DateTime {
     return '$hours Hours $minutes Minute $second Seconds';
   }
 
-  /// Return timestamp (milliseconds since epoch)
+  // Return timestamp (milliseconds since epoch)
   String get timestamp => millisecondsSinceEpoch.toString();
 }
 
 extension StringToDateTimeExtension on String {
   /// Parse a string to DateTime with a given format
-  DateTime toDateTime(String pattern) => DateFormat(pattern).parse(this).toUtc();
+  DateTime toDateTime(String pattern) =>
+      DateFormat(pattern).parse(this).toUtc();
 }
 
 extension NowDateHelper on DateTime {

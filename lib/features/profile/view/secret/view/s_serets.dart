@@ -71,13 +71,13 @@ class _SSeretsState extends State<SSerets> {
                 SliverToBoxAdapter(child: gapY(20)),
                 WTaskSection(
                   leadingColor: PColors.pendingColor,
-                  items: [],
+                  // items: [],
                   title: 'Reguler Note',
                   taskState: TaskState.timeOut,
                 ),
                 WTaskSection(
                   leadingColor: PColors.completedColor,
-                  items: [],
+                  // items: [],
                   title: 'Sencetive Note',
                   taskState: TaskState.completed,
                 ),

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class MTask {
-  int id;
+  int? id;
   String? title;
   String? points;
   String? details;
@@ -11,7 +11,7 @@ class MTask {
   DateTime? finishedAt;
 
   MTask({
-    required this.id,
+     this.id,
     this.title,
     this.points,
     this.details,

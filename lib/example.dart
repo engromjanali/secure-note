@@ -33,40 +33,35 @@ class _InfinityScrollState extends State<InfinityScroll> {
       for (int i = 0; i < 55; i++) {
         itemList.add((i, Random().nextInt(200) + 100));
       }
+      setState(() {});
 
       // 🔹 Listen to item positions (which items are visible)
       itemPositionsListener.itemPositions.addListener(() {
         final positions = itemPositionsListener.itemPositions.value;
 
         // Print all visible indexes
-        final visibleIndexes = positions.map((e) => e.index).toList();
-        debugPrint("Visible indexes: $visibleIndexes");
+        debugPrint("Visible indexes: ${positions.map((e) => e.index)}");
 
-        if (visibleIndexes.isNotEmpty) {
-          int firstVisibleIndex = visibleIndexes.reduce(
-            (a, b) => a < b ? a : b,
+        if (positions.isNotEmpty) {
+          final firstVisibleItem = positions.reduce(
+            (a, b) => a.itemLeadingEdge < b.itemLeadingEdge ? a : b,
           );
-          int lastVisibleIndex = visibleIndexes.reduce((a, b) => a > b ? a : b);
-          removeData(lastVisibleIndex: visibleIndexes.last);
-          loadData(lastVisibleIndex: lastVisibleIndex);
+          final lastVisibleItem = positions.reduce(
+            (a, b) => a.itemTrailingEdge > b.itemTrailingEdge ? a : b,
+          );
+
+          removeData(lastVisibleIndex: firstVisibleItem.index);
+          loadData(lastVisibleIndex: lastVisibleItem.index);
 
           // cache scroll direction
-          final firstItem = positions
-              .where((element) => element.index == firstVisibleIndex)
-              .first;
-
-          double currentPosition = firstItem.itemLeadingEdge;
-
+          double currentPosition = firstVisibleItem.itemLeadingEdge;
           if (currentPosition > lastPosition!) {
             print("⬇️ Scrolling Forward");
           } else if (currentPosition < lastPosition!) {
             print("⬆️ Scrolling Reverse");
           }
-
           lastPosition = currentPosition;
         }
-        print(scrollOffsetListener.changes);
-        // scrollOffsetListener.changes.reduce((a,b)=>a<b?a:b);
       });
     });
   }

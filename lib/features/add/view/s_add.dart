@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:daily_info/core/constants/colors.dart';
+import 'package:daily_info/core/data/local/db_local.dart';
 import 'package:daily_info/core/extensions/ex_build_context.dart';
 import 'package:daily_info/core/extensions/ex_date_time.dart';
 import 'package:daily_info/core/extensions/ex_duration.dart';
@@ -18,7 +19,7 @@ import 'package:daily_info/core/widgets/w_text_field.dart';
 import 'package:daily_info/features/add/widgets/w_select_duration.dart';
 import 'package:daily_info/features/note/data/model/m_note.dart';
 import 'package:daily_info/features/task/controller/c_task.dart';
-import 'package:daily_info/features/task/data/datasource/demo_data.dart';
+import 'package:daily_info/features/task/data/datasource/task_datasource_impl.dart';
 import 'package:daily_info/features/task/data/model/m_task.dart';
 import 'package:daily_info/features/task/data/repository/task_repository_impl.dart';
 import 'package:flutter/material.dart';
@@ -130,18 +131,30 @@ class _SAddState extends State<SAdd> with RouteAware {
     if (_currentRoute != null) {
       NavigationService.routeObserver.unsubscribe(this);
     }
-    PowerVault.delete<CTask>();
+    // PowerVault.delete<CTask>();
     super.dispose();
   }
 
   Future<void> submit() async {
+    for (int i = 0; i < 1; i++) {
+      await DBHelper.getInstance.addNote(
+        MTask(
+          title: i.toString(),
+          createdAt: DateTime.now().toUtc(),
+          finishedAt: i % 2 == 0 ? DateTime.now() : null,
+          endAt: DateTime.timestamp(),
+        ),
+      );
+    }
     context.unFocus();
     if (fromKey.currentState?.validate() ?? false) {
       // normal datetime or DateTime.now() dose not contain utc it's only contain date and time.
       // final now = DateTime.now().toUtc();// way 1
       final now = DateTime.timestamp(); // way 2
       if (isTaskListener.value) {
-        final cTask = PowerVault.put(CTask(TaskRepositoryImpl()));
+        CTask cTask = PowerVault.put(
+          CTask(TaskRepositoryImpl(TaskDataSourceImpl())),
+        );
 
         MTask payload = MTask(
           id: widget.mTask?.id ?? now.millisecondsSinceEpoch,

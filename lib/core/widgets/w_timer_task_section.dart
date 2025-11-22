@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class WTimerTaskSection extends StatefulWidget {
   final Color? leadingColor;
   final String? title;
-  final List<MTask> items;
+  final List<MTask>? items;
   final Function()? onTap;
   final TaskState taskState;
   final bool asSliver;
@@ -17,7 +17,7 @@ class WTimerTaskSection extends StatefulWidget {
   const WTimerTaskSection({
     super.key,
     this.title,
-    required this.items,
+    this.items,
     this.leadingColor,
     this.onTap,
     this.taskState = TaskState.pending,
