@@ -106,10 +106,7 @@ class DBHelper {
     });
     if (effectedRow > 0) {
       List<MTask> list = await fetchTask(
-        MQuery(
-          where: "$hash IS ? AND $createdAt is ?",
-          args: [genaratedHash, payload.createdAt],
-        ),
+        MQuery(where: "$hash IS ? ", args: [genaratedHash]),
       );
       return list.first;
     } else {
@@ -149,7 +146,7 @@ class DBHelper {
         // You can handle tampered data here (delete, flag, etc.)
       }
     }
-    await Future.delayed(Duration(seconds: 2));
+    // await Future.delayed(Duration(seconds: 2));
     // return List.generate(
     //   payload.limit ?? 0,
     //   (index) => MTask(
@@ -172,26 +169,25 @@ class DBHelper {
 
   // 🔄 Update with new hash
   Future<MTask> updateNote({required MTask payload}) async {
+    Map data = Map.from(payload.toMap());
+    data.remove(id);
+    data.remove(createdAt);
+    printer("update called");
     var db = await getDB();
-    String genaratedHash = _generateHash(title, details);
+    String genaratedHash = _generateHash(
+      payload.title ?? "",
+      payload.details ?? "",
+    );
 
     int effectedRow = await db.update(
       tableName,
-      {
-        title: payload.title,
-        points: payload.points,
-        details: payload.details,
-        // createdAt: payload.createdAt,
-        updatedAt: payload.updatedAt,
-        endAt: payload.endAt,
-        finishedAt: payload.finishedAt,
-        hash: genaratedHash,
-      },
-      where: "$id = ?, ",
+      {...data, hash: genaratedHash},
+      where: "$id = ? ",
       whereArgs: [payload.id],
     );
 
     if (effectedRow > 0) {
+      printer("Updated success");
       List<MTask> list = await fetchTask(
         MQuery(where: "$id IS ? ", args: [payload.id]),
       );
@@ -217,6 +213,15 @@ class DBHelper {
     if (myDB != null) {
       await myDB!.close();
       myDB = null;
+    }
+  }
+
+  Future<void> clear() async {
+    Database db = await getDB();
+    try {
+      await db.delete(tableName);
+    } catch (e) {
+      rethrow;
     }
   }
 }

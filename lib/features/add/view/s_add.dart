@@ -58,13 +58,10 @@ class _SAddState extends State<SAdd> with RouteAware {
     null,
   );
   ValueNotifier<bool> isTaskListener = ValueNotifier<bool>(false);
-  int selectedButton = 0;
-  DateTime currentDateTime = DateTime.now();
-  late DateTime startDateTime = currentDateTime;
-  late DateTime endDateTime = currentDateTime;
   TextEditingController titleController = TextEditingController();
   TextEditingController detailsController = TextEditingController();
   TextEditingController pointTController = TextEditingController();
+  CTask cTask = PowerVault.put(CTask(TaskRepositoryImpl(TaskDataSourceImpl())));
   final double spacing = 20;
 
   @override
@@ -77,10 +74,10 @@ class _SAddState extends State<SAdd> with RouteAware {
           ? true
           : false;
       if (widget.isEditPage) {
-        titleController.text = widget.mTask?.title??"";
-        pointTController.text = widget.mTask?.points??"";
-        detailsController.text = widget.mTask?.details??"";
-        titleController.text = widget.mTask?.title??"";
+        titleController.text = widget.mTask?.title ?? "";
+        pointTController.text = widget.mTask?.points ?? "";
+        detailsController.text = widget.mTask?.details ?? "";
+        targetdDateTimeListener.value = widget.mTask?.endAt;
       }
       startTimer();
     });
@@ -153,10 +150,6 @@ class _SAddState extends State<SAdd> with RouteAware {
       // final now = DateTime.now().toUtc();// way 1
       final now = DateTime.timestamp(); // way 2
       if (isTaskListener.value || true) {
-        CTask cTask = PowerVault.put(
-          CTask(TaskRepositoryImpl(TaskDataSourceImpl())),
-        );
-
         MTask payload = MTask(
           id: widget.mTask?.id,
           title: titleController.text.trim(),
@@ -174,20 +167,13 @@ class _SAddState extends State<SAdd> with RouteAware {
         } else {
           cTask.addTask(payload);
         }
-      } else {
-        MNote payload = MNote(
-          id: widget.mNote?.id ?? DateTime.now().millisecondsSinceEpoch,
-          title: titleController.text,
-          points: titleController.text,
-          details: titleController.text,
-          createdAt: widget.mNote?.createdAt ?? now,
-          updatedAt: widget.isEditPage ? now : null,
-        );
-        if (widget.isEditPage) {
-          // cNote.updateTask(payload);
-        } else {
-          // cNote.addTask(payload);
-        }
+        // ALL DONE NOW DELETE THEME.
+        titleController.text = "";
+        pointTController.text = "";
+        detailsController.text = "";
+        fromKey.currentState?.reset();
+        targetdDateTimeListener.value = null;
+        targetedDurationListener.value = null;
       }
     }
   }
@@ -331,8 +317,13 @@ class _SAddState extends State<SAdd> with RouteAware {
                   );
                 },
               ),
-
-              WPrimaryButton(text: "Submit", onTap: submit),
+              PowerBuilder<CTask>(
+                builder: (cTask) => WPrimaryButton(
+                  text: "Submit",
+                  onTap: submit,
+                  isLoading: cTask.isLoadingMore,
+                ),
+              ),
             ],
           ).pAll(),
         ),
@@ -384,7 +375,7 @@ class WDate extends StatelessWidget {
                             "Tap To Select Duration")
                       : dateTime?.format(
                               DateTimeFormattingExtension
-                                  .formatDDMMMYYYY_I_HHMMA,
+                                  .formatDDMMMYYYY_I_HHMMSSA,
                             ) ??
                             "Tap To Select Date",
 

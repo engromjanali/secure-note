@@ -1,4 +1,5 @@
 import 'package:daily_info/core/constants/default_values.dart';
+import 'package:daily_info/core/data/local/db_local.dart';
 import 'package:daily_info/core/extensions/ex_build_context.dart';
 import 'package:daily_info/core/functions/f_snackbar.dart';
 import 'package:daily_info/core/functions/f_url_launcher.dart';
@@ -32,8 +33,16 @@ List<MSItem> profileItem = [
         title: "Clear All History",
         content: "Are you sure you want clear all history?",
         context: NavigationService.currentContext,
-        onConfirm: () {
-          showSnackBar("History Cleared");
+        onConfirm: () async {
+          try {
+            await DBHelper.getInstance.clear();
+            showSnackBar("History Cleared");
+          } catch (e) {
+            showSnackBar(
+              "Somthing Want Wrong!",
+              snackBarType: SnackBarType.warning,
+            );
+          }
         },
       );
     },

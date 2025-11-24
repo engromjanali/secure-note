@@ -5,6 +5,7 @@ import 'package:daily_info/core/constants/dimension_theme.dart';
 import 'package:daily_info/core/extensions/ex_build_context.dart';
 import 'package:daily_info/core/extensions/ex_expanded.dart';
 import 'package:daily_info/core/extensions/ex_padding.dart';
+import 'package:daily_info/core/extensions/ex_strings.dart';
 import 'package:daily_info/core/functions/f_printer.dart';
 import 'package:daily_info/core/widgets/w_container.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,7 @@ class WListTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        title ?? PDefaultValues.noName,
+                        (title ?? "").toTitleCase.showDVIE,
                         style: context.textTheme?.titleSmall,
                         overflow: TextOverflow.ellipsis,
                       ),

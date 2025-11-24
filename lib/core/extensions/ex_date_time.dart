@@ -17,6 +17,7 @@ extension DateTimeFormattingExtension on DateTime {
   static const String formatYYYYMMDD = 'yyyy-MM-dd';
   static const String formatDDMMMYYYY = 'dd MMM yyyy';
   static const String formatDDMMMYYYY_I_HHMMA = 'dd MMM yyyy | hh:mm a';
+  static const String formatDDMMMYYYY_I_HHMMSSA = 'dd MMM yyyy | hh:mm:ss a';
 
   /// Format this DateTime to a string
   String format(String pattern) => DateFormat(pattern).format(this.toLocal());

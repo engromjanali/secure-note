@@ -44,7 +44,11 @@ class _SNoteState extends State<SNote> {
     printer("build");
     return Scaffold(
       appBar: AppBar(title: Text("Nots")),
-      body: WTaskSection(taskState: TaskState.note, isTask: false).pAll(),
+      body: Column(
+        children: [
+          WTaskSection(taskState: TaskState.note, isTask: false),
+        ],
+      ).pAll(),
     );
   }
 }

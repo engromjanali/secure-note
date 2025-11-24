@@ -54,7 +54,9 @@ class WTaskSection extends StatefulWidget {
             ? PColors.pendingColor
             : taskState == TaskState.timeOut
             ? PColors.timeoutColor
-            : PColors.completedColor);
+            : taskState == TaskState.completed
+            ? PColors.completedColor
+            : null);
   }
 
   @override
@@ -266,9 +268,12 @@ class _WTaskSectionState extends State<WTaskSection> {
             onTap: () {
               SDetails(isTask: true, mtask: items[index]).push();
             },
+
             onAction: (ActionType actionType) {
               if (actionType == ActionType.edit) {
-              } else if (actionType == ActionType.delete) {}
+              } else if (actionType == ActionType.delete) {
+                cTask.deleteTask(items[index].id!);
+              }
             },
             index: items[index].id ?? 0,
             title: items[index].title,

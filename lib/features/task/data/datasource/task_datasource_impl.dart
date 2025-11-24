@@ -10,8 +10,8 @@ class TaskDataSourceImpl extends ITaskDataSource {
   }
 
   @override
-  Future<bool> deteteTask(MTask payload) async {
-    return DBHelper.getInstance.deleteNote(id: payload.id!);
+  Future<bool> deteteTask(int id) async {
+    return DBHelper.getInstance.deleteNote(id: id);
   }
 
   @override

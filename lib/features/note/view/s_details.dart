@@ -4,6 +4,7 @@ import 'package:daily_info/core/extensions/ex_build_context.dart';
 import 'package:daily_info/core/extensions/ex_date_time.dart';
 import 'package:daily_info/core/extensions/ex_duration.dart';
 import 'package:daily_info/core/extensions/ex_padding.dart';
+import 'package:daily_info/core/extensions/ex_strings.dart';
 import 'package:daily_info/core/functions/f_call_back.dart';
 import 'package:daily_info/core/functions/f_is_null.dart';
 import 'package:daily_info/core/functions/f_timer.dart';
@@ -78,20 +79,18 @@ class _SDetailsState extends State<SDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.isTask
-                        ? widget.mtask?.title ?? PDefaultValues.noName
-                        : "Note Titile",
+                    (widget.mtask?.title ?? "").toTitleCase.showDVIE,
                     style: context.textTheme?.titleSmall,
                   ),
                 ],
               ).pDivider().pB(),
               // points section
               Text(
-                widget.isTask
-                    ? (widget.mtask?.points ?? PDefaultValues.noName)
+                isNull(widget.mtask?.points)
+                    ? ""
+                    : (widget.mtask!.points!)
                           .replaceAll("\n", "\n◉ ")
-                          .replaceFirst("", "◉ ")
-                    : "Note points",
+                          .replaceFirst("", "◉ "),
                 textAlign: TextAlign.justify,
                 style: context.textTheme?.bodyLarge,
               ).pB(value: 20),

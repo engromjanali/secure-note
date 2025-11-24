@@ -27,7 +27,6 @@ class CTask extends CBase {
     hasMoreNext = true;
     isLoadingMore = false;
     lastPage = 1;
-    
   }
 
   Future<void> addTask(MTask payload) async {
@@ -35,6 +34,7 @@ class CTask extends CBase {
       isLoadingMore = true;
       update();
       MTask mTask = await _iTaskRepository.addTask(payload);
+      await Future.delayed(Duration(seconds: 2));
       printer(pendingList.length);
     } catch (e) {
       errorPrint(e);
@@ -57,15 +57,21 @@ class CTask extends CBase {
     }
   }
 
-  Future<void> deleteTask(MTask payload) async {
+  Future<void> deleteTask(int id) async {
     try {
-      await _iTaskRepository.deteteTask(payload);
+      isLoadingMore = true;
+      update();
+      await _iTaskRepository.deteteTask(id);
       // clear from runtime storage
-      pendingList.removeWhere((mTask) => mTask.id == payload.id);
-      timeOutList.removeWhere((mTask) => mTask.id == payload.id);
-      completedList.removeWhere((mTask) => mTask.id == payload.id);
+      pendingList.removeWhere((mTask) => mTask.id == id);
+      timeOutList.removeWhere((mTask) => mTask.id == id);
+      completedList.removeWhere((mTask) => mTask.id == id);
+      noteList.removeWhere((mTask) => mTask.id == id);
     } catch (e) {
       errorPrint(e);
+    } finally {
+      isLoadingMore = false;
+      update();
     }
   }
 

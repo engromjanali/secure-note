@@ -24,7 +24,7 @@ class _SpalshScreenState extends State<SpalshScreen> {
 
   void checkAuth() async {
     printer("value");
-    if (true || await LocalAuthServices().showBiometric()) {
+    if (await LocalAuthServices().showBiometric()) {
       final CCheckPoint checkPoint = CCheckPoint();
       checkPoint.initialization();
     }

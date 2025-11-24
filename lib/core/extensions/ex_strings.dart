@@ -6,6 +6,8 @@
 // - `removeSpaces` 🧹
 // - `initials` 🧑‍💼
 
+import 'package:daily_info/core/constants/default_values.dart';
+
 extension StringCasingExtension on String {
   String get toCapitalized => length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
   String get toTitleCase => replaceAll(RegExp(' +'), ' ').split(' ').map((str) => str.toCapitalized).join(' ');
@@ -18,4 +20,5 @@ extension StringCasingExtension on String {
   bool get isValidInt =>  RegExp(r'^[+-]?[0-9]+$').hasMatch(this);
   String get removeSpaces => replaceAll(' ', '');
   String get initials => split(' ').map((e) => e.isNotEmpty ? e[0] : '').join().toUpperCase();
+  String get showDVIE => isEmpty? PDefaultValues.noName : this;
 }

@@ -30,6 +30,8 @@ class CTheme extends CBase {
     canvasColor: Colors.black.withValues(alpha: 0.05),
     dividerColor: PColors.dividerColorLight,
 
+    tabBarTheme: TabBarThemeData(indicatorColor: Colors.black),
+
     // ▶️ AppBar Theme
     appBarTheme: AppBarTheme(
       backgroundColor: PColors.appBarColorLight,
@@ -192,6 +194,8 @@ class CTheme extends CBase {
     splashFactory: InkRipple.splashFactory,
     canvasColor: Colors.black.withValues(alpha: 0.05),
     dividerColor: PColors.dividerColorDark,
+
+    tabBarTheme: TabBarThemeData(indicatorColor: Colors.black),
 
     // ▶️ AppBar Theme
     appBarTheme: AppBarTheme(
