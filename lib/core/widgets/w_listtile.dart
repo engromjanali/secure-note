@@ -1,8 +1,12 @@
+import 'package:daily_info/core/constants/all_enums.dart';
 import 'package:daily_info/core/constants/colors.dart';
 import 'package:daily_info/core/constants/default_values.dart';
 import 'package:daily_info/core/constants/dimension_theme.dart';
 import 'package:daily_info/core/extensions/ex_build_context.dart';
+import 'package:daily_info/core/extensions/ex_expanded.dart';
 import 'package:daily_info/core/extensions/ex_padding.dart';
+import 'package:daily_info/core/functions/f_printer.dart';
+import 'package:daily_info/core/widgets/w_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -11,16 +15,20 @@ class WListTile extends StatelessWidget {
   final Color? fillColor;
   final String? title;
   final String? subTitle;
+  final TaskState taskState;
   final int index;
   final Function() onTap;
+  final Function(ActionType) onAction;
   const WListTile({
     super.key,
     this.leadingColor,
     this.fillColor,
     this.title,
     this.subTitle,
+    required this.taskState,
     required this.onTap,
     required this.index,
+    required this.onAction,
   });
 
   @override
@@ -95,62 +103,69 @@ class WListTile extends StatelessWidget {
 
       items: [
         PopupMenuItem(
+          onTap: () {
+            onAction(ActionType.edit);
+          },
           value: 'edit',
           padding: EdgeInsets.symmetric(vertical: 2),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(PTheme.borderRadius),
-            ),
+          child: WContainer(
+            borderInDark: true,
             child: Center(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: PTheme.spaceX,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.edit, size: 20, color: Color(0xFF0088FF)),
-                  SizedBox(width: 8),
-                  Text('Edit'),
+                  Icon(Icons.edit, size: 20.w, color: Color(0xFF0088FF)),
+                  Text('Edit', textAlign: TextAlign.center).expd(),
                 ],
-              ).pAll(),
+              ),
             ),
           ),
         ),
-        PopupMenuItem(
-          value: 'Duplicate',
-          padding: EdgeInsets.symmetric(vertical: 2),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(PTheme.borderRadius),
-            ),
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.copy, size: 20, color: Colors.green),
-                  SizedBox(width: 8),
-                  Text('Duplicate'),
-                ],
-              ).pAll(),
+        if (taskState == TaskState.note)
+          PopupMenuItem(
+            onTap: () {
+              onAction(ActionType.edit);
+            },
+            value: 'secret',
+            padding: EdgeInsets.symmetric(vertical: 2),
+            child: WContainer(
+              borderInDark: true,
+              child: Center(
+                child: Row(
+                  spacing: PTheme.spaceX,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.switch_access_shortcut_rounded,
+                      size: 20.w,
+                      color: Colors.green,
+                    ),
+                    Text('Keep In Vault', textAlign: TextAlign.center).expd(),
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
         PopupMenuItem(
+          onTap: () {
+            onAction(ActionType.delete);
+          },
           padding: EdgeInsets.symmetric(vertical: 2),
           value: 'Delete',
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.circular(PTheme.borderRadius),
-            ),
+          child: WContainer(
+            color: Colors.red,
+            // borderInDark: true,
             child: Center(
               child: Row(
+                spacing: PTheme.spaceX,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.delete, size: 20, color: Colors.black),
-                  SizedBox(width: 8),
-                  Text('Delete'),
+                  Icon(Icons.delete, size: 20.w, color: Colors.black),
+                  Text('Delete', textAlign: TextAlign.center).expd(),
                 ],
-              ).pAll(),
+              ),
             ),
           ),
         ),

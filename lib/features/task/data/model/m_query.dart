@@ -6,10 +6,12 @@ class MQuery {
   final bool? isLoadNext;
   // final int? firstEid;
   // final int? lastEid;
-  final String? filter;
+  final String? where;
+  List? args;
   final TaskState? taskState;
   MQuery({
-    this.filter,
+    this.where,
+    this.args,
     this.taskState,
     // this.firstEid,
     // this.lastEid,

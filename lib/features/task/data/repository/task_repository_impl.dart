@@ -13,7 +13,7 @@ class TaskRepositoryImpl extends ITaskRepository {
   }
 
   @override
-  Future<void> deteteTask(MTask payload) async {
+  Future<bool> deteteTask(MTask payload) async {
     return _iTaskDataSource.deteteTask(payload);
   }
 

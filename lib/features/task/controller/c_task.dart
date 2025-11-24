@@ -13,12 +13,13 @@ class CTask extends CBase {
   List<MTask> pendingList = [];
   List<MTask> timeOutList = [];
   List<MTask> completedList = [];
+  List<MTask> noteList = [];
 
-  final int limit = 10;
+  final int limit = 20;
   int firstPage = 1;
   int lastPage = 1;
   bool hasMoreNext = true;
-  bool get hasMorePrev => firstPage>1;
+  bool get hasMorePrev => firstPage > 1;
   bool isLoadingMore = false;
   // int get firstPage => currentPage - 5;
 
@@ -26,24 +27,33 @@ class CTask extends CBase {
     hasMoreNext = true;
     isLoadingMore = false;
     lastPage = 1;
+    
   }
 
   Future<void> addTask(MTask payload) async {
     try {
-      MTask mTask = await _iTaskRepository.addTask(payload);
-      pendingList.add(mTask);
+      isLoadingMore = true;
       update();
+      MTask mTask = await _iTaskRepository.addTask(payload);
       printer(pendingList.length);
     } catch (e) {
       errorPrint(e);
+    } finally {
+      isLoadingMore = false;
+      update();
     }
   }
 
   Future<void> updateTask(MTask payload) async {
     try {
+      isLoadingMore = true;
+      update();
       MTask mTask = await _iTaskRepository.updateTask(payload);
     } catch (e) {
       errorPrint(e);
+    } finally {
+      isLoadingMore = false;
+      update();
     }
   }
 
@@ -69,44 +79,50 @@ class CTask extends CBase {
   }
 
   Future<List<MTask>?> fetchSpacificItem({MQuery? payload}) async {
-    // try {
+    print("called fetched spacfic item payload");
+    try {
       TaskState taskState = (payload?.taskState ?? TaskState.pending);
       // printer("call 1");
       MQuery newPayload = MQuery(
         isLoadNext: payload?.isLoadNext ?? true,
         limit: payload?.limit ?? limit,
-        filter:
-            payload?.filter ??
+        where:
+            payload?.where ??
             (taskState == TaskState.pending
-                ? "finishedAt == null AND endAt > CURRENT_TIMESTAMP"
+                ?
+                  // "finishedAt IS NULL AND
+                  "finishedAt IS NULL AND endAt IS NOT NULL AND endAt > ?"
                 : taskState == TaskState.timeOut
-                ? "finishedAt == null AND endAt < CURRENT_TIMESTAMP"
-                :
-                  // taskState == TaskState.completed
-                  // ?
-                  "finishedAt not null"
-            // : "note"
-            ),
-        pageNo: (payload?.isLoadNext ?? true) ? lastPage :firstPage,
+                ? "finishedAt IS NULL AND endAt IS NOT NULL AND endAt < ?"
+                : taskState == TaskState.completed
+                ? "finishedAt IS NOT NULL"
+                : "finishedAt IS NULL AND endAt IS NULL"),
+        args: [
+          if (taskState == TaskState.pending)
+            DateTime.timestamp().toIso8601String(),
+          if (taskState == TaskState.timeOut)
+            DateTime.timestamp().toIso8601String(),
+        ],
+        pageNo: (payload?.isLoadNext ?? true) ? lastPage : firstPage,
         taskState: taskState,
       );
 
-      // printer("call 2");
+      printer("call 2");
       if (isLoadingMore) {
         return null; //Already loading
       }
-      // printer("call 3");
+      printer("call 3");
       // If loading next AND there are no more next pages, stop.
       if (newPayload.isLoadNext! && !hasMoreNext) {
         return null;
       }
-      // printer("call 4");
+      printer("call 4");
       // If loading previous AND there are no more previous pages, stop.
       if (!newPayload.isLoadNext! && !hasMorePrev) {
         printer("load prev failed");
         return null;
       }
-      // printer("call 5");
+      printer("call 5");
       isLoadingMore = true;
       update();
       List<MTask> res = await _iTaskRepository.fetchTask(newPayload);
@@ -117,8 +133,13 @@ class CTask extends CBase {
           timeOutList.addAll(res);
         } else if (taskState == TaskState.completed) {
           completedList.addAll(res);
+        } else {
+          noteList.addAll(res);
         }
-        if (res.length < limit) hasMoreNext = false;
+        if (res.length < limit) {
+          hasMoreNext = false;
+          printer("has more has been false");
+        }
         ++lastPage;
       } else {
         printer("loaded previous");
@@ -128,6 +149,8 @@ class CTask extends CBase {
           timeOutList.insertAll(0, res);
         } else if (taskState == TaskState.completed) {
           completedList.insertAll(0, res);
+        } else {
+          noteList.insertAll(0, res);
         }
         // hasMoreNext = true;
         --firstPage;
@@ -135,13 +158,13 @@ class CTask extends CBase {
       update();
       printer("call 6");
       return res;
-    // } catch (e) {
-      // errorPrint(e);
-    // } finally {
+    } catch (e) {
+      errorPrint(e);
+    } finally {
       printer("call 7");
       isLoadingMore = false;
       update();
-    // }
+    }
     return null;
   }
 }

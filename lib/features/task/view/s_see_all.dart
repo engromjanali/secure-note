@@ -49,7 +49,7 @@ class _SSeeAllState extends State<SSeeAll> {
             ).pB(),
 
             (widget.taskState == TaskState.pending)
-                ? WTimerTaskSection()
+                ? WTimerTaskSection(taskState: widget.taskState)
                 : WTaskSection(taskState: widget.taskState),
           ],
         ).pAll(),

@@ -6,15 +6,12 @@ import 'package:daily_info/features/task/data/model/m_task.dart';
 class TaskDataSourceImpl extends ITaskDataSource {
   @override
   Future<MTask> addTask(MTask payload) async {
-    // return DBHelper.getInstance.addNote(payload);
-    return payload;
+    return DBHelper.getInstance.addNote(payload);
   }
 
   @override
-  Future<void> deteteTask(MTask payload) async {
-    // return DBHelper.getInstance.deleteNote(id: payload.id);
-    // TODO: implement deteteTask
-    throw UnimplementedError();
+  Future<bool> deteteTask(MTask payload) async {
+    return DBHelper.getInstance.deleteNote(id: payload.id!);
   }
 
   @override
@@ -24,8 +21,6 @@ class TaskDataSourceImpl extends ITaskDataSource {
 
   @override
   Future<MTask> updateTask(MTask payload) async {
-    // return DBHelper.getInstance.updateNote(payload);
-    // TODO: implement updateTask
-    throw UnimplementedError();
+    return DBHelper.getInstance.updateNote(payload: payload);
   }
 }

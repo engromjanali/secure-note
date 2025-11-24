@@ -7,6 +7,7 @@ import 'package:daily_info/core/extensions/ex_duration.dart';
 import 'package:daily_info/core/extensions/ex_expanded.dart';
 import 'package:daily_info/core/extensions/ex_keyboards.dart';
 import 'package:daily_info/core/extensions/ex_padding.dart';
+import 'package:daily_info/core/functions/f_call_back.dart';
 import 'package:daily_info/core/functions/f_is_null.dart';
 import 'package:daily_info/core/functions/f_pick_date_time.dart';
 import 'package:daily_info/core/functions/f_printer.dart';
@@ -15,9 +16,11 @@ import 'package:daily_info/core/widgets/w_button.dart';
 import 'package:daily_info/core/widgets/w_card.dart';
 import 'package:daily_info/core/widgets/w_container.dart';
 import 'package:daily_info/core/widgets/w_dialog.dart';
+import 'package:daily_info/core/widgets/w_pop_button.dart';
 import 'package:daily_info/core/widgets/w_text_field.dart';
 import 'package:daily_info/features/add/widgets/w_select_duration.dart';
 import 'package:daily_info/features/note/data/model/m_note.dart';
+import 'package:daily_info/features/s_home.dart';
 import 'package:daily_info/features/task/controller/c_task.dart';
 import 'package:daily_info/features/task/data/datasource/task_datasource_impl.dart';
 import 'package:daily_info/features/task/data/model/m_task.dart';
@@ -67,12 +70,20 @@ class _SAddState extends State<SAdd> with RouteAware {
   @override
   void initState() {
     super.initState();
-    isTaskListener.value = widget.onlyNote
-        ? false
-        : widget.isEditPage
-        ? true // set here given value from parent.
-        : false;
-    startTimer();
+    callBackFunction(() {
+      isTaskListener.value = widget.onlyNote
+          ? false
+          : widget.isEditPage && isNotNull(widget.mTask?.endAt)
+          ? true
+          : false;
+      if (widget.isEditPage) {
+        titleController.text = widget.mTask?.title??"";
+        pointTController.text = widget.mTask?.points??"";
+        detailsController.text = widget.mTask?.details??"";
+        titleController.text = widget.mTask?.title??"";
+      }
+      startTimer();
+    });
   }
 
   void startTimer() {
@@ -136,36 +147,27 @@ class _SAddState extends State<SAdd> with RouteAware {
   }
 
   Future<void> submit() async {
-    for (int i = 0; i < 1; i++) {
-      await DBHelper.getInstance.addNote(
-        MTask(
-          title: i.toString(),
-          createdAt: DateTime.now().toUtc(),
-          finishedAt: i % 2 == 0 ? DateTime.now() : null,
-          endAt: DateTime.timestamp(),
-        ),
-      );
-    }
     context.unFocus();
     if (fromKey.currentState?.validate() ?? false) {
       // normal datetime or DateTime.now() dose not contain utc it's only contain date and time.
       // final now = DateTime.now().toUtc();// way 1
       final now = DateTime.timestamp(); // way 2
-      if (isTaskListener.value) {
+      if (isTaskListener.value || true) {
         CTask cTask = PowerVault.put(
           CTask(TaskRepositoryImpl(TaskDataSourceImpl())),
         );
 
         MTask payload = MTask(
-          id: widget.mTask?.id ?? now.millisecondsSinceEpoch,
-          title: titleController.text,
-          points: titleController.text,
-          details: titleController.text,
+          id: widget.mTask?.id,
+          title: titleController.text.trim(),
+          points: pointTController.text.trim(),
+          details: detailsController.text.trim(),
           createdAt: widget.mTask?.createdAt ?? now,
           endAt: targetdDateTimeListener.value,
           updatedAt: widget.isEditPage ? now : null,
           finishedAt: widget.mTask?.finishedAt,
         );
+        printer(payload.toMap());
 
         if (widget.isEditPage) {
           cTask.updateTask(payload);
@@ -194,6 +196,14 @@ class _SAddState extends State<SAdd> with RouteAware {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // leading: Center(
+        //   child: WPButton.remove(
+        //     onTap: () {
+        //       SHome(selectedPage: 0).pushReplacement();
+        //     },
+        //     size: 25,
+        //   ),
+        // ),
         title: ValueListenableBuilder(
           valueListenable: isTaskListener,
           builder: (context, isTask, child) {
@@ -211,11 +221,12 @@ class _SAddState extends State<SAdd> with RouteAware {
                 child: Column(
                   spacing: spacing,
                   children: [
-                    WTextField(label: "Points", controller: titleController),
+                    WTextField(label: "Title", controller: titleController),
                     WTextField(
                       label: "Points",
                       hintText: "Points-1\nPoints-2",
                       controller: pointTController,
+                      textInputAction: TextInputAction.newline,
                       minLines: 1,
                       maxLines: 6,
                     ),

@@ -1,5 +1,6 @@
 import 'package:daily_info/core/constants/all_enums.dart';
 import 'package:daily_info/core/extensions/ex_padding.dart';
+import 'package:daily_info/core/functions/f_call_back.dart';
 import 'package:daily_info/core/functions/f_printer.dart';
 import 'package:daily_info/core/services/navigation_service.dart';
 import 'package:daily_info/core/widgets/w_task_section.dart';
@@ -7,6 +8,7 @@ import 'package:daily_info/core/widgets/w_timer_task_section.dart';
 import 'package:daily_info/features/task/controller/c_task.dart';
 import 'package:daily_info/features/task/data/datasource/task_datasource_impl.dart';
 import 'package:daily_info/features/task/data/model/m_query.dart';
+import 'package:daily_info/features/task/data/model/m_task.dart';
 import 'package:daily_info/features/task/data/repository/task_repository_impl.dart';
 import 'package:daily_info/features/task/view/s_see_all.dart';
 import 'package:flutter/material.dart';
@@ -20,20 +22,25 @@ class STask extends StatefulWidget {
 }
 
 class _STaskState extends State<STask> {
-  CTask cTask = PowerVault.put(CTask(TaskRepositoryImpl(TaskDataSourceImpl())));
+  late CTask cTask;
   ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     // load initial items
-    cTask.fetchTask();
+    PowerVault.delete<CTask>();
+    cTask = PowerVault.put(CTask(TaskRepositoryImpl(TaskDataSourceImpl())));
+
+    callBackFunction(() {
+      cTask.fetchTask();
+    });
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    PowerVault.delete<CTask>();
+    // PowerVault.delete<CTask>();
     super.dispose();
   }
 
@@ -90,11 +97,16 @@ class _STaskState extends State<STask> {
                         WTimerTaskSection(
                           onTap: () async {
                             // clear current items
-                            cTask.completedList.clear();
+                            cTask.pendingList.clear();
+                            cTask.clearPaigenationChace();
                             cTask.update();
-                            await SSeeAll(taskState: TaskState.pending,).push();
+                            await SSeeAll(taskState: TaskState.pending).push();
+                            await Future.delayed(
+                              Duration(seconds: 1),
+                            ); // bacuse if seemore page was loading within the time if we pop we even we clear the list but when the data will be fetch it's will be added.
                             // clear current items
-                            cTask.completedList.clear();
+                            cTask.pendingList.clear();
+                            cTask.clearPaigenationChace();
                             cTask.update();
                             // load new items
                             await cTask.fetchSpacificItem(
@@ -108,12 +120,15 @@ class _STaskState extends State<STask> {
                         WTaskSection(
                           onTap: () async {
                             // clear current items
-                            cTask.completedList.clear();
+                            cTask.timeOutList.clear();
+                            cTask.clearPaigenationChace();
                             cTask.update();
-                            // navigate 
+                            // navigate
                             await SSeeAll(taskState: TaskState.timeOut).push();
+                            await Future.delayed(Duration(seconds: 1));
                             // clear current items
-                            cTask.completedList.clear();
+                            cTask.timeOutList.clear();
+                            cTask.clearPaigenationChace();
                             cTask.update();
                             // load new items
                             await cTask.fetchSpacificItem(
@@ -129,13 +144,16 @@ class _STaskState extends State<STask> {
                           onTap: () async {
                             // clear current items
                             cTask.completedList.clear();
+                            cTask.clearPaigenationChace();
                             cTask.update();
                             // navigate to new page
                             await SSeeAll(
                               taskState: TaskState.completed,
                             ).push();
+                            await Future.delayed(Duration(seconds: 1));
                             // clear current items
                             cTask.completedList.clear();
+                            cTask.clearPaigenationChace();
                             cTask.update();
                             // load new items
                             await cTask.fetchSpacificItem(

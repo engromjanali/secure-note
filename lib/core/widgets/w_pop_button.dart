@@ -21,10 +21,7 @@ class WPButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        print("sd");
-        onTap.call();
-      },
+      onTap: onTap,
       child: Image.asset(
         isWButton ? Assets.icons.close2.path : Assets.icons.close.path,
         height: size.w,

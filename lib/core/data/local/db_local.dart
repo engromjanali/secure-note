@@ -92,38 +92,43 @@ class DBHelper {
   }
 
   // ✅ Insert with integrity hash
-  Future<bool> addNote(MTask payload) async {
+  Future<MTask> addNote(MTask payload) async {
     Map data = Map.from(payload.toMap());
     data.remove(id);
-    String genaratedHash = _generateHash(payload.title ?? "", payload.details ?? "");
+    String genaratedHash = _generateHash(
+      payload.title ?? "",
+      payload.details ?? "",
+    );
     var db = await getDB();
     int effectedRow = await db.insert(tableName, {
       ...data,
       hash: genaratedHash, // For integrity verification
     });
-    printer(effectedRow);
-    return effectedRow > 0;
+    if (effectedRow > 0) {
+      List<MTask> list = await fetchTask(
+        MQuery(
+          where: "$hash IS ? AND $createdAt is ?",
+          args: [genaratedHash, payload.createdAt],
+        ),
+      );
+      return list.first;
+    } else {
+      throw "Addition failed";
+    }
   }
 
   // 🔍 Fetch all tasks with integrity verification
   Future<List<MTask>> fetchTask(MQuery payload) async {
     var db = await getDB();
-    printer(payload.filter);
+    printer(payload.where);
     printer("page no ${payload.pageNo}");
 
     List<Map<String, dynamic>> list = await db.query(
       tableName, // Your table name
       orderBy: '$id DESC', // Essential for consistent ordering
       limit: payload.limit,
-      // where: payload.filter,
-      // whereArgs: [
-      //   payload.isLoadNext ?? false
-
-      //       ? "${payload.lastEid}"
-      //       : "${payload.firstEid}",
-      // ],
-      // where: '$taskId = ? AND $taskTitle = ?',
-      // whereArgs: [1, "abcd"],
+      where: payload.where,
+      whereArgs: payload.args,
       offset: ((payload.pageNo ?? 0) - 1) * (payload.limit ?? 0),
     );
 
@@ -144,7 +149,7 @@ class DBHelper {
         // You can handle tampered data here (delete, flag, etc.)
       }
     }
-    await Future.delayed(Duration(seconds: 4));
+    await Future.delayed(Duration(seconds: 2));
     // return List.generate(
     //   payload.limit ?? 0,
     //   (index) => MTask(
@@ -160,24 +165,13 @@ class DBHelper {
     printer("fetched ${list.length}");
     printer("verifyed ${verifiedData.length}");
     return verifiedData
-        .map(
-          (Map map) => MTask(
-            id: map["id"],
-            title: map["title"],
-            createdAt: isNotNull(map["createdAt"])
-                ? DateTime.parse(map["createdAt"])
-                : null,
-            finishedAt: isNotNull(map["finishedAt"])
-                ? DateTime.parse(map["finishedAt"])
-                : null,
-          ),
-        )
+        .map((Map<String, dynamic> map) => MTask.fromMap(map))
         .toList();
     // return verifiedData;
   }
 
   // 🔄 Update with new hash
-  Future<bool> updateNote({required MTask payload}) async {
+  Future<MTask> updateNote({required MTask payload}) async {
     var db = await getDB();
     String genaratedHash = _generateHash(title, details);
 
@@ -197,7 +191,14 @@ class DBHelper {
       whereArgs: [payload.id],
     );
 
-    return effectedRow > 0;
+    if (effectedRow > 0) {
+      List<MTask> list = await fetchTask(
+        MQuery(where: "$id IS ? ", args: [payload.id]),
+      );
+      return list.first;
+    } else {
+      throw "Updation failed";
+    }
   }
 
   // 🗑️ Delete task

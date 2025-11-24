@@ -79,6 +79,7 @@ class _WTaskSectionState extends State<WTaskSection> {
     super.initState();
     callBackFunction(() {
       if (!widget.asSliver) {
+        printer("value-");
         cTask.fetchSpacificItem(payload: MQuery(taskState: widget.taskState));
         initScrolling();
       }
@@ -87,17 +88,18 @@ class _WTaskSectionState extends State<WTaskSection> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   void initScrolling() {
     // List<MTask>
-    items = widget.taskState == TaskState.pending
-        ? cTask.pendingList
-        : widget.taskState == TaskState.timeOut
-        ? cTask.timeOutList
-        : cTask.completedList;
+    // items = widget.taskState == TaskState.pending
+    //     ? cTask.pendingList
+    //     : widget.taskState == TaskState.timeOut
+    //     ? cTask.timeOutList
+    //     : widget.taskState == TaskState.completed
+    //     ? cTask.completedList
+    //     : cTask.noteList;
 
     // 🔹 Listen to item positions (which items are visible)
     itemPositionsListener.itemPositions.addListener(() {
@@ -130,7 +132,8 @@ class _WTaskSectionState extends State<WTaskSection> {
         }
         if (firstVisibleIndex <= 10 &&
             currentScrollDirection == ScrollDirection.forward &&
-            !cTask.isLoadingMore) {
+            !cTask.isLoadingMore &&
+            cTask.hasMorePrev) {
           // add previous
           printer("call for load previous");
           cTask.fetchSpacificItem(
@@ -139,7 +142,8 @@ class _WTaskSectionState extends State<WTaskSection> {
         }
         if (lastVisibleIndex >= items.length - 11 &&
             currentScrollDirection == ScrollDirection.reverse &&
-            !cTask.isLoadingMore) {
+            !cTask.isLoadingMore &&
+            cTask.hasMoreNext) {
           // load next
           printer("call for load next");
           cTask.fetchSpacificItem(payload: MQuery(taskState: widget.taskState));
@@ -175,28 +179,39 @@ class _WTaskSectionState extends State<WTaskSection> {
           index: lastVIndex! - (pageCount * cTask.limit),
           alignment: 1,
         );
-        cTask.firstPage -= pageCount;
+        cTask.firstPage += pageCount;
+      } else {
+        printer("remove data from bottom/end");
+        items.removeRange(
+          items.length - (pageCount * cTask.limit),
+          items.length,
+        );
+        cTask.update();
+        cTask.lastPage -= pageCount;
+        cTask.hasMoreNext = true;
       }
-    } else {
-      printer("remove data from bottom/end");
-      items.removeRange(items.length - (pageCount * cTask.limit), items.length);
+      cTask.isLoadingMore = false;
       cTask.update();
-      cTask.lastPage -= pageCount;
-      cTask.hasMoreNext = true;
     }
-    cTask.isLoadingMore = false;
-    cTask.update();
   }
 
   @override
   Widget build(BuildContext context) {
     return PowerBuilder<CTask>(
       builder: (cTask) {
+        // printer("length length ${items.length}");
+        // printer("length first ${cTask.firstPage}");
+        // printer("length last ${cTask.lastPage}");
+        // printer("${items[0].endAt}");
+        // cTask.isLoadingMore = false;
+
         items = items = widget.taskState == TaskState.pending
             ? cTask.pendingList
             : widget.taskState == TaskState.timeOut
             ? cTask.timeOutList
-            : cTask.completedList;
+            : widget.taskState == TaskState.completed
+            ? cTask.completedList
+            : cTask.noteList;
         return widget.asSliver
             ? SliverPadding(
                 padding: EdgeInsets.only(bottom: 10.h),
@@ -236,30 +251,30 @@ class _WTaskSectionState extends State<WTaskSection> {
         ) ??
         items[index].finishedAt?.toString() ??
         PDefaultValues.noName;
-    if (widget.taskState == TaskState.pending) {
-      if (Duration(hours: 1, minutes: 1, seconds: 60) -
-              Duration(seconds: DateTime.now().second) <
-          Duration.zero) {
-        cTask.update();
-      }
-    }
+
     String status = widget.taskState == TaskState.pending
-        ? (Duration(hours: 1, minutes: 1, seconds: 60) -
-                  Duration(seconds: DateTime.now().second))
-              .as_XX_XX_XX
-        : widget.taskState == TaskState.completed
+        ? items[index].endAt?.difference(DateTime.timestamp()).as_XX_XX_XX ??
+              PDefaultValues.noName
+        : (widget.taskState == TaskState.completed)
         ? "Completed"
         : "Time-Out";
-    return WListTile(
-      leadingColor: widget.leadingColor,
-      onTap: () {
-        SDetails(isTask: true).push();
-      },
-      index: items[index].id ?? 0,
-      title: items[index].title,
-      subTitle: "$dateTime | $status",
-      // status:""
-    );
+    return items.length == index
+        ? CircularProgressIndicator()
+        : WListTile(
+            taskState: widget.taskState,
+            leadingColor: widget.leadingColor,
+            onTap: () {
+              SDetails(isTask: true, mtask: items[index]).push();
+            },
+            onAction: (ActionType actionType) {
+              if (actionType == ActionType.edit) {
+              } else if (actionType == ActionType.delete) {}
+            },
+            index: items[index].id ?? 0,
+            title: items[index].title,
+            subTitle: "$dateTime | $status",
+            // status:""
+          );
   }
 
   Widget header(BuildContext context) => Row(
@@ -293,19 +308,4 @@ class _WTaskSectionState extends State<WTaskSection> {
       ),
     ],
   );
-}
-
-class a {
-  List<String> list = ["3", "sf"];
-}
-
-class b {
-  a A = a();
-  fun() {
-    List<String> newlist = A.list;
-    List<String> newlist2 = A.list;
-    newlist2 = ["new"];
-    print(newlist);
-    print(newlist2);
-  }
 }
