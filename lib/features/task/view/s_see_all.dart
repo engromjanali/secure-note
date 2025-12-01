@@ -41,6 +41,7 @@ class _SSeeAllState extends State<SSeeAll> {
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search_sharp),
                 hintText: "Search Task Here",
+                contentPadding: EdgeInsets.zero,
                 suffixIcon: IconButton(
                   onPressed: () {},
                   icon: Icon(Icons.tune_rounded),

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:daily_info/core/constants/colors.dart';
-import 'package:daily_info/core/data/local/db_local.dart';
 import 'package:daily_info/core/extensions/ex_build_context.dart';
 import 'package:daily_info/core/extensions/ex_date_time.dart';
 import 'package:daily_info/core/extensions/ex_duration.dart';
@@ -16,11 +15,12 @@ import 'package:daily_info/core/widgets/w_button.dart';
 import 'package:daily_info/core/widgets/w_card.dart';
 import 'package:daily_info/core/widgets/w_container.dart';
 import 'package:daily_info/core/widgets/w_dialog.dart';
-import 'package:daily_info/core/widgets/w_pop_button.dart';
 import 'package:daily_info/core/widgets/w_text_field.dart';
 import 'package:daily_info/features/add/widgets/w_select_duration.dart';
-import 'package:daily_info/features/note/data/model/m_note.dart';
-import 'package:daily_info/features/s_home.dart';
+import 'package:daily_info/features/profile/view/secret/controller/c_sceret.dart';
+import 'package:daily_info/features/profile/view/secret/data/datasource/task_datasource_impl.dart';
+import 'package:daily_info/features/profile/view/secret/data/model/m_secret.dart';
+import 'package:daily_info/features/profile/view/secret/data/repository/task_repository_impl.dart';
 import 'package:daily_info/features/task/controller/c_task.dart';
 import 'package:daily_info/features/task/data/datasource/task_datasource_impl.dart';
 import 'package:daily_info/features/task/data/model/m_task.dart';
@@ -32,14 +32,16 @@ class SAdd extends StatefulWidget {
   final bool onlyNote;
   final bool isEditPage;
   final MTask? mTask;
-  final MNote? mNote;
+  final MSecret? mSecret;
+  final bool isSecret;
 
   const SAdd({
     super.key,
     this.onlyNote = false,
     this.isEditPage = false,
     this.mTask,
-    this.mNote,
+    this.mSecret,
+    this.isSecret = false,
   });
 
   @override
@@ -62,6 +64,9 @@ class _SAddState extends State<SAdd> with RouteAware {
   TextEditingController detailsController = TextEditingController();
   TextEditingController pointTController = TextEditingController();
   CTask cTask = PowerVault.put(CTask(TaskRepositoryImpl(TaskDataSourceImpl())));
+  CSecret cSecret = PowerVault.put(
+    CSecret(SecretRepositoryImpl(SecretDataSourceImpl())),
+  );
   final double spacing = 20;
 
   @override
@@ -74,12 +79,20 @@ class _SAddState extends State<SAdd> with RouteAware {
           ? true
           : false;
       if (widget.isEditPage) {
-        titleController.text = widget.mTask?.title ?? "";
-        pointTController.text = widget.mTask?.points ?? "";
-        detailsController.text = widget.mTask?.details ?? "";
-        targetdDateTimeListener.value = widget.mTask?.endAt;
+        if (widget.isSecret) {
+          titleController.text = widget.mSecret?.title ?? "";
+          pointTController.text = widget.mSecret?.points ?? "";
+          detailsController.text = widget.mSecret?.details ?? "";
+        } else {
+          titleController.text = widget.mTask?.title ?? "";
+          pointTController.text = widget.mTask?.points ?? "";
+          detailsController.text = widget.mTask?.details ?? "";
+          targetdDateTimeListener.value = widget.mTask?.endAt;
+        }
       }
-      startTimer();
+      if (!widget.isSecret || !widget.onlyNote) {
+        startTimer();
+      }
     });
   }
 
@@ -150,22 +163,38 @@ class _SAddState extends State<SAdd> with RouteAware {
       // final now = DateTime.now().toUtc();// way 1
       final now = DateTime.timestamp(); // way 2
       if (isTaskListener.value || true) {
-        MTask payload = MTask(
-          id: widget.mTask?.id,
-          title: titleController.text.trim(),
-          points: pointTController.text.trim(),
-          details: detailsController.text.trim(),
-          createdAt: widget.mTask?.createdAt ?? now,
-          endAt: targetdDateTimeListener.value,
-          updatedAt: widget.isEditPage ? now : null,
-          finishedAt: widget.mTask?.finishedAt,
-        );
-        printer(payload.toMap());
-
-        if (widget.isEditPage) {
-          cTask.updateTask(payload);
+        if (widget.isSecret) {
+          MSecret payload = MSecret(
+            id: widget.isEditPage
+                ? widget.mSecret?.id!
+                : DateTime.timestamp().timestamp,
+            title: titleController.text.trim(),
+            points: pointTController.text.trim(),
+            details: detailsController.text.trim(),
+            createdAt: widget.mSecret?.createdAt ?? now,
+            updatedAt: widget.isEditPage ? now : null,
+          );
+          if (widget.isEditPage) {
+            cSecret.updateSecret(payload);
+          } else {
+            cSecret.addSecret(payload);
+          }
         } else {
-          cTask.addTask(payload);
+          MTask payload = MTask(
+            id: widget.mTask?.id,
+            title: titleController.text.trim(),
+            points: pointTController.text.trim(),
+            details: detailsController.text.trim(),
+            createdAt: widget.mTask?.createdAt ?? now,
+            endAt: targetdDateTimeListener.value,
+            updatedAt: widget.isEditPage ? now : null,
+            finishedAt: widget.mTask?.finishedAt,
+          );
+          if (widget.isEditPage) {
+            cTask.updateTask(payload);
+          } else {
+            cTask.addTask(payload);
+          }
         }
         // ALL DONE NOW DELETE THEME.
         titleController.text = "";
@@ -193,7 +222,11 @@ class _SAddState extends State<SAdd> with RouteAware {
         title: ValueListenableBuilder(
           valueListenable: isTaskListener,
           builder: (context, isTask, child) {
-            return Text(isTask ? "Add Task" : "Add Note");
+            return Text(
+              isTask
+                  ? (widget.isEditPage ? "Update Task" : "Add Task")
+                  : (widget.isEditPage ? "Update Note" : "Add Note"),
+            );
           },
         ),
       ),
@@ -317,11 +350,16 @@ class _SAddState extends State<SAdd> with RouteAware {
                   );
                 },
               ),
+
               PowerBuilder<CTask>(
-                builder: (cTask) => WPrimaryButton(
-                  text: "Submit",
-                  onTap: submit,
-                  isLoading: cTask.isLoadingMore,
+                builder: (cTask) => PowerBuilder<CSecret>(
+                  builder: (cSecret) => WPrimaryButton(
+                    text: "Submit",
+                    onTap: submit,
+                    isLoading: widget.isSecret
+                        ? cSecret.isLoadingMore
+                        : cTask.isLoadingMore,
+                  ),
                 ),
               ),
             ],

@@ -5,4 +5,8 @@ class PKeys {
   static const usertoken = "userToken";
   static const themeIndex = "themeIndex";
   static const userRefreshtoken = "userRefreshToken";
+
+  //
+  static const secret = "secret";
+
 }

@@ -11,6 +11,7 @@ import 'package:daily_info/core/functions/f_call_back.dart';
 import 'package:daily_info/core/functions/f_is_null.dart';
 import 'package:daily_info/core/functions/f_printer.dart';
 import 'package:daily_info/core/services/navigation_service.dart';
+import 'package:daily_info/core/widgets/w_dismisable.dart';
 import 'package:daily_info/core/widgets/w_listtile.dart';
 import 'package:daily_info/features/note/view/s_details.dart';
 import 'package:daily_info/features/task/controller/c_task.dart';
@@ -233,6 +234,7 @@ class _WTaskSectionState extends State<WTaskSection> {
                   if (isNotNull(widget.title) && items.isNotEmpty)
                     header(context),
                   ScrollablePositionedList.builder(
+                    physics: AlwaysScrollableScrollPhysics(),
                     itemCount: items.length,
                     itemBuilder: builder,
                     itemScrollController: itemScrollController,
@@ -262,7 +264,13 @@ class _WTaskSectionState extends State<WTaskSection> {
         : "Time-Out";
     return items.length == index
         ? CircularProgressIndicator()
-        : WListTile(
+        : WDismisable(
+            isFromVault: false,
+            onDismissed: (id) {
+              setState(() {
+                items.removeWhere((MTask mTask) => mTask.id == id);
+              });
+            },
             taskState: widget.taskState,
             leadingColor: widget.leadingColor,
             onTap: () {
@@ -278,6 +286,7 @@ class _WTaskSectionState extends State<WTaskSection> {
             index: items[index].id ?? 0,
             title: items[index].title,
             subTitle: "$dateTime | $status",
+            mTask: items[index],
             // status:""
           );
   }

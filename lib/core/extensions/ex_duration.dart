@@ -38,6 +38,32 @@ extension DurationFormattingExtension on Duration {
     final ms = inMilliseconds.remainder(1000).toString().padLeft(2, '0');
     return '$h : $m : $s : $ms';
   }
+
+  String asPostFormate() {
+    final seconds = inSeconds;
+    final minutes = inMinutes;
+    final hours = inHours;
+    final days = inDays;
+
+    if (seconds < 60) {
+      return "just now";
+    } else if (minutes < 60) {
+      return "$minutes minute${minutes > 1 ? 's' : ''} ago";
+    } else if (hours < 24) {
+      return "$hours hour${hours > 1 ? 's' : ''} ago";
+    } else if (days < 7) {
+      return "$days day${days > 1 ? 's' : ''} ago";
+    } else if (days < 30) {
+      final weeks = (days / 7).floor();
+      return "$weeks week${weeks > 1 ? 's' : ''} ago";
+    } else if (days < 365) {
+      final months = (days / 30).floor();
+      return "$months month${months > 1 ? 's' : ''} ago";
+    } else {
+      final years = (days / 365).floor();
+      return "$years year${years > 1 ? 's' : ''} ago";
+    }
+  }
 }
 
 // extension StringToDateTimeExtension on String {

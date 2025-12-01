@@ -3,14 +3,18 @@
 A new Flutter project.
 
 ## Getting Started
+### features
+1. dark/loght mode
+2. local authentication (biometric, passwprd),
+3. 
 
-This project is a starting point for a Flutter application.
+# screens
+!["no image found"](ss/1.jpg)
+!["no image found"](ss/2.jpg)
+!["no image found"](ss/3.jpg)
+!["no image found"](ss/4.jpg)
+!["no image found"](ss/5.jpg)
+!["no image found"](ss/6.jpg)
+!["no image found"](ss/7.jpg)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### inspired by Jahangir Alam

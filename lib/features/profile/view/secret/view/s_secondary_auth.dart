@@ -15,7 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SSAuth extends StatefulWidget {
-  const SSAuth({super.key});
+  final bool isSetkey;
+  const SSAuth({super.key, this.isSetkey = false});
 
   @override
   State<SSAuth> createState() => _SSAuthState();
@@ -39,13 +40,13 @@ class _SSAuthState extends State<SSAuth> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Align(
-              //   alignment: AlignmentGeometry.topRight,
-              //   child: Text("Left Attem - 3", textAlign: TextAlign.end),
-              // ),
+              Text(
+                "Note you will not able to change or forget this key leter, so remember it.",
+                style: context.textTheme?.bodySmall?.copyWith(
+                  color: Colors.red,
+                ),
+              ),
               gapY(100),
-              Row(children: [SizedBox().expd()]),
-
               WImage(
                 PDefaultValues.profileImage,
                 payload: MImagePayload(
@@ -58,7 +59,7 @@ class _SSAuthState extends State<SSAuth> {
               Column(
                 children: [
                   Text(
-                    " Secondary Authentication",
+                    "Secondary Authentication",
                     style: context.textTheme?.titleLarge?.copyWith(
                       fontFamily: "Custom",
                     ),

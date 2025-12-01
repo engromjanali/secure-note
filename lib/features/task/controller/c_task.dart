@@ -76,6 +76,9 @@ class CTask extends CBase {
   }
 
   Future<void> fetchTask({MQuery? payload}) async {
+    pendingList.clear();
+    timeOutList.clear();
+    completedList.clear();
     await fetchSpacificItem(payload: MQuery(taskState: TaskState.pending));
     clearPaigenationChace();
     await fetchSpacificItem(payload: MQuery(taskState: TaskState.timeOut));

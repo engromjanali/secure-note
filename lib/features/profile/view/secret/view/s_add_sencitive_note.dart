@@ -1,3 +1,4 @@
+import 'package:daily_info/core/constants/all_enums.dart';
 import 'package:daily_info/core/constants/default_values.dart';
 import 'package:daily_info/core/constants/dimension_theme.dart';
 import 'package:daily_info/core/extensions/ex_build_context.dart';
@@ -17,6 +18,7 @@ class SASNote extends StatelessWidget {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController passController = TextEditingController();
   final TextEditingController backupController = TextEditingController();
+  final TextEditingController noteController = TextEditingController();
   SASNote({super.key, this.viewOnly = false});
 
   @override
@@ -48,9 +50,11 @@ class SASNote extends StatelessWidget {
                     hintText: "xxxxxxx xxxxxx xxxxxx\nxxxxxxx xxxxxx",
                     minLines: 2,
                     maxLines: 5,
+                    textInputAction: TextInputAction.newline,
                     controller: backupController,
                     suffixIcon: Column(
                       mainAxisSize: MainAxisSize.min,
+
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -66,7 +70,7 @@ class SASNote extends StatelessWidget {
                             }
                           },
                           icon: Icon(
-                            Icons.sync,
+                            Icons.published_with_changes_outlined,
                             color: context.button?.primary,
                           ),
                         ),
@@ -77,9 +81,10 @@ class SASNote extends StatelessWidget {
                 WTextField(
                   enable: !viewOnly,
                   label: "Note",
-                  // controller: backupController,
+                  controller: noteController,
                   maxLines: 6,
                   minLines: 1,
+                  textInputAction: TextInputAction.newline,
                 ),
                 gapY(50),
                 if (!viewOnly) WBottomNavButton(label: "Submit", ontap: submit),
