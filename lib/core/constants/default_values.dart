@@ -9,6 +9,8 @@
 import 'package:flutter/widgets.dart';
 
 class PDefaultValues {
+
+  static const String encryption = "encryption";
   static const String noFee = "N/A";
   static const String noName = "N/A";
   static const int phoneNumberLength = 11;
@@ -17,7 +19,10 @@ class PDefaultValues {
   static const List<String> allowedFileTypes = ['jpg', 'pdf', 'png'];
   static const int minDOBDate = 1900;
   static const int passwordMinLength = 8;
-  static const googleGroupLink =
+  static const int limit = 20;
+  static const privacyUrlLink =
+      "https://groups.google.com/u/0/g/apptestingservicex-xxx";
+  static const termsConditionUrl =
       "https://groups.google.com/u/0/g/apptestingservicex-xxx";
   static const instagramLink = "https://www.instagram.com/engromjanali";
   static const tiktokLink = "https://www.tiktok.com/404?fromUrl=/engromjanali";

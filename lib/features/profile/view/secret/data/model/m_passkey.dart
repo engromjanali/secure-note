@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class MSocial {
+class MPasskey {
   String? id;
   String? title;
   String? pass;
@@ -10,7 +10,7 @@ class MSocial {
   DateTime? updatedAt;
 
 
-  MSocial({
+  MPasskey({
      this.id,
     this.title,
     this.pass,
@@ -20,8 +20,8 @@ class MSocial {
     this.updatedAt,
   });
 
-  factory MSocial.fromMap(Map<String, dynamic> map) {
-    return MSocial(
+  factory MPasskey.fromMap(Map<String, dynamic> map) {
+    return MPasskey(
       id: map["id"] as String,
       title: map['title'] as String?,
       pass: map['pass'] as String?,
@@ -50,21 +50,21 @@ class MSocial {
 
   // --- Utility Methods ---
 
-  // 4. Method to create MSocial from a JSON string
-  factory MSocial.fromJson(String source) =>
-      MSocial.fromMap(json.decode(source) as Map<String, dynamic>);
+  // 4. Method to create MPasskey from a JSON string
+  factory MPasskey.fromJson(String source) =>
+      MPasskey.fromMap(json.decode(source) as Map<String, dynamic>);
 
-  // 5. Method to convert MSocial to a JSON string
+  // 5. Method to convert MPasskey to a JSON string
   String toJson() => json.encode(toMap());
 
   // 6. toString() override for easy debugging/printing
   @override
   String toString() {
-    return 'MSocial(id: $id title: $title, pass: $pass, bCode: $bCode, note: $note, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'MPasskey(id: $id title: $title, pass: $pass, bCode: $bCode, note: $note, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   // 7. copyWith() for creating a new instance with optional changes
-  MSocial copyWith({
+  MPasskey copyWith({
     String? id,
     String? title,
     String? pass,
@@ -73,7 +73,7 @@ class MSocial {
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
-    return MSocial(
+    return MPasskey(
       id: id ?? this.id,
       title: title ?? this.title,
       pass: pass ?? this.pass,

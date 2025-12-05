@@ -31,6 +31,7 @@ class WSDuration extends StatelessWidget {
             spacing: 10.h,
             children: [
               WTextField(
+                keyboardType: TextInputType.number,
                 validator: (value) {
                   if (!(value?.isValidInt ?? false)) {
                     return "Invalid";
@@ -41,6 +42,7 @@ class WSDuration extends StatelessWidget {
                 controller: hoursController,
               ),
               WTextField(
+                keyboardType: TextInputType.number,
                 validator: (value) {
                   if (!(value?.isValidInt ?? false)) {
                     return "Invalid";
@@ -51,6 +53,7 @@ class WSDuration extends StatelessWidget {
                 controller: minutesController,
               ),
               WTextField(
+                keyboardType: TextInputType.number,
                 validator: (value) {
                   if (!(value?.isValidInt ?? false)) {
                     return "Invalid";

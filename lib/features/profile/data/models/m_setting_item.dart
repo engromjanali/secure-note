@@ -1,15 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daily_info/core/constants/default_values.dart';
+import 'package:daily_info/core/constants/keys.dart';
 import 'package:daily_info/core/data/local/db_local.dart';
 import 'package:daily_info/core/extensions/ex_build_context.dart';
+import 'package:daily_info/core/extensions/ex_padding.dart';
+import 'package:daily_info/core/functions/f_is_null.dart';
 import 'package:daily_info/core/functions/f_snackbar.dart';
 import 'package:daily_info/core/functions/f_url_launcher.dart';
+import 'package:daily_info/core/services/flutter_secure_service.dart';
 import 'package:daily_info/core/services/navigation_service.dart';
 import 'package:daily_info/core/widgets/w_dialog.dart';
+import 'package:daily_info/features/profile/controllers/c_profile.dart';
 import 'package:daily_info/features/profile/view/s_faq.dart';
 import 'package:daily_info/features/profile/view/secret/view/s_secondary_auth.dart';
 import 'package:daily_info/gen/assets.gen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:power_state/power_state.dart';
 
 class MSItem {
   final String icon;
@@ -50,9 +58,70 @@ List<MSItem> profileItem = [
   MSItem(
     icon: Assets.icons.vault,
     label: "Secret Vault",
-    onTap: () {
-      SSAuth().push();
+    onTap: () async {
+      CProfile cProfile = PowerVault.find<CProfile>();
+      // user already signed
+      if (cProfile.isSigned) {
+        String? secondaryAuthKey = await FSSService().getString(
+          "secondaryAuthKey",
+        );
+        String? attemptCount = await FSSService().getString("attemptCount");
+        if (isNotNull(secondaryAuthKey)) {
+          // key found in local sotrage so verify user.
+          if (int.parse(attemptCount ?? "0") > 3) {
+            showSnackBar(
+              "Account Was Locked",
+              snackBarType: SnackBarType.warning,
+            );
+          } else {
+            SSAuth(
+              isSetkey: false,
+              attemptCount: int.parse(attemptCount ?? "0"),
+              secondaryAuthKey: secondaryAuthKey,
+            ).push();
+          }
+        } else {
+          // first signin, or new device sign in
+          FirebaseFirestore.instance
+              .collection(PKeys.users)
+              .doc(cProfile.mProfileData.id)
+              .collection(PKeys.eKey)
+              .doc(PKeys.eKey)
+              .get()
+              .then((DocumentSnapshot snapshot) {
+                final data = snapshot.data();
+                if (isNotNull(data) &&
+                    isNotNull(
+                      (data as Map<String, dynamic>)["secondaryAuthKey"],
+                    )) {
+                  // key found in server
+                  // so set key in local storage
+                  SSAuth(
+                    isSetkey: true,
+                    serverSecondaryAuthKey: data["secondaryAuthKey"],
+                  ).push();
+                } else {
+                  // key not found in server so set key
+                  SSAuth(isSetkey: true).push();
+                }
+              });
+        }
+      } else {
+        showSnackBar("Please Sign In !!!", snackBarType: SnackBarType.warning);
+      }
     },
+  ),
+  MSItem(
+    icon: Assets.icons.profile,
+    label: "User ID",
+    onTap: () {
+      CProfile cProfile = PowerVault.find<CProfile>();
+      Clipboard.setData(
+        ClipboardData(text: cProfile.mProfileData.id ?? PDefaultValues.noName),
+      );
+      showSnackBar("Copyed!");
+    },
+    child: _WCopyButton(),
   ),
 ];
 
@@ -100,29 +169,40 @@ List<MSItem> menuList = [
     },
   ),
   MSItem(
-    icon: Assets.icons.profile,
-    label: "User ID",
-    onTap: () {
-      Clipboard.setData(ClipboardData(text: "483nvidfn10238593"));
-      showSnackBar("Copyed!");
+    icon: Assets.icons.power,
+    label: "SignOut",
+    onTap: () async {
+      WDialog.confirmExitLogout(
+        context: NavigationService.currentContext,
+        isLogOut: true,
+        onYesPressed: () {
+          CProfile cProfile = PowerVault.find<CProfile>();
+          cProfile.logOut();
+        },
+      );
     },
-    child: _WCopyButton(),
   ),
 ];
 
 class _WCopyButton extends StatelessWidget {
-  const _WCopyButton({super.key});
+  _WCopyButton({super.key});
+  CProfile cProfile = PowerVault.find<CProfile>();
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(
-          child: Text(
-            "483nvidfn10238593",
-            style: context.textTheme?.bodySmall,
-            overflow: TextOverflow.ellipsis,
-          ),
+        PowerBuilder<CProfile>(
+          builder: (cProfile) {
+            return Expanded(
+              child: Text(
+                cProfile.mProfileData.id ?? PDefaultValues.noName,
+                style: context.textTheme?.bodySmall,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.right,
+              ).pR(),
+            );
+          },
         ),
         Icon(Icons.file_copy, color: context.primaryTextColor),
       ],

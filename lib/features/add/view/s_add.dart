@@ -18,9 +18,9 @@ import 'package:daily_info/core/widgets/w_dialog.dart';
 import 'package:daily_info/core/widgets/w_text_field.dart';
 import 'package:daily_info/features/add/widgets/w_select_duration.dart';
 import 'package:daily_info/features/profile/view/secret/controller/c_sceret.dart';
-import 'package:daily_info/features/profile/view/secret/data/datasource/task_datasource_impl.dart';
+import 'package:daily_info/features/profile/view/secret/data/datasource/secret_note/secret_note_datasource_impl.dart';
 import 'package:daily_info/features/profile/view/secret/data/model/m_secret.dart';
-import 'package:daily_info/features/profile/view/secret/data/repository/task_repository_impl.dart';
+import 'package:daily_info/features/profile/view/secret/data/repository/secret_note/secret_note_repository_impl.dart';
 import 'package:daily_info/features/task/controller/c_task.dart';
 import 'package:daily_info/features/task/data/datasource/task_datasource_impl.dart';
 import 'package:daily_info/features/task/data/model/m_task.dart';
@@ -65,7 +65,7 @@ class _SAddState extends State<SAdd> with RouteAware {
   TextEditingController pointTController = TextEditingController();
   CTask cTask = PowerVault.put(CTask(TaskRepositoryImpl(TaskDataSourceImpl())));
   CSecret cSecret = PowerVault.put(
-    CSecret(SecretRepositoryImpl(SecretDataSourceImpl())),
+    CSecret(SecretRepositoryImpl(SecretDatasourceImpl())),
   );
   final double spacing = 20;
 
@@ -152,7 +152,7 @@ class _SAddState extends State<SAdd> with RouteAware {
     if (_currentRoute != null) {
       NavigationService.routeObserver.unsubscribe(this);
     }
-    // PowerVault.delete<CTask>();
+    // PowerVault.delete<CSecret>();
     super.dispose();
   }
 
@@ -191,9 +191,9 @@ class _SAddState extends State<SAdd> with RouteAware {
             finishedAt: widget.mTask?.finishedAt,
           );
           if (widget.isEditPage) {
-            cTask.updateTask(payload);
+            await cTask.updateTask(payload);
           } else {
-            cTask.addTask(payload);
+            await cTask.addTask(payload);
           }
         }
         // ALL DONE NOW DELETE THEME.

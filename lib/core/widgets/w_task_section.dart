@@ -2,6 +2,7 @@ import 'package:daily_info/core/constants/all_enums.dart';
 import 'package:daily_info/core/constants/colors.dart';
 import 'package:daily_info/core/constants/default_values.dart';
 import 'package:daily_info/core/constants/dimension_theme.dart';
+import 'package:daily_info/core/data/local/db_local.dart';
 import 'package:daily_info/core/extensions/ex_build_context.dart';
 import 'package:daily_info/core/extensions/ex_date_time.dart';
 import 'package:daily_info/core/extensions/ex_duration.dart';
@@ -12,8 +13,13 @@ import 'package:daily_info/core/functions/f_is_null.dart';
 import 'package:daily_info/core/functions/f_printer.dart';
 import 'package:daily_info/core/services/navigation_service.dart';
 import 'package:daily_info/core/widgets/w_dismisable.dart';
-import 'package:daily_info/core/widgets/w_listtile.dart';
+import 'package:daily_info/features/add/view/s_add.dart';
 import 'package:daily_info/features/note/view/s_details.dart';
+import 'package:daily_info/features/profile/view/secret/controller/c_sceret.dart';
+import 'package:daily_info/features/profile/view/secret/data/datasource/passkey/passkey_datasource_impl.dart';
+import 'package:daily_info/features/profile/view/secret/data/datasource/secret_note/secret_note_datasource_impl.dart';
+import 'package:daily_info/features/profile/view/secret/data/model/m_secret.dart';
+import 'package:daily_info/features/profile/view/secret/data/repository/secret_note/secret_note_repository_impl.dart';
 import 'package:daily_info/features/task/controller/c_task.dart';
 import 'package:daily_info/features/task/data/model/m_query.dart';
 import 'package:daily_info/features/task/data/model/m_task.dart';
@@ -27,8 +33,6 @@ import 'package:sliver_tools/sliver_tools.dart';
 class WTaskSection extends StatefulWidget {
   Color? leadingColor;
   final String? title;
-  final bool isTask;
-  final List<MTask>? items;
   final Function()? onTap;
   final TaskState taskState;
   final bool asSliver;
@@ -39,8 +43,6 @@ class WTaskSection extends StatefulWidget {
   WTaskSection({
     super.key,
     this.title,
-    this.isTask = true,
-    this.items,
     this.leadingColor,
     this.onTap,
     required this.taskState,
@@ -253,7 +255,6 @@ class _WTaskSectionState extends State<WTaskSection> {
         items[index].createdAt?.format(
           DateTimeFormattingExtension.formatDDMMMYYYY_I_HHMMA,
         ) ??
-        items[index].finishedAt?.toString() ??
         PDefaultValues.noName;
 
     String status = widget.taskState == TaskState.pending
@@ -266,28 +267,17 @@ class _WTaskSectionState extends State<WTaskSection> {
         ? CircularProgressIndicator()
         : WDismisable(
             isFromVault: false,
-            onDismissed: (id) {
-              setState(() {
-                items.removeWhere((MTask mTask) => mTask.id == id);
-              });
-            },
             taskState: widget.taskState,
             leadingColor: widget.leadingColor,
             onTap: () {
               SDetails(isTask: true, mtask: items[index]).push();
             },
-
-            onAction: (ActionType actionType) {
-              if (actionType == ActionType.edit) {
-              } else if (actionType == ActionType.delete) {
-                cTask.deleteTask(items[index].id!);
-              }
+            onAction: (actionType) {
+              onAction(actionType, index);
             },
-            index: items[index].id ?? 0,
             title: items[index].title,
             subTitle: "$dateTime | $status",
             mTask: items[index],
-            // status:""
           );
   }
 
@@ -322,4 +312,50 @@ class _WTaskSectionState extends State<WTaskSection> {
       ),
     ],
   );
+  void onAction(ActionType actionType, int index) {
+    MTask mTask = items[index];
+    items.removeAt(index);
+    cTask.update();
+    if (actionType == ActionType.edit) {
+      SAdd(
+        isEditPage: true,
+        onlyNote: widget.taskState == TaskState.note,
+        mTask: mTask,
+      ).push();
+    } else if (actionType == ActionType.keepInVault) {
+      CSecret cSecret = PowerVault.put(
+        CSecret(SecretRepositoryImpl(SecretDatasourceImpl())),
+      );
+      MSecret payload = MSecret(
+        id: DateTime.timestamp().timestamp,
+        title: mTask.title,
+        points: mTask.points,
+        details: mTask.details,
+        createdAt: mTask.createdAt,
+        updatedAt: mTask.updatedAt,
+      );
+      cSecret.addSecret(payload);
+      cTask.deleteTask(mTask.id!);
+      PowerVault.delete<CSecret>();
+    } else if (actionType == ActionType.markAsComplete) {
+      Map<String, dynamic> data = mTask.toMap();
+      data.update(
+        DBHelper.finishedAt,
+        (value) => DateTime.timestamp().toIso8601String(),
+      );
+      MTask payload = MTask.fromMap(data);
+      printer(payload.toMap());
+      cTask.updateTask(payload);
+    } else if (actionType == ActionType.setAsPending) {
+      // set as pending
+      Map<String, dynamic> data = Map.from(mTask.toMap());
+      data.remove(DBHelper.finishedAt);
+      MTask payload = MTask.fromMap(data);
+      printer(payload.toMap());
+      cTask.updateTask(payload);
+    } else if (actionType == ActionType.delete) {
+      // delete
+      cTask.deleteTask(mTask.id!);
+    }
+  }
 }

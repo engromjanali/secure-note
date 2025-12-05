@@ -70,6 +70,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/oneshot.svg
   String get oneshot => 'assets/icons/oneshot.svg';
 
+  /// File path: assets/icons/power.svg
+  String get power => 'assets/icons/power.svg';
+
   /// File path: assets/icons/privacy_and_policy.svg
   String get privacyAndPolicy => 'assets/icons/privacy_and_policy.svg';
 
@@ -107,6 +110,7 @@ class $AssetsIconsGen {
     feedback,
     notebook,
     oneshot,
+    power,
     privacyAndPolicy,
     profile,
     rating,
@@ -153,6 +157,9 @@ class $AssetsLogoGen {
   /// File path: assets/logo/addbutton.svg
   String get addbutton => 'assets/logo/addbutton.svg';
 
+  /// File path: assets/logo/appIcon.png
+  AssetGenImage get appIcon => const AssetGenImage('assets/logo/appIcon.png');
+
   /// File path: assets/logo/apple.svg
   String get apple => 'assets/logo/apple.svg';
 
@@ -173,6 +180,9 @@ class $AssetsLogoGen {
 
   /// File path: assets/logo/imageNotFound.svg
   String get imageNotFound => 'assets/logo/imageNotFound.svg';
+
+  /// File path: assets/logo/logo.svg
+  String get logo => 'assets/logo/logo.svg';
 
   /// File path: assets/logo/logout.svg
   String get logout => 'assets/logo/logout.svg';
@@ -222,6 +232,7 @@ class $AssetsLogoGen {
     a404Error,
     image,
     addbutton,
+    appIcon,
     apple,
     community,
     edit,
@@ -229,6 +240,7 @@ class $AssetsLogoGen {
     emptyData,
     google,
     imageNotFound,
+    logo,
     logout,
     menu,
     myApps,

@@ -4,17 +4,22 @@ import 'package:daily_info/core/extensions/ex_build_context.dart';
 import 'package:daily_info/core/extensions/ex_expanded.dart';
 import 'package:daily_info/core/extensions/ex_padding.dart';
 import 'package:daily_info/core/functions/f_is_null.dart';
-import 'package:daily_info/core/services/local_auth_services.dart';
+import 'package:daily_info/core/functions/f_printer.dart';
 import 'package:daily_info/core/services/navigation_service.dart';
 import 'package:daily_info/core/widgets/image/m_image_payload.dart';
 import 'package:daily_info/core/widgets/image/w_image.dart';
 import 'package:daily_info/core/widgets/w_card.dart';
+import 'package:daily_info/features/authentication/views/s_sign_in.dart';
+import 'package:daily_info/features/profile/controllers/c_profile.dart';
+import 'package:daily_info/features/profile/data/data_source/profile_data_source_impl.dart';
 import 'package:daily_info/features/profile/data/models/m_setting_item.dart';
+import 'package:daily_info/features/profile/data/repository/patient_repository_impl.dart';
 import 'package:daily_info/features/profile/view/s_edit_profile.dart';
 import 'package:daily_info/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:power_state/power_state.dart';
 
 class SProfile extends StatefulWidget {
   const SProfile({super.key});
@@ -24,12 +29,17 @@ class SProfile extends StatefulWidget {
 }
 
 class _SProfileState extends State<SProfile> {
-  bool isSign = true;
+  CProfile cProfile = PowerVault.put(
+    CProfile(ProfileRepositoryImpl(ProfileDataSourceImpl())),
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: NavigationService.currentContext.backgroundColor,
-      appBar: AppBar(title: Text("Settings")),
+      appBar: AppBar(title: Text("Settings"), actions: [
+          
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           spacing: PTheme.paddingY,
@@ -84,99 +94,112 @@ class _SProfileState extends State<SProfile> {
 
   // top profile section
   Widget _WProfile() {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: context.button?.primary,
-            borderRadius: BorderRadius.circular(PTheme.borderRadius),
-          ),
-          height: 200.h,
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: 20.h,
-            children: [
-              WImage(
-                PDefaultValues.profileImage,
-                payload: MImagePayload(
-                  height: 100.r,
-                  width: 100.r,
-                  isProfileImage: true,
-                  isCircular: true,
-                ),
+    return PowerBuilder<CProfile>(
+      builder: (cProfile) {
+        printer("_WProfile");
+        printer(cProfile.mProfileData.toJson());
+
+        return Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: context.button?.primary,
+                borderRadius: BorderRadius.circular(PTheme.borderRadius),
               ),
-              if (isSign)
-                Column(
-                  children: [
-                    Text(
-                      "Md Romjan Ali" ?? PDefaultValues.noName,
-                      style: context.textTheme?.titleSmall,
-                      overflow: TextOverflow.ellipsis,
+              height: 200.h,
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                spacing: 20.h,
+                children: [
+                  WImage(
+                    cProfile.mProfileData?.image,
+                    payload: MImagePayload(
+                      height: 100.r,
+                      width: 100.r,
+                      isProfileImage: true,
+                      isCircular: true,
                     ),
-                    Text(
-                      "engromjanali@gmail.com" ?? PDefaultValues.noName,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.justify,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
-              if (!isSign)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: PTheme.paddingX,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black.withAlpha(100),
-                        borderRadius: BorderRadius.circular(
-                          PTheme.borderRadius,
+                  ),
+                  if (cProfile.isSigned)
+                    Column(
+                      children: [
+                        Text(
+                          cProfile.mProfileData?.name ?? PDefaultValues.noName,
+                          style: context.textTheme?.titleSmall,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      child: Text(
-                        "Sign In",
-                        style: context.textTheme?.titleSmall,
-                      ).pAll(value: 5),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black.withAlpha(100),
-                        borderRadius: BorderRadius.circular(
-                          PTheme.borderRadius,
+                        Text(
+                          cProfile.mProfileData?.email ?? PDefaultValues.noName,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.justify,
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
-                      ),
-                      child: Text(
-                        "Sign Up",
-                        style: context.textTheme?.titleSmall,
-                      ).pAll(value: 5),
+                      ],
                     ),
-                  ],
-                ),
-            ],
-          ).pAll(),
-        ),
-        if (isSign)
-          Positioned(
-            right: 5,
-            top: 5,
-            child: InkWell(
-              onTap: () {
-                SEditProfile().push();
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.black.withAlpha(100),
-                  borderRadius: BorderRadius.circular(PTheme.borderRadius),
-                ),
-                child: Text(
-                  "Edit Profile",
-                  style: context.textTheme?.titleSmall,
-                ).pAll(value: 5),
-              ),
+                  if (!cProfile.isSigned)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: PTheme.paddingX,
+                      children: [
+                        GestureDetector(
+                          onTap: () => SSignIn().push(),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black.withAlpha(100),
+                              borderRadius: BorderRadius.circular(
+                                PTheme.borderRadius,
+                              ),
+                            ),
+                            child: Text(
+                              "Sign In",
+                              style: context.textTheme?.titleSmall,
+                            ).pAll(value: 5),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () => SSignIn(isSignIn: false).push(),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black.withAlpha(100),
+                              borderRadius: BorderRadius.circular(
+                                PTheme.borderRadius,
+                              ),
+                            ),
+                            child: Text(
+                              "Sign Up",
+                              style: context.textTheme?.titleSmall,
+                            ).pAll(value: 5),
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
+              ).pAll(),
             ),
-          ),
-      ],
+            if (cProfile.isSigned)
+              Positioned(
+                right: 5,
+                top: 5,
+                child: InkWell(
+                  onTap: () {
+                    SEditProfile().push();
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withAlpha(100),
+                      borderRadius: BorderRadius.circular(PTheme.borderRadius),
+                    ),
+                    child: Text(
+                      "Edit Profile",
+                      style: context.textTheme?.titleSmall,
+                    ).pAll(value: 5),
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

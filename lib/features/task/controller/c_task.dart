@@ -1,4 +1,5 @@
 import 'package:daily_info/core/constants/all_enums.dart';
+import 'package:daily_info/core/constants/default_values.dart';
 import 'package:daily_info/core/controllers/c_base.dart';
 import 'package:daily_info/core/functions/f_printer.dart';
 import 'package:daily_info/features/task/data/model/m_query.dart';
@@ -15,7 +16,7 @@ class CTask extends CBase {
   List<MTask> completedList = [];
   List<MTask> noteList = [];
 
-  final int limit = 20;
+  final int limit = PDefaultValues.limit;
   int firstPage = 1;
   int lastPage = 1;
   bool hasMoreNext = true;
@@ -58,6 +59,7 @@ class CTask extends CBase {
   }
 
   Future<void> deleteTask(int id) async {
+    printer("deleteWhere id = $id");
     try {
       isLoadingMore = true;
       update();

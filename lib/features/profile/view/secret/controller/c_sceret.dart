@@ -1,21 +1,31 @@
+import 'package:daily_info/core/constants/default_values.dart';
 import 'package:daily_info/core/controllers/c_base.dart';
 import 'package:daily_info/core/functions/f_printer.dart';
 import 'package:daily_info/features/profile/view/secret/data/model/m_secret.dart';
 import 'package:daily_info/features/profile/view/secret/data/model/m_secret_query.dart';
-import 'package:daily_info/features/profile/view/secret/data/repository/task_repository.dart';
+import 'package:daily_info/features/profile/view/secret/data/repository/secret_note/secret_note_repository.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class CSecret extends CBase {
   final ISecretRepository _iSecretRepository;
   CSecret(this._iSecretRepository);
 
   List<MSecret> secretList = [];
-
-  final int limit = 20;
+  final int limit = PDefaultValues.limit;
   String? firstSId;
   String? lastSId;
   bool hasMoreNext = true;
   bool hasMorePrev = false;
   bool isLoadingMore = false;
+
+  void clear() {
+    secretList = [];
+    firstSId = null;
+    lastSId = null;
+    hasMoreNext = true;
+    hasMorePrev = false;
+    isLoadingMore = false;
+  }
 
   // void listenFundDocChanges({required String messId}) {
   //   fundListener2?.cancel();
@@ -87,7 +97,7 @@ class CSecret extends CBase {
     try {
       isLoadingMore = true;
       update();
-      await _iSecretRepository.addSecret(payload);
+      await _iSecretRepository.addSecretNote(payload);
       await Future.delayed(Duration(seconds: 2));
       printer(secretList.length);
     } catch (e) {
@@ -102,7 +112,7 @@ class CSecret extends CBase {
     try {
       isLoadingMore = true;
       update();
-      await _iSecretRepository.updateSecret(payload);
+      await _iSecretRepository.updateSecretNote(payload);
     } catch (e) {
       errorPrint(e);
     } finally {
@@ -115,7 +125,7 @@ class CSecret extends CBase {
     try {
       isLoadingMore = true;
       update();
-      await _iSecretRepository.deteteSecret(id);
+      await _iSecretRepository.deteteSecretNote(id);
       // clear from runtime storage
       secretList.removeWhere((mSecret) => mSecret.id == id);
     } catch (e) {
@@ -128,7 +138,7 @@ class CSecret extends CBase {
 
   Future<void> fetchSecret({MSQuery? payload}) async {
     secretList.clear();
-    await fetchSpacificItem();
+    await fetchSpacificItem(payload: payload);
   }
 
   Future<List<MSecret>?> fetchSpacificItem({MSQuery? payload}) async {
@@ -136,8 +146,8 @@ class CSecret extends CBase {
       MSQuery newPayload = MSQuery(
         isLoadNext: payload?.isLoadNext ?? true,
         limit: payload?.limit ?? limit,
-        firstEid: firstSId,
-        lastEid: lastSId,
+        firstEid: payload?.firstEid ?? firstSId,
+        lastEid: payload?.lastEid ?? lastSId,
       );
 
       printer("call 2");
@@ -158,7 +168,8 @@ class CSecret extends CBase {
       printer("call 5");
       isLoadingMore = true;
       update();
-      List<MSecret> res = await _iSecretRepository.fetchSecret(newPayload);
+      List<MSecret> res = await _iSecretRepository.fetchSecretNote(newPayload);
+      printer("res : ${res.length}");
       if (newPayload.isLoadNext!) {
         secretList.addAll(res);
         if (res.length < limit) {

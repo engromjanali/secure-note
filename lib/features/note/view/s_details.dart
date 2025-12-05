@@ -10,13 +10,22 @@ import 'package:daily_info/core/functions/f_is_null.dart';
 import 'package:daily_info/core/functions/f_timer.dart';
 import 'package:daily_info/core/services/navigation_service.dart';
 import 'package:daily_info/features/add/view/s_add.dart';
+import 'package:daily_info/features/profile/view/secret/data/model/m_secret.dart';
 import 'package:daily_info/features/task/data/model/m_task.dart';
 import 'package:flutter/material.dart';
 
 class SDetails extends StatefulWidget {
   final bool isTask;
+  final bool? isFromVault;
   final MTask? mtask;
-  const SDetails({super.key, this.isTask = false, this.mtask});
+  final MSecret? mSecret;
+  const SDetails({
+    super.key,
+    this.isTask = false,
+    this.mtask,
+    this.isFromVault,
+    this.mSecret,
+  });
   @override
   State<SDetails> createState() => _SDetailsState();
 }
@@ -29,18 +38,22 @@ class _SDetailsState extends State<SDetails> {
   void initState() {
     super.initState();
     callBackFunction(() async {
-      TimerService().listen(() {
-        if (mounted &&
-            isNotNull(widget.mtask?.endAt) &&
-            widget.mtask!.endAt!.difference(DateTime.timestamp()) >
-                Duration.zero) {
-          targetedDurationListener.value = widget.mtask?.endAt?.difference(
-            DateTime.timestamp(),
-          );
-        } else {
-          TimerService().stop();
-        }
-      });
+      if (widget.isFromVault ?? false) {
+        //
+      } else {
+        TimerService().listen(() {
+          if (mounted &&
+              isNotNull(widget.mtask?.endAt) &&
+              widget.mtask!.endAt!.difference(DateTime.timestamp()) >
+                  Duration.zero) {
+            targetedDurationListener.value = widget.mtask?.endAt?.difference(
+              DateTime.timestamp(),
+            );
+          } else {
+            TimerService().stop();
+          }
+        });
+      }
     });
   }
 
@@ -63,6 +76,8 @@ class _SDetailsState extends State<SDetails> {
                 isEditPage: true,
                 onlyNote: isNull(widget.mtask?.endAt) ? true : false,
                 mTask: widget.mtask,
+                mSecret: widget.mSecret,
+                isSecret: widget.isFromVault ?? false,
               ).pushReplacement();
             },
             icon: Icon(Icons.edit),
@@ -79,16 +94,18 @@ class _SDetailsState extends State<SDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    (widget.mtask?.title ?? "").toTitleCase.showDVIE,
+                    (widget.mtask?.title ?? (widget.mSecret?.title ?? ""))
+                        .toTitleCase
+                        .showDVIE,
                     style: context.textTheme?.titleSmall,
                   ),
                 ],
               ).pDivider().pB(),
               // points section
               Text(
-                isNull(widget.mtask?.points)
+                isNull(widget.mtask?.points ?? widget.mSecret?.title)
                     ? ""
-                    : (widget.mtask!.points!)
+                    : (widget.mtask?.points ?? (widget.mSecret!.points!))
                           .replaceAll("\n", "\n◉ ")
                           .replaceFirst("", "◉ "),
                 textAlign: TextAlign.justify,
@@ -96,15 +113,14 @@ class _SDetailsState extends State<SDetails> {
               ).pB(value: 20),
               // details section
               Text(
-                widget.isTask
-                    ? widget.mtask?.details ?? PDefaultValues.noName
-                    : "Note details",
+                widget.mtask?.details ??
+                    (widget.mSecret?.details ?? PDefaultValues.noName),
                 textAlign: TextAlign.justify,
                 style: context.textTheme?.bodyLarge,
               ).pB(),
               // info section
-              // Text("Info", style: context.textTheme?.titleSmall),
               SizedBox.shrink().pDivider(),
+              // remaining time
               if (widget.isTask &&
                   isNull(widget.mtask?.finishedAt) &&
                   isNotNull(widget.mtask?.endAt))
@@ -128,13 +144,23 @@ class _SDetailsState extends State<SDetails> {
                 "Finished At",
                 widget.mtask?.finishedAt,
                 color: PColors.completedColor,
+                context: context,
               ),
-              showDateAsFormated("End At", widget.mtask?.endAt),
-              showDateAsFormated("Updated At", widget.mtask?.updatedAt),
+              showDateAsFormated(
+                "End At",
+                widget.mtask?.endAt,
+                context: context,
+              ),
+              showDateAsFormated(
+                "Updated At",
+                widget.mtask?.updatedAt ?? widget.mSecret?.updatedAt,
+                context: context,
+              ),
               showDateAsFormated(
                 "Created At",
-                widget.mtask?.createdAt,
+                widget.mtask?.createdAt ?? widget.mSecret?.createdAt,
                 doNotShowIfNull: false,
+                context: context,
               ),
             ],
           ).pAll(),
@@ -142,25 +168,26 @@ class _SDetailsState extends State<SDetails> {
       ),
     );
   }
+}
 
-  Widget showDateAsFormated(
-    String leading,
-    DateTime? dateTime, {
-    bool doNotShowIfNull = true,
-    Color? color,
-  }) {
-    if (doNotShowIfNull) {
-      return isNotNull(dateTime)
-          ? Text(
-              "$leading: ${dateTime?.format(DateTimeFormattingExtension.formatDDMMMYYYY_I_HHMMA)}",
-              style: context.textTheme?.bodyMedium?.copyWith(color: color),
-            )
-          : SizedBox.shrink();
-    } else {
-      return Text(
-        "$leading: ${dateTime?.format(DateTimeFormattingExtension.formatDDMMMYYYY_I_HHMMA)}",
-        style: context.textTheme?.bodyMedium?.copyWith(color: color),
-      );
-    }
+Widget showDateAsFormated(
+  String leading,
+  DateTime? dateTime, {
+  bool doNotShowIfNull = true,
+  Color? color,
+  required BuildContext context,
+}) {
+  if (doNotShowIfNull) {
+    return isNotNull(dateTime)
+        ? Text(
+            "$leading: ${dateTime?.format(DateTimeFormattingExtension.formatDDMMMYYYY_I_HHMMA)}",
+            style: context.textTheme?.bodyMedium?.copyWith(color: color),
+          )
+        : SizedBox.shrink();
+  } else {
+    return Text(
+      "$leading: ${dateTime?.format(DateTimeFormattingExtension.formatDDMMMYYYY_I_HHMMA)}",
+      style: context.textTheme?.bodyMedium?.copyWith(color: color),
+    );
   }
 }

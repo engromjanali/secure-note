@@ -1,7 +1,7 @@
 import 'dart:io';
 
 class MProfileUpdatePayload {
-  int? id;
+  String? id;
   String? name;
   String? email;
   String? password;

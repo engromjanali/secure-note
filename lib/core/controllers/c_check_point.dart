@@ -31,7 +31,7 @@ class CCheckPoint {
       String? token = await SharedPrefService.instance.getString(
         PKeys.usertoken,
       );
-      if (!isNull(token)) {
+      if (!isNull(token) || true) {
         await cProfile.getPatientList();
       }
       await const SHome().pushAndRemoveUntil();

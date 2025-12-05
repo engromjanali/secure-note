@@ -2,24 +2,84 @@ import 'package:daily_info/core/constants/all_enums.dart';
 import 'package:daily_info/core/constants/default_values.dart';
 import 'package:daily_info/core/constants/dimension_theme.dart';
 import 'package:daily_info/core/extensions/ex_build_context.dart';
+import 'package:daily_info/core/extensions/ex_date_time.dart';
 import 'package:daily_info/core/extensions/ex_expanded.dart';
 import 'package:daily_info/core/extensions/ex_padding.dart';
+import 'package:daily_info/core/functions/f_call_back.dart';
 import 'package:daily_info/core/functions/f_copy_to_clipboard.dart';
+import 'package:daily_info/core/functions/f_printer.dart';
 import 'package:daily_info/core/functions/f_snackbar.dart';
 import 'package:daily_info/core/widgets/w_bottom_nav_button.dart';
+import 'package:daily_info/core/widgets/w_button.dart';
 import 'package:daily_info/core/widgets/w_card.dart';
 import 'package:daily_info/core/widgets/w_text_field.dart';
+import 'package:daily_info/features/note/view/s_details.dart';
+import 'package:daily_info/features/profile/view/secret/controller/c_passkey.dart';
+import 'package:daily_info/features/profile/view/secret/data/datasource/passkey/passkey_datasource_impl.dart';
+import 'package:daily_info/features/profile/view/secret/data/model/m_passkey.dart';
+import 'package:daily_info/features/profile/view/secret/data/repository/passkey/passkey_repository_impl.dart';
 import 'package:flutter/material.dart';
+import 'package:power_state/power_state.dart';
 
-class SASNote extends StatelessWidget {
+class SAPasskey extends StatefulWidget {
   final bool viewOnly;
+  final bool isEdit;
+  final MPasskey? mPasskey;
+
+  SAPasskey({
+    super.key,
+    this.viewOnly = false,
+    this.isEdit = false,
+    this.mPasskey,
+  });
+
+  @override
+  State<SAPasskey> createState() => _SAPasskeyState();
+}
+
+class _SAPasskeyState extends State<SAPasskey> {
   GlobalKey<FormState> fromKey = GlobalKey();
   ValueNotifier<List<String>> backupCodeListeners = ValueNotifier([]);
   final TextEditingController titleController = TextEditingController();
   final TextEditingController passController = TextEditingController();
   final TextEditingController backupController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
-  SASNote({super.key, this.viewOnly = false});
+  CPasskey cPasskey = PowerVault.put(
+    CPasskey(PasskeyRepositoryImpl(PasskeyDataSourceImpl())),
+  );
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    callBackFunction(() {
+      printer(widget.mPasskey?.toMap());
+      titleController.text = widget.mPasskey?.title ?? "";
+      passController.text = widget.mPasskey?.pass ?? "";
+      backupController.text = widget.mPasskey?.bCode ?? "";
+      noteController.text = widget.mPasskey?.note ?? "";
+      syncBCode();
+      setState(() {});
+    });
+  }
+
+  void syncBCode() {
+    if (backupController.text.isNotEmpty) {
+      backupCodeListeners.value = backupController.text
+          .trim()
+          .replaceAll(RegExp(r'\s+'), ' ')
+          .split(" ");
+    } else {
+      backupCodeListeners.value = [];
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    // PowerVault.delete<CPasskey>();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,19 +93,19 @@ class SASNote extends StatelessWidget {
               spacing: PTheme.paddingY,
               children: [
                 WTextField.requiredField(
-                  enable: !viewOnly,
+                  enable: !widget.viewOnly,
                   label: "Title",
                   controller: titleController,
                 ),
                 WTextField(
-                  enable: !viewOnly,
+                  enable: !widget.viewOnly,
                   label: "Password",
                   controller: passController,
                 ),
                 BackupCodeWapper("Backup Codes", context, backupCodeListeners),
-                if (!viewOnly)
+                if (!widget.viewOnly)
                   WTextField(
-                    enable: !viewOnly,
+                    enable: !widget.viewOnly,
                     label: "Backup Code",
                     hintText: "xxxxxxx xxxxxx xxxxxx\nxxxxxxx xxxxxx",
                     minLines: 2,
@@ -59,16 +119,7 @@ class SASNote extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         IconButton(
-                          onPressed: () {
-                            if (backupController.text.isNotEmpty) {
-                              backupCodeListeners.value = backupController.text
-                                  .trim()
-                                  .replaceAll(RegExp(r'\s+'), ' ')
-                                  .split(" ");
-                            } else {
-                              backupCodeListeners.value = [];
-                            }
-                          },
+                          onPressed: syncBCode,
                           icon: Icon(
                             Icons.published_with_changes_outlined,
                             color: context.button?.primary,
@@ -79,7 +130,7 @@ class SASNote extends StatelessWidget {
                     ),
                   ),
                 WTextField(
-                  enable: !viewOnly,
+                  enable: !widget.viewOnly,
                   label: "Note",
                   controller: noteController,
                   maxLines: 6,
@@ -87,7 +138,39 @@ class SASNote extends StatelessWidget {
                   textInputAction: TextInputAction.newline,
                 ),
                 gapY(50),
-                if (!viewOnly) WBottomNavButton(label: "Submit", ontap: submit),
+                if (!widget.viewOnly)
+                  PowerBuilder<CPasskey>(
+                    builder: (cPasskey) => WPrimaryButton(
+                      text: "Submit",
+                      onTap: submit,
+                      isLoading: cPasskey.isLoadingMore,
+                    ),
+                  ),
+
+                if (widget.viewOnly)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // just to take full size of width,
+                      // otherwise we can't saw in left.
+                      Row(children: []),
+                      Text("Info", style: context.textTheme?.titleSmall),
+                      SizedBox.shrink().pDivider().pB(),
+                      showDateAsFormated(
+                        "Updated At",
+                        widget.mPasskey?.updatedAt ??
+                            widget.mPasskey?.updatedAt,
+                        context: context,
+                      ),
+                      showDateAsFormated(
+                        "Created At",
+                        widget.mPasskey?.createdAt ??
+                            widget.mPasskey?.createdAt,
+                        doNotShowIfNull: false,
+                        context: context,
+                      ),
+                    ],
+                  ),
               ],
             ).pAll(),
           ),
@@ -96,8 +179,45 @@ class SASNote extends StatelessWidget {
     );
   }
 
-  void submit() {
-    if (fromKey.currentState?.validate() ?? false) {}
+  void submit() async {
+    if (fromKey.currentState?.validate() ?? false) {
+      late MPasskey payload;
+      if (widget.isEdit) {
+        payload = widget.mPasskey!.copyWith(
+          title: titleController.text,
+          pass: passController.text,
+          bCode: backupController.text,
+          note: noteController.text,
+          updatedAt: DateTime.timestamp(),
+        );
+      } else {
+        payload = MPasskey(
+          id: DateTime.timestamp().timestamp,
+          title: titleController.text,
+          pass: passController.text,
+          bCode: backupController.text,
+          note: noteController.text,
+          createdAt: DateTime.timestamp(),
+        );
+      }
+      for (int i = 0; i < 500; i++) {
+        payload.title = i.toString();
+        payload.id = DateTime.now().timestamp;
+        await (widget.isEdit
+            ? cPasskey.updatePasskey(payload)
+            : cPasskey.addPasskey(payload));
+      }
+      await (widget.isEdit
+          ? cPasskey.updatePasskey(payload)
+          : cPasskey.addPasskey(payload));
+      // ALL DONE NOW DELETE THEME.
+      titleController.text = "";
+      passController.text = "";
+      backupController.text = "";
+      noteController.text = "";
+      fromKey.currentState?.reset();
+      backupCodeListeners.value = [];
+    }
   }
 }
 

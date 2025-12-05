@@ -16,9 +16,10 @@ class WListTile extends StatelessWidget {
   final String? title;
   final String? subTitle;
   final TaskState taskState;
-  final int index;
   final Function() onTap;
   final Function(ActionType) onAction;
+  final bool isFromVault;
+  final bool isSecretNote;
   const WListTile({
     super.key,
     this.leadingColor,
@@ -27,8 +28,9 @@ class WListTile extends StatelessWidget {
     this.subTitle,
     required this.taskState,
     required this.onTap,
-    required this.index,
     required this.onAction,
+    this.isFromVault = false,
+    this.isSecretNote = false,
   });
 
   @override
@@ -36,7 +38,11 @@ class WListTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       onLongPress: () {
-        _showPopupMenu(context, index);
+        _showPopupMenu(
+          context,
+          isFromVault: isFromVault,
+          isSecretNote: isSecretNote,
+        );
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(PTheme.borderRadius),
@@ -82,7 +88,11 @@ class WListTile extends StatelessWidget {
     );
   }
 
-  void _showPopupMenu(BuildContext context, int index) {
+  void _showPopupMenu(
+    BuildContext context, {
+    required bool isFromVault,
+    required bool isSecretNote,
+  }) {
     final RenderBox renderBox =
         context.findRenderObject() as RenderBox; // get parent/tile's position.
     final Offset offset = renderBox.localToGlobal(
@@ -109,6 +119,7 @@ class WListTile extends StatelessWidget {
           value: 'edit',
           padding: EdgeInsets.symmetric(vertical: 2),
           child: WContainer(
+            verticalPadding: 10,
             borderInDark: true,
             child: Center(
               child: Row(
@@ -123,26 +134,46 @@ class WListTile extends StatelessWidget {
             ),
           ),
         ),
-        if (taskState == TaskState.note)
+        if (taskState == TaskState.note && !isFromVault)
           PopupMenuItem(
             onTap: () {
-              onAction(ActionType.edit);
+              onAction(ActionType.keepInVault);
             },
-            value: 'secret',
+            value: 'Keep In Vault',
             padding: EdgeInsets.symmetric(vertical: 2),
             child: WContainer(
+              verticalPadding: 10,
+              // horizontalPadding: 0,
               borderInDark: true,
               child: Center(
                 child: Row(
                   spacing: PTheme.spaceX,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.switch_access_shortcut_rounded,
-                      size: 20.w,
-                      color: Colors.green,
-                    ),
+                    Icon(Icons.move_down, size: 20.w, color: Colors.green),
                     Text('Keep In Vault', textAlign: TextAlign.center).expd(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        if (isFromVault && isSecretNote)
+          PopupMenuItem(
+            onTap: () {
+              onAction(ActionType.removeFromVault);
+            },
+            value: 'Remove From Vault',
+            padding: EdgeInsets.symmetric(vertical: 2),
+            child: WContainer(
+              verticalPadding: 10,
+              borderInDark: true,
+              child: Center(
+                child: Row(
+                  spacing: PTheme.spaceX,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.move_down, size: 20.w, color: Colors.green),
+                    Text('Put Back', textAlign: TextAlign.center).expd(),
                   ],
                 ),
               ),
@@ -155,6 +186,7 @@ class WListTile extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 2),
           value: 'Delete',
           child: WContainer(
+            verticalPadding: 10,
             color: Colors.red,
             // borderInDark: true,
             child: Center(

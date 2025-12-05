@@ -8,7 +8,7 @@ import 'package:daily_info/core/services/navigation_service.dart';
 import 'package:daily_info/core/widgets/w_container.dart';
 import 'package:daily_info/core/widgets/w_dialog.dart';
 import 'package:daily_info/features/add/view/s_add.dart';
-import 'package:daily_info/features/profile/view/secret/view/s_add_sencitive_note.dart';
+import 'package:daily_info/features/profile/view/secret/view/s_add_passkey.dart';
 import 'package:daily_info/features/profile/view/secret/widgets/w_select_note_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -71,8 +71,8 @@ class _WFloatingActionButtonState extends State<WFloatingActionButton>
               child: FadeTransition(
                 opacity: _fadeAnimation,
                 child: _WActionButton(
-                  iconData: Icons.south_america_outlined,
-                  label: "Social",
+                  iconData: Icons.key,
+                  label: "Passkey",
                   onTap: () {
                     widget.onTap?.call(2);
                   },
@@ -90,7 +90,7 @@ class _WFloatingActionButtonState extends State<WFloatingActionButton>
               child: FadeTransition(
                 opacity: _fadeAnimation,
                 child: _WActionButton(
-                  iconData: Icons.add_circle_outline_rounded,
+                  iconData: Icons.note_alt_outlined,
                   label: "Note",
                   onTap: () {
                     widget.onTap?.call(1);

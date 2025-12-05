@@ -2,6 +2,6 @@ import 'package:daily_info/features/profile/data/models/m_profile_update_payload
 import '../models/m_profile.dart';
 
 abstract class IProfileRepository {
-  Future<MProfile?> fetchProfile();
+  Future<MProfile> fetchProfile();
   Future<MProfile> updateProfile(MProfileUpdatePayload payload);
 }

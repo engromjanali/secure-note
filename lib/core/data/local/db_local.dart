@@ -182,14 +182,14 @@ class DBHelper {
     int effectedRow = await db.update(
       tableName,
       {...data, hash: genaratedHash},
-      where: "$id = ? ",
+      where: "${DBHelper.id} = ? ",
       whereArgs: [payload.id],
     );
 
     if (effectedRow > 0) {
       printer("Updated success");
       List<MTask> list = await fetchTask(
-        MQuery(where: "$id IS ? ", args: [payload.id]),
+        MQuery(where: "${DBHelper.id} IS ? ", args: [payload.id]),
       );
       return list.first;
     } else {
@@ -202,9 +202,10 @@ class DBHelper {
     var db = await getDB();
     int effectedRow = await db.delete(
       tableName,
-      where: "$id = ?",
+      where: "${DBHelper.id} = ?",
       whereArgs: [id],
     );
+    printer(effectedRow);
     return effectedRow > 0;
   }
 

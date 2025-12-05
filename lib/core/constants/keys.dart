@@ -8,5 +8,9 @@ class PKeys {
 
   //
   static const secret = "secret";
+  static const passkey = "passkey";
+  static const secretNote = "secretNote";
+  static const users = "users";
+  static const eKey = "eKey";
 
 }

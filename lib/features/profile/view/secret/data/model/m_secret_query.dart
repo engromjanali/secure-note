@@ -16,7 +16,6 @@ class MSQuery {
     this.lastEid,
     this.pageNo,
     this.limit,
-
     this.isLoadNext,
   });
 }

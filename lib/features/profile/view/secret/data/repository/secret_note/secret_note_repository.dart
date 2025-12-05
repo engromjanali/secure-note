@@ -3,8 +3,8 @@ import 'package:daily_info/features/profile/view/secret/data/model/m_secret.dart
 
 
 abstract class ISecretRepository {
-  Future<void> addSecret(MSecret payload);
-  Future<void> updateSecret(MSecret payload);
-  Future<void> deteteSecret(String id);
-  Future<List<MSecret>> fetchSecret(MSQuery payload);
+  Future<void> addSecretNote(MSecret payload);
+  Future<void> updateSecretNote(MSecret payload);
+  Future<void> deteteSecretNote(String id);
+  Future<List<MSecret>> fetchSecretNote(MSQuery payload);
 }

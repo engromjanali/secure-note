@@ -10,6 +10,7 @@ import 'package:daily_info/core/widgets/w_dialog.dart';
 import 'package:daily_info/core/widgets/w_image_source_dialog.dart';
 import 'package:daily_info/core/widgets/w_listtile.dart';
 import 'package:daily_info/features/add/view/s_add.dart';
+import 'package:daily_info/features/profile/view/secret/data/model/m_secret.dart';
 import 'package:daily_info/features/task/controller/c_task.dart';
 import 'package:daily_info/features/task/data/datasource/task_datasource_impl.dart';
 import 'package:daily_info/features/task/data/model/m_task.dart';
@@ -24,154 +25,160 @@ class WDismisable extends StatelessWidget {
   final String? subTitle;
   final bool isFromVault;
   final TaskState taskState;
-  final MTask mTask;
+  final MTask? mTask;
+  final MSecret? mSecret;
   final Function() onTap;
-  final int index;
+  // final int index;
   final Function(ActionType) onAction;
-  final Function(int) onDismissed;
+  final bool isSecretNote;
+  final bool withDismissable;
   WDismisable({
     super.key,
     required this.taskState,
-    required this.mTask,
+    this.mTask,
+    this.mSecret,
     required this.onTap,
     required this.onAction,
-    required this.index,
     this.title,
     this.fillColor,
     this.leadingColor,
     this.subTitle,
     required this.isFromVault,
-    required this.onDismissed,
+    this.isSecretNote = false,
+    this.withDismissable = true,
   });
-  CTask cTask = PowerVault.put(CTask(TaskRepositoryImpl(TaskDataSourceImpl())));
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-      key: ValueKey(mTask?.id ?? 0), // 🧠 Must be unique
-      direction: DismissDirection.horizontal, // both sides allowed
-      resizeDuration: const Duration(
-        milliseconds: 300,
-      ), // shrink animation speed
-      movementDuration: const Duration(
-        milliseconds: 200,
-      ), // swipe animation speed
-      confirmDismiss: (direction) async {
-        // 🧭 Before dismiss — decide what to do
-        if (direction == DismissDirection.startToEnd) {
-          // Left to right
-          String message =
-              "Do You Want To ${taskState == TaskState.completed
-                  ? "Set As Pending"
-                  : taskState == TaskState.pending
-                  ? "Mark As Completed"
-                  : taskState == TaskState.note && isFromVault
-                  ? "Move To Genaral"
-                  : "Keep In Vault"}";
-          final confirm = await _confirmDialog(context, message);
-          return confirm;
-        } else if (direction == DismissDirection.endToStart) {
-          // Right to left
-          return true;
-        }
-        return false; // prevent dismissable
-      },
-      onDismissed: (direction) {
-        // 🗑 Called after confirmed dismiss
-        onDismissed(mTask.id!);
-        if (direction == DismissDirection.startToEnd) {
-          if (taskState == TaskState.pending) {
-            // move to completed
-            Map<String, dynamic> data = mTask.toMap();
-            data.update(
-              DBHelper.finishedAt,
-              (value) => DateTime.timestamp().toIso8601String(),
-            );
-            MTask payload = MTask.fromMap(data);
-            printer(payload.toMap());
-            cTask.updateTask(payload);
-          } else if (taskState == TaskState.completed) {
-            Map<String, dynamic> data = Map.from(mTask.toMap());
-            data.remove(DBHelper.finishedAt);
-            MTask payload = MTask.fromMap(data);
-            printer(payload.toMap());
-            cTask.updateTask(payload);
-          }
-        } else if (direction == DismissDirection.endToStart) {
-          SAdd(
-            isEditPage: true,
-            onlyNote: taskState == TaskState.note,
-            mTask: mTask,
-          ).push();
-        }
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text("item dismissed")));
-      },
-      background: taskState == TaskState.timeOut
-          ? Container(color: PColors.timeoutColor)
-          : Container(
-              color: Colors.green,
-              alignment: Alignment.centerLeft,
+    return withDismissable
+        ? Dismissible(
+            key: ValueKey(
+              isFromVault ? (mSecret?.id) : (mTask?.id),
+            ), // 🧠 Must be unique
+            direction: DismissDirection.horizontal, // both sides allowed
+            resizeDuration: const Duration(
+              milliseconds: 300,
+            ), // shrink animation speed
+            movementDuration: const Duration(
+              milliseconds: 200,
+            ), // swipe animation speed
+            confirmDismiss: (direction) async {
+              // 🧭 Before dismiss — decide what to do
+              if (direction == DismissDirection.startToEnd) {
+                // Left to right
+                if (taskState == TaskState.timeOut ||
+                    (isFromVault && !isSecretNote)) {
+                  // prevent if it's timeout or secret passkey
+                  return false;
+                }
+                String message =
+                    "Do You Want To ${taskState == TaskState.completed
+                        ? "Set As Pending"
+                        : taskState == TaskState.pending
+                        ? "Mark As Completed"
+                        : (isSecretNote && isFromVault)
+                        ? "remove From Valut"
+                        : "Keep In Vault"}";
+                final confirm = await _confirmDialog(context, message);
+                return confirm;
+              } else if (direction == DismissDirection.endToStart) {
+                // Right to left
+                return true;
+              }
+              return false; // prevent dismissable
+            },
+            onDismissed: (direction) {
+              // 🗑 Called after confirmed dismiss
+              if (direction == DismissDirection.startToEnd) {
+                if (taskState == TaskState.pending) {
+                  // // move to completed
+                  onAction(ActionType.markAsComplete);
+                } else if (taskState == TaskState.completed) {
+                  // set as pending
+                  onAction(ActionType.setAsPending);
+                } else if (isFromVault && isSecretNote) {
+                  // move to genaral
+                  onAction(ActionType.removeFromVault);
+                } else if (taskState == TaskState.note) {
+                  // keep in valut
+                  onAction(ActionType.keepInVault);
+                }
+              } else if (direction == DismissDirection.endToStart) {
+                // edit
+                onAction(ActionType.edit);
+              }
+            },
+            background:
+                taskState == TaskState.timeOut || (isFromVault && !isSecretNote)
+                ? Container(color: PColors.timeoutColor)
+                : Container(
+                    color: Colors.green,
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      spacing: PTheme.spaceX,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.move_down, color: Colors.white),
+                        Text(
+                          taskState == TaskState.completed
+                              ? "Set As Pending"
+                              : taskState == TaskState.pending
+                              ? "Mark As Completed"
+                              : (isSecretNote && isFromVault)
+                              ? "Remove From Valut"
+                              : "Keep In Vault",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Spacer(),
+                      ],
+                    ),
+                  ),
+            secondaryBackground: Container(
+              color: Colors.blue,
+              alignment: Alignment.centerRight,
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 spacing: PTheme.spaceX,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.move_down, color: Colors.white),
+                  Spacer(),
                   Text(
-                    taskState == TaskState.completed
-                        ? "Set As Pending"
-                        : taskState == TaskState.pending
-                        ? "Mark As Completed"
-                        : taskState == TaskState.note && isFromVault
-                        ? "Move To Genaral"
-                        : "Keep In Vault",
+                    "EDIT",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  Spacer(),
+                  const Icon(Icons.edit, color: Colors.white),
                 ],
               ),
             ),
-      secondaryBackground: Container(
-        color: Colors.blue,
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Row(
-          spacing: PTheme.spaceX,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Spacer(),
-            Text(
-              "EDIT",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const Icon(Icons.edit, color: Colors.white),
-          ],
-        ),
-      ),
-      dismissThresholds: const {
-        DismissDirection.startToEnd: 0.4,
-        DismissDirection.endToStart: 0.4,
-      },
-      crossAxisEndOffset: 0.2, // pushes dismissed item up/down at end
+            dismissThresholds: const {
+              DismissDirection.startToEnd: 0.4,
+              DismissDirection.endToStart: 0.4,
+            },
+            crossAxisEndOffset: 0.2, // pushes dismissed item up/down at end
 
-      child: WListTile(
-        leadingColor: leadingColor,
-        fillColor: fillColor,
-        title: title,
-        subTitle: subTitle,
-        taskState: taskState,
-        onTap: onTap,
-        index: index,
-        onAction: onAction,
-      ),
+            child: child(),
+          )
+        : child();
+  }
+
+  Widget child() {
+    return WListTile(
+      leadingColor: leadingColor,
+      fillColor: fillColor,
+      title: title,
+      subTitle: subTitle,
+      taskState: taskState,
+      onTap: onTap,
+      onAction: onAction,
+      isFromVault: isFromVault,
+      isSecretNote: isSecretNote,
     );
   }
 

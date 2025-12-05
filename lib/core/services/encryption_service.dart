@@ -53,7 +53,7 @@ class EncryptionService {
 
   // The raw bytes of the key (useful for persistent storage)
   String get keyBytes => base64.encode(_key.bytes);
-  String get keyBytes2 => base64.encode(_key.bytes);
+  String get keyBytes2 => base64Encode(_key.bytes);
 
   // The raw bytes of the IV (useful for persistent storage)
   String get ivBytes => base64.encode(_iv.bytes);

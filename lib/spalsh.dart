@@ -6,6 +6,7 @@ import 'package:daily_info/core/services/local_auth_services.dart';
 import 'package:daily_info/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SpalshScreen extends StatefulWidget {
   const SpalshScreen({super.key});
@@ -32,32 +33,31 @@ class _SpalshScreenState extends State<SpalshScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        onDoubleTap: checkAuth,
-        child: Container(
-          color: Colors.black,
-          height: double.infinity,
-          width: double.infinity,
-          child: Column(
-            children: [
-              Expanded(
-                child: Center(
-                  child: Image.asset(
-                    Assets.images.logo.path,
-                    height: 300.w,
-                    width: 300.w,
+    return GestureDetector(
+      onDoubleTap: checkAuth,
+      child: Scaffold(
+        body: Column(
+          children: [
+            Expanded(
+              child: Center(
+                child: SvgPicture.asset(
+                  Assets.logo.logo,
+                  height: 200.w,
+                  width: 200.w,
+                  colorFilter: ColorFilter.mode(
+                    context.primaryTextColor!,
+                    BlendMode.srcIn,
                   ),
                 ),
               ),
-              Text(
-                "Loading...",
-                style: context.textTheme?.titleSmall?.copyWith(
-                  color: Colors.white,
-                ),
-              ).pB(value: 50),
-            ],
-          ),
+            ),
+            Text(
+              "Loading...",
+              style: context.textTheme?.titleSmall?.copyWith(
+                color: context.primaryTextColor,
+              ),
+            ).pB(value: 50),
+          ],
         ),
       ),
     );

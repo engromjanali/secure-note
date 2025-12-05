@@ -1,4 +1,3 @@
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class FSSService {
@@ -6,11 +5,11 @@ class FSSService {
   FSSService._();
   factory FSSService() => _instance;
 
-  AndroidOptions _getAndroidOptions() => const AndroidOptions(
-        encryptedSharedPreferences: true,
-      );
-  final iOptions =
-      IOSOptions(accessibility: KeychainAccessibility.first_unlock);
+  AndroidOptions _getAndroidOptions() =>
+      const AndroidOptions(encryptedSharedPreferences: true);
+  final iOptions = IOSOptions(
+    accessibility: KeychainAccessibility.first_unlock,
+  );
   late final FlutterSecureStorage storage = FlutterSecureStorage(
     aOptions: _getAndroidOptions(),
     iOptions: iOptions,
@@ -20,11 +19,11 @@ class FSSService {
     await storage.write(key: key, value: value);
   }
 
-  Future<String?> getString(
-    String key,
-  ) async {
-    return await storage.read(
-      key: key,
-    );
+  Future<String?> getString(String key) async {
+    return await storage.read(key: key);
+  }
+
+  Future<void> clear() async {
+   await storage.deleteAll();
   }
 }

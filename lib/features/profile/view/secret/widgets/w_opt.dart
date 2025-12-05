@@ -1,20 +1,29 @@
 import 'package:daily_info/core/constants/dimension_theme.dart';
 import 'package:daily_info/core/extensions/ex_build_context.dart';
 import 'package:daily_info/core/extensions/ex_keyboards.dart';
+import 'package:daily_info/core/extensions/ex_strings.dart';
 import 'package:daily_info/core/functions/f_is_null.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class WOTPBox extends StatelessWidget {
-  FocusNode? previous;
-  FocusNode? current;
-  FocusNode? next;
-  TextEditingController? contriller;
-  WOTPBox({super.key, this.previous, this.current, this.next, this.contriller});
+  final FocusNode? previous;
+  final FocusNode? current;
+  final FocusNode? next;
+  final TextEditingController? contriller;
+  final bool isEnable;
+  WOTPBox({
+    super.key,
+    this.previous,
+    this.isEnable = false,
+    this.current,
+    this.next,
+    this.contriller,
+  });
+ 
 
   @override
   Widget build(BuildContext context) {
-    bool isEnable = isNotNull(current);
     return SizedBox(
       width: 50.w,
       height: 50.w,
@@ -29,7 +38,16 @@ class WOTPBox extends StatelessWidget {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         enabled: isEnable,
         validator: (value) {
-          if (isNull(value) && isNotNull(current)) return "";
+          if (!isEnable) {
+            return null;
+          }
+          if (isNull(value) && isNotNull(current)) {
+            return "";
+          }
+          if (!(value?.isValidInt ?? false)) {
+            // invalid digit
+            return "";
+          }
         },
         errorBuilder: (context, errorText) => SizedBox.shrink(),
         keyboardType: TextInputType.number,
