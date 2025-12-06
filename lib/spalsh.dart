@@ -2,7 +2,6 @@ import 'package:secure_note/core/controllers/c_check_point.dart';
 import 'package:secure_note/core/extensions/ex_build_context.dart';
 import 'package:secure_note/core/extensions/ex_padding.dart';
 import 'package:secure_note/core/functions/f_call_back.dart';
-import 'package:secure_note/core/functions/f_printer.dart';
 import 'package:secure_note/core/services/local_auth_services.dart';
 import 'package:secure_note/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +26,7 @@ class _SpalshScreenState extends State<SpalshScreen> {
   }
 
   void checkAuth() async {
-    if (await LocalAuthServices().showBiometric() || true) {
+    if (await LocalAuthServices().showBiometric()) {
       final CCheckPoint checkPoint = CCheckPoint();
       checkPoint.initialization();
     }

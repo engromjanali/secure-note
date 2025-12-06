@@ -7,12 +7,12 @@ class LocalAuthServices {
   static LocalAuthServices instance = LocalAuthServices._();
   factory LocalAuthServices() => instance;
   final LocalAuthentication auth = LocalAuthentication();
+
+  /// return true if authentication success otherwise false.
   Future<bool> showBiometric({bool biometricOnly = false}) async {
     final bool canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
-    printer("canAuthenticateWithBiometrics $canAuthenticateWithBiometrics");
     final bool canAuthenticate =
         canAuthenticateWithBiometrics || await auth.isDeviceSupported();
-    printer("canAuthenticate $canAuthenticate");
 
     if (canAuthenticate) {
       final List<BiometricType> availableBiometrics = await auth
@@ -29,7 +29,8 @@ class LocalAuthServices {
         return await authenticate(biometricOnly: biometricOnly);
       } else {
         // biomatric not found
-        return await authenticate(biometricOnly: biometricOnly);
+        printer("local auth credential not found");
+        return true;
       }
     } else {
       // can't authenticate
