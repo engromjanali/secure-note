@@ -18,15 +18,6 @@ import 'package:power_state/power_state.dart';
 
 void main() async {
   await init();
-  WidgetsFlutterBinding.ensureInitialized();
-  await ScreenUtil.ensureScreenSize();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  await FirebaseAppCheck.instance.activate(
-    androidProvider: AndroidProvider.debug,
-    // set to true to use the default providers configured in console
-    // webProvider: ReCaptchaV3Provider('your-site-key'), // only for web if applicable
-  );
   runApp(
     // DevicePreview(enabled: !kReleaseMode, builder: (context) => _SCheckPoint()),
     DevicePreview(enabled: false, builder: (context) => _SCheckPoint()),
@@ -40,7 +31,9 @@ Future<void> init() async {
   await ScreenUtil.ensureScreenSize();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseAppCheck.instance.activate(
-    androidProvider: AndroidProvider.debug,
+    androidProvider: kReleaseMode
+        ? AndroidProvider.playIntegrity
+        : AndroidProvider.debug,
     // set to true to use the default providers configured in console
     // webProvider: ReCaptchaV3Provider('your-site-key'), // only for web if applicable
   );
