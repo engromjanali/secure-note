@@ -1,7 +1,7 @@
-import 'package:daily_info/core/extensions/ex_build_context.dart';
-import 'package:daily_info/core/extensions/ex_expanded.dart';
-import 'package:daily_info/core/services/navigation_service.dart';
-import 'package:daily_info/core/widgets/w_dialog.dart';
+import 'package:secure_note/core/extensions/ex_build_context.dart';
+import 'package:secure_note/core/extensions/ex_expanded.dart';
+import 'package:secure_note/core/services/navigation_service.dart';
+import 'package:secure_note/core/widgets/w_dialog.dart';
 import '/core/extensions/ex_keyboards.dart';
 import '/core/extensions/ex_strings.dart';
 import 'package:flutter/material.dart';

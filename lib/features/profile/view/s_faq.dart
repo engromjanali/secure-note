@@ -1,6 +1,6 @@
-import 'package:daily_info/core/extensions/ex_build_context.dart';
-import 'package:daily_info/core/widgets/w_app_bar.dart';
-import 'package:daily_info/features/profile/data/models/m_faq.dart';
+import 'package:secure_note/core/extensions/ex_build_context.dart';
+import 'package:secure_note/core/widgets/w_app_bar.dart';
+import 'package:secure_note/features/profile/data/models/m_faq.dart';
 import '/core/extensions/ex_padding.dart';
 import '/core/widgets/w_container.dart';
 import 'package:flutter/material.dart';

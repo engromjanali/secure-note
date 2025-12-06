@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:daily_info/core/functions/f_snackbar.dart';
+import 'package:secure_note/core/functions/f_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 

@@ -1,6 +1,6 @@
-import 'package:daily_info/core/functions/f_is_null.dart';
-import 'package:daily_info/core/functions/f_printer.dart';
-import 'package:daily_info/core/services/secret_service.dart';
+import 'package:secure_note/core/functions/f_is_null.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/core/services/secret_service.dart';
 
 /// remember at first you must have to initialize the,
 /// SecretService with key.

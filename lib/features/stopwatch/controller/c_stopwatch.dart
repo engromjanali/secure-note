@@ -1,8 +1,8 @@
-import 'package:daily_info/core/controllers/c_base.dart';
-import 'package:daily_info/core/functions/f_printer.dart';
-import 'package:daily_info/core/services/shared_preference_service.dart';
-import 'package:daily_info/features/stopwatch/data/model/m_stopwatch.dart';
-import 'package:daily_info/features/stopwatch/data/servics/stopwatch_service.dart';
+import 'package:secure_note/core/controllers/c_base.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/core/services/shared_preference_service.dart';
+import 'package:secure_note/features/stopwatch/data/model/m_stopwatch.dart';
+import 'package:secure_note/features/stopwatch/data/servics/stopwatch_service.dart';
 
 class CStopwatch extends CBase {
   final StopWatchService _stopWatchService = StopWatchService.getInstance;

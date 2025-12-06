@@ -1,6 +1,6 @@
 import 'package:another_flushbar/flushbar.dart';
-import 'package:daily_info/core/constants/dimension_theme.dart';
-import 'package:daily_info/core/services/navigation_service.dart';
+import 'package:secure_note/core/constants/dimension_theme.dart';
+import 'package:secure_note/core/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 
 /// 🍔 showSnackBar(message)

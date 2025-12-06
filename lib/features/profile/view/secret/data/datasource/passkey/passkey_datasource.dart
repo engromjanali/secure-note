@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:daily_info/features/profile/view/secret/data/model/m_passkey.dart';
-import 'package:daily_info/features/profile/view/secret/data/model/m_secret_query.dart';
+import 'package:secure_note/features/profile/view/secret/data/model/m_passkey.dart';
+import 'package:secure_note/features/profile/view/secret/data/model/m_secret_query.dart';
 
 abstract class IPasskeyDataSource {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;

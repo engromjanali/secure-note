@@ -1,14 +1,14 @@
 import 'package:another_flushbar/flushbar.dart';
-import 'package:daily_info/core/constants/default_values.dart';
-import 'package:daily_info/core/constants/dimension_theme.dart';
-import 'package:daily_info/core/extensions/ex_build_context.dart';
-import 'package:daily_info/core/extensions/ex_padding.dart';
-import 'package:daily_info/core/functions/f_is_null.dart';
-import 'package:daily_info/core/functions/f_snackbar.dart';
-import 'package:daily_info/core/services/navigation_service.dart';
-import 'package:daily_info/core/widgets/w_bottom_nav_button.dart';
-import 'package:daily_info/core/widgets/w_pop_button.dart';
-import 'package:daily_info/gen/assets.gen.dart';
+import 'package:secure_note/core/constants/default_values.dart';
+import 'package:secure_note/core/constants/dimension_theme.dart';
+import 'package:secure_note/core/extensions/ex_build_context.dart';
+import 'package:secure_note/core/extensions/ex_padding.dart';
+import 'package:secure_note/core/functions/f_is_null.dart';
+import 'package:secure_note/core/functions/f_snackbar.dart';
+import 'package:secure_note/core/services/navigation_service.dart';
+import 'package:secure_note/core/widgets/w_bottom_nav_button.dart';
+import 'package:secure_note/core/widgets/w_pop_button.dart';
+import 'package:secure_note/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

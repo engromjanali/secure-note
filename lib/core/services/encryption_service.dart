@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:daily_info/core/functions/f_genarate_randome_data.dart';
-import 'package:daily_info/core/services/flutter_secure_service.dart';
+import 'package:secure_note/core/functions/f_genarate_randome_data.dart';
+import 'package:secure_note/core/services/flutter_secure_service.dart';
 import 'package:encrypt/encrypt.dart';
 
 class EncryptionService {
@@ -23,9 +23,7 @@ class EncryptionService {
 
   // Generates a cryptographically secure 32-byte (256-bit) key
   Future<Key> _generateSecureKey() async {
-    String? raw = await FSSService().getString(
-      "eSkey",
-    );
+    String? raw = await FSSService().getString("eSkey");
     if (raw == null) {
       Uint8List bytes = generateRandomData(32, asUint8List: true);
       await FSSService().setString("eSkey", base64Encode(bytes));
@@ -37,9 +35,7 @@ class EncryptionService {
 
   // Generates a cryptographically secure 16-byte (128-bit) IV
   Future<IV> _generateSecureIV() async {
-    String? raw = await FSSService().getString(
-      "eSIV",
-    );
+    String? raw = await FSSService().getString("eSIV");
     if (raw == null) {
       Uint8List bytes = generateRandomData(16, asUint8List: true);
       await FSSService().setString("eSIV", base64Encode(bytes));

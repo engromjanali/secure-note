@@ -1,7 +1,7 @@
-import 'package:daily_info/features/profile/view/secret/data/datasource/passkey/passkey_datasource.dart';
-import 'package:daily_info/features/profile/view/secret/data/model/m_passkey.dart';
-import 'package:daily_info/features/profile/view/secret/data/model/m_secret_query.dart';
-import 'package:daily_info/features/profile/view/secret/data/repository/passkey/passkey_repository.dart';
+import 'package:secure_note/features/profile/view/secret/data/datasource/passkey/passkey_datasource.dart';
+import 'package:secure_note/features/profile/view/secret/data/model/m_passkey.dart';
+import 'package:secure_note/features/profile/view/secret/data/model/m_secret_query.dart';
+import 'package:secure_note/features/profile/view/secret/data/repository/passkey/passkey_repository.dart';
 
 class PasskeyRepositoryImpl extends IPasskeyRepository {
   final IPasskeyDataSource _iPasskeyDataSource;

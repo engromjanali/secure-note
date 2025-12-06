@@ -1,7 +1,7 @@
-import 'package:daily_info/core/constants/dimension_theme.dart';
-import 'package:daily_info/core/extensions/ex_build_context.dart';
-import 'package:daily_info/core/widgets/w_container.dart';
-import 'package:daily_info/core/widgets/w_form_field_wrapper.dart';
+import 'package:secure_note/core/constants/dimension_theme.dart';
+import 'package:secure_note/core/extensions/ex_build_context.dart';
+import 'package:secure_note/core/widgets/w_container.dart';
+import 'package:secure_note/core/widgets/w_form_field_wrapper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 
@@ -57,7 +57,9 @@ class MRadios extends StatelessWidget {
             color: context.fillColor,
             horizontalPadding: PTheme.spaceX,
             verticalPadding: 4.h,
-            borderColor: formFieldState.hasError ? context.redColor : Colors.transparent,
+            borderColor: formFieldState.hasError
+                ? context.redColor
+                : Colors.transparent,
             child: Wrap(
               spacing: 12,
               children: options.map((String option) {

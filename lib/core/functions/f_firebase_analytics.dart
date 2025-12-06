@@ -1,4 +1,4 @@
-import 'package:daily_info/core/functions/f_printer.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
 class AnalyticsService {
@@ -20,23 +20,29 @@ class AnalyticsService {
         screenClass: screenClass ?? screenName,
       );
       infoPrint(
-          'Analytics: Screen view logged - screenName: $screenName, screenClass: ${screenClass ?? screenName}');
+        'Analytics: Screen view logged - screenName: $screenName, screenClass: ${screenClass ?? screenName}',
+      );
     } catch (e) {
       infoPrint(
-          'Analytics: Failed to log screen view - screenName: $screenName, error: $e');
+        'Analytics: Failed to log screen view - screenName: $screenName, error: $e',
+      );
     }
   }
 
   // Log custom event
   Future<void> logCustomEvent(
-      String eventName, Map<String, Object>? parameters) async {
+    String eventName,
+    Map<String, Object>? parameters,
+  ) async {
     try {
       await _analytics.logEvent(name: eventName, parameters: parameters);
       infoPrint(
-          'Analytics: Custom event logged - eventName: $eventName, parameters: $parameters');
+        'Analytics: Custom event logged - eventName: $eventName, parameters: $parameters',
+      );
     } catch (e) {
       infoPrint(
-          'Analytics: Failed to log custom event - eventName: $eventName, error: $e');
+        'Analytics: Failed to log custom event - eventName: $eventName, error: $e',
+      );
     }
   }
 
@@ -47,7 +53,8 @@ class AnalyticsService {
       infoPrint('Analytics: User property set - name: $name, value: $value');
     } catch (e) {
       infoPrint(
-          'Analytics: Failed to set user property - name: $name, error: $e');
+        'Analytics: Failed to set user property - name: $name, error: $e',
+      );
     }
   }
 }

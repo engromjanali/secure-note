@@ -6,7 +6,7 @@
 // - `removeSpaces` 🧹
 // - `initials` 🧑‍💼
 
-import 'package:daily_info/core/constants/default_values.dart';
+import 'package:secure_note/core/constants/default_values.dart';
 
 extension StringCasingExtension on String {
   String get toCapitalized =>

@@ -1,5 +1,5 @@
-import 'package:daily_info/core/extensions/ex_padding.dart';
-import 'package:daily_info/gen/assets.gen.dart';
+import 'package:secure_note/core/extensions/ex_padding.dart';
+import 'package:secure_note/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

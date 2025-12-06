@@ -1,8 +1,8 @@
-import 'package:daily_info/core/constants/dimension_theme.dart';
-import 'package:daily_info/core/extensions/ex_build_context.dart';
-import 'package:daily_info/core/extensions/ex_keyboards.dart';
-import 'package:daily_info/core/extensions/ex_strings.dart';
-import 'package:daily_info/core/functions/f_is_null.dart';
+import 'package:secure_note/core/constants/dimension_theme.dart';
+import 'package:secure_note/core/extensions/ex_build_context.dart';
+import 'package:secure_note/core/extensions/ex_keyboards.dart';
+import 'package:secure_note/core/extensions/ex_strings.dart';
+import 'package:secure_note/core/functions/f_is_null.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -20,7 +20,6 @@ class WOTPBox extends StatelessWidget {
     this.next,
     this.contriller,
   });
- 
 
   @override
   Widget build(BuildContext context) {

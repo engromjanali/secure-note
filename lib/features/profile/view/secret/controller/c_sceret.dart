@@ -1,9 +1,9 @@
-import 'package:daily_info/core/constants/default_values.dart';
-import 'package:daily_info/core/controllers/c_base.dart';
-import 'package:daily_info/core/functions/f_printer.dart';
-import 'package:daily_info/features/profile/view/secret/data/model/m_secret.dart';
-import 'package:daily_info/features/profile/view/secret/data/model/m_secret_query.dart';
-import 'package:daily_info/features/profile/view/secret/data/repository/secret_note/secret_note_repository.dart';
+import 'package:secure_note/core/constants/default_values.dart';
+import 'package:secure_note/core/controllers/c_base.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/features/profile/view/secret/data/model/m_secret.dart';
+import 'package:secure_note/features/profile/view/secret/data/model/m_secret_query.dart';
+import 'package:secure_note/features/profile/view/secret/data/repository/secret_note/secret_note_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 class CSecret extends CBase {

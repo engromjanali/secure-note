@@ -1,4 +1,4 @@
-import 'package:daily_info/core/functions/f_firebase_analytics.dart';
+import 'package:secure_note/core/functions/f_firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
 class NavigationService {

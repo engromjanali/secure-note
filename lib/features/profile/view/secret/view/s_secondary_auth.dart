@@ -1,23 +1,22 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:daily_info/core/constants/default_values.dart';
-import 'package:daily_info/core/constants/keys.dart';
-import 'package:daily_info/core/extensions/ex_build_context.dart';
-import 'package:daily_info/core/extensions/ex_padding.dart';
-import 'package:daily_info/core/functions/f_encrypt_decrypt.dart';
-import 'package:daily_info/core/functions/f_is_null.dart';
-import 'package:daily_info/core/functions/f_printer.dart';
-import 'package:daily_info/core/functions/f_snackbar.dart';
-import 'package:daily_info/core/services/flutter_secure_service.dart';
-import 'package:daily_info/core/services/navigation_service.dart';
-import 'package:daily_info/core/services/secret_service.dart';
-import 'package:daily_info/core/widgets/image/m_image_payload.dart';
-import 'package:daily_info/core/widgets/image/w_image.dart';
-import 'package:daily_info/core/widgets/w_bottom_nav_button.dart';
-import 'package:daily_info/features/profile/controllers/c_profile.dart';
-import 'package:daily_info/features/profile/view/secret/view/s_serets.dart';
-import 'package:daily_info/features/profile/view/secret/widgets/w_opt.dart';
-import 'package:daily_info/features/s_home.dart';
+import 'package:secure_note/core/constants/default_values.dart';
+import 'package:secure_note/core/constants/keys.dart';
+import 'package:secure_note/core/extensions/ex_build_context.dart';
+import 'package:secure_note/core/extensions/ex_padding.dart';
+import 'package:secure_note/core/functions/f_is_null.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/core/functions/f_snackbar.dart';
+import 'package:secure_note/core/services/flutter_secure_service.dart';
+import 'package:secure_note/core/services/navigation_service.dart';
+import 'package:secure_note/core/services/secret_service.dart';
+import 'package:secure_note/core/widgets/image/m_image_payload.dart';
+import 'package:secure_note/core/widgets/image/w_image.dart';
+import 'package:secure_note/core/widgets/w_bottom_nav_button.dart';
+import 'package:secure_note/features/profile/controllers/c_profile.dart';
+import 'package:secure_note/features/profile/view/secret/view/s_serets.dart';
+import 'package:secure_note/features/profile/view/secret/widgets/w_opt.dart';
+import 'package:secure_note/features/s_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:power_state/power_state.dart';
@@ -118,7 +117,7 @@ class _SSAuthState extends State<SSAuth> {
                     ),
                   ),
                   Text(
-                    widget.isSetkey
+                    (widget.isSetkey && isNull(widget.serverSecondaryAuthKey))
                         ? "Enter your new 6-digit key"
                         : "Enter the required digits",
                     style: context.textTheme?.bodyMedium?.copyWith(

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:daily_info/core/functions/f_genarate_randome_data.dart';
-import 'package:daily_info/core/services/flutter_secure_service.dart';
+import 'package:secure_note/core/functions/f_genarate_randome_data.dart';
+import 'package:secure_note/core/services/flutter_secure_service.dart';
 import 'package:encrypt/encrypt.dart';
 
 class SecretService {

@@ -1,6 +1,6 @@
-import 'package:daily_info/core/functions/f_printer.dart';
-import 'package:daily_info/core/functions/f_snackbar.dart';
-import 'package:daily_info/core/widgets/load_and_error/models/view_state_model.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/core/functions/f_snackbar.dart';
+import 'package:secure_note/core/widgets/load_and_error/models/view_state_model.dart';
 import 'package:dio/dio.dart';
 import 'package:power_state/power_state.dart';
 

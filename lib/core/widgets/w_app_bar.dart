@@ -1,4 +1,4 @@
-import 'package:daily_info/core/functions/f_is_null.dart';
+import 'package:secure_note/core/functions/f_is_null.dart';
 import 'package:flutter/material.dart';
 
 /// 🧭 Custom AppBar with optional right-side widgets and back button toggle

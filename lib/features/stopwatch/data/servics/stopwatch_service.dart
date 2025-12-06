@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:daily_info/core/functions/f_is_null.dart';
-import 'package:daily_info/core/functions/f_printer.dart';
-import 'package:daily_info/core/services/shared_preference_service.dart';
-import 'package:daily_info/features/stopwatch/data/model/m_stopwatch.dart';
+import 'package:secure_note/core/functions/f_is_null.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/core/services/shared_preference_service.dart';
+import 'package:secure_note/features/stopwatch/data/model/m_stopwatch.dart';
 
 class StopWatchService {
   static StopWatchService getInstance = StopWatchService._();
@@ -23,7 +23,7 @@ class StopWatchService {
 
   Future<MStopwatch?> getCurrentStopwatchState() async {
     try {
-      var rawData =await sharedPrefService.getString("currentStopWatchState");
+      var rawData = await sharedPrefService.getString("currentStopWatchState");
       if (isNull(rawData)) {
         return null;
       }

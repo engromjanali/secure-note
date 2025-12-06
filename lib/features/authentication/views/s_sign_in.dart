@@ -1,8 +1,8 @@
-import 'package:daily_info/core/extensions/ex_build_context.dart';
-import 'package:daily_info/core/extensions/ex_expanded.dart';
-import 'package:daily_info/core/services/navigation_service.dart';
-import 'package:daily_info/core/widgets/w_app_bar.dart';
-import 'package:daily_info/features/authentication/views/s_forget_pass.dart';
+import 'package:secure_note/core/extensions/ex_build_context.dart';
+import 'package:secure_note/core/extensions/ex_expanded.dart';
+import 'package:secure_note/core/services/navigation_service.dart';
+import 'package:secure_note/core/widgets/w_app_bar.dart';
+import 'package:secure_note/features/authentication/views/s_forget_pass.dart';
 import '/core/constants/default_values.dart';
 import '/core/functions/f_url_launcher.dart';
 import 'package:flutter/gestures.dart';

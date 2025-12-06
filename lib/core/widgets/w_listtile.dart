@@ -1,12 +1,12 @@
-import 'package:daily_info/core/constants/all_enums.dart';
-import 'package:daily_info/core/constants/colors.dart';
-import 'package:daily_info/core/constants/default_values.dart';
-import 'package:daily_info/core/constants/dimension_theme.dart';
-import 'package:daily_info/core/extensions/ex_build_context.dart';
-import 'package:daily_info/core/extensions/ex_expanded.dart';
-import 'package:daily_info/core/extensions/ex_padding.dart';
-import 'package:daily_info/core/extensions/ex_strings.dart';
-import 'package:daily_info/core/widgets/w_container.dart';
+import 'package:secure_note/core/constants/all_enums.dart';
+import 'package:secure_note/core/constants/colors.dart';
+import 'package:secure_note/core/constants/default_values.dart';
+import 'package:secure_note/core/constants/dimension_theme.dart';
+import 'package:secure_note/core/extensions/ex_build_context.dart';
+import 'package:secure_note/core/extensions/ex_expanded.dart';
+import 'package:secure_note/core/extensions/ex_padding.dart';
+import 'package:secure_note/core/extensions/ex_strings.dart';
+import 'package:secure_note/core/widgets/w_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:daily_info/core/constants/env.dart';
-import 'package:daily_info/core/constants/keys.dart';
-import 'package:daily_info/core/functions/f_printer.dart';
-import 'package:daily_info/core/services/shared_preference_service.dart';
+import 'package:secure_note/core/constants/env.dart';
+import 'package:secure_note/core/constants/keys.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/core/services/shared_preference_service.dart';
 import 'package:dio/dio.dart';
 
 // Enum for HTTP methods
@@ -22,35 +22,39 @@ class DioService {
   Dio? _dio;
 
   Dio get dio {
-    _dio ??= Dio(
-      BaseOptions(
-        baseUrl: ENV().baseUrl,
-        connectTimeout: const Duration(seconds: 60),
-        receiveTimeout: const Duration(seconds: 60),
-        contentType: "application/json",
-      ),
-    )..interceptors.addAll([
-        LoggingInterceptor(), // Add custom logging interceptor
-        InterceptorsWrapper(
-          onRequest: (options, handler) async {
-            final token = await SharedPrefService.instance.getString(PKeys.usertoken);
-            // options.headers['Content-Type'] = "application/json";
-            options.headers['Authorization'] = "Bearer $token";
-            printer("🔑 Bearer Token: $token");
-            return handler.next(options);
-          },
-          onError: (error, handler) async {
-            if (error.response?.statusCode == 401) {
-              // Token refresh logic if needed
-              // Handle error and retry if necessary
-            }
-            return handler.next(error);
-          },
-          onResponse: (response, handler) async {
-            return handler.next(response);
-          },
-        )
-      ]);
+    _dio ??=
+        Dio(
+            BaseOptions(
+              baseUrl: ENV().baseUrl,
+              connectTimeout: const Duration(seconds: 60),
+              receiveTimeout: const Duration(seconds: 60),
+              contentType: "application/json",
+            ),
+          )
+          ..interceptors.addAll([
+            LoggingInterceptor(), // Add custom logging interceptor
+            InterceptorsWrapper(
+              onRequest: (options, handler) async {
+                final token = await SharedPrefService.instance.getString(
+                  PKeys.usertoken,
+                );
+                // options.headers['Content-Type'] = "application/json";
+                options.headers['Authorization'] = "Bearer $token";
+                printer("🔑 Bearer Token: $token");
+                return handler.next(options);
+              },
+              onError: (error, handler) async {
+                if (error.response?.statusCode == 401) {
+                  // Token refresh logic if needed
+                  // Handle error and retry if necessary
+                }
+                return handler.next(error);
+              },
+              onResponse: (response, handler) async {
+                return handler.next(response);
+              },
+            ),
+          ]);
 
     return _dio!;
   }
@@ -67,7 +71,9 @@ class LoggingInterceptor extends Interceptor {
       final formData = options.data as FormData;
       printer("Payload (FormData): Fields - ${formData.fields}");
       if (formData.files.isNotEmpty) {
-        printer("Payload (FormData): Files - ${formData.files.map((file) => file.key).toList()}");
+        printer(
+          "Payload (FormData): Files - ${formData.files.map((file) => file.key).toList()}",
+        );
       }
     } else {
       printer("Payload: ${json.encode(options.data)}");
@@ -78,14 +84,18 @@ class LoggingInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    printer("✅ StatusCode [${response.statusCode}] from ${response.requestOptions.uri}");
+    printer(
+      "✅ StatusCode [${response.statusCode}] from ${response.requestOptions.uri}",
+    );
     printer("Response: ${json.encode(response.data)}");
     super.onResponse(response, handler);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    errorPrint("❌ Error [${err.response?.statusCode}] from ${err.requestOptions.uri}");
+    errorPrint(
+      "❌ Error [${err.response?.statusCode}] from ${err.requestOptions.uri}",
+    );
     errorPrint("Error Message: ${json.encode(err.message)}");
     errorPrint("Error Data: ${json.encode(err.response?.data)}");
     super.onError(err, handler);
@@ -103,7 +113,9 @@ Future<Response> makeRequest({
     if (data == null) {
       // Construct FormData only if `data` is not directly passed
       if (formDataFields == null && files == null) {
-        throw ArgumentError('formDataFields or files must be provided for multipart requests.');
+        throw ArgumentError(
+          'formDataFields or files must be provided for multipart requests.',
+        );
       }
 
       data = FormData.fromMap({

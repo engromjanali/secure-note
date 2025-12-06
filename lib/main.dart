@@ -1,14 +1,13 @@
-import 'package:daily_info/core/controllers/c_theme.dart';
-import 'package:daily_info/core/data/local/db_local.dart';
-import 'package:daily_info/core/extensions/ex_build_context.dart';
-import 'package:daily_info/core/functions/f_default_scrolling.dart';
-import 'package:daily_info/core/services/encryption_service.dart';
-import 'package:daily_info/core/services/navigation_service.dart';
-import 'package:daily_info/core/services/shared_preference_service.dart';
-import 'package:daily_info/example.dart';
-import 'package:daily_info/features/authentication/views/s_forget_pass.dart';
-import 'package:daily_info/firebase_options.dart';
-import 'package:daily_info/spalsh.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:secure_note/core/controllers/c_theme.dart';
+import 'package:secure_note/core/data/local/db_local.dart';
+import 'package:secure_note/core/extensions/ex_build_context.dart';
+import 'package:secure_note/core/functions/f_default_scrolling.dart';
+import 'package:secure_note/core/services/encryption_service.dart';
+import 'package:secure_note/core/services/navigation_service.dart';
+import 'package:secure_note/core/services/shared_preference_service.dart';
+import 'package:secure_note/firebase_options.dart';
+import 'package:secure_note/spalsh.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -19,6 +18,15 @@ import 'package:power_state/power_state.dart';
 
 void main() async {
   await init();
+  WidgetsFlutterBinding.ensureInitialized();
+  await ScreenUtil.ensureScreenSize();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await FirebaseAppCheck.instance.activate(
+    androidProvider: AndroidProvider.debug,
+    // set to true to use the default providers configured in console
+    // webProvider: ReCaptchaV3Provider('your-site-key'), // only for web if applicable
+  );
   runApp(
     // DevicePreview(enabled: !kReleaseMode, builder: (context) => _SCheckPoint()),
     DevicePreview(enabled: false, builder: (context) => _SCheckPoint()),
@@ -26,10 +34,16 @@ void main() async {
   // runApp(const _SCheckPoint());
 }
 
+// MyDebugToken D13CC233-97A1-42A1-A511-EC15AF3995E6
 Future<void> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseAppCheck.instance.activate(
+    androidProvider: AndroidProvider.debug,
+    // set to true to use the default providers configured in console
+    // webProvider: ReCaptchaV3Provider('your-site-key'), // only for web if applicable
+  );
   //   await CNotification().requestPermission();
   //   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   //   await CNotification().initNotification();

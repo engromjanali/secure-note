@@ -1,10 +1,10 @@
-import 'package:daily_info/core/constants/all_enums.dart';
-import 'package:daily_info/core/constants/default_values.dart';
-import 'package:daily_info/core/controllers/c_base.dart';
-import 'package:daily_info/core/functions/f_printer.dart';
-import 'package:daily_info/features/task/data/model/m_query.dart';
-import 'package:daily_info/features/task/data/model/m_task.dart';
-import 'package:daily_info/features/task/data/repository/task_repository.dart';
+import 'package:secure_note/core/constants/all_enums.dart';
+import 'package:secure_note/core/constants/default_values.dart';
+import 'package:secure_note/core/controllers/c_base.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/features/task/data/model/m_query.dart';
+import 'package:secure_note/features/task/data/model/m_task.dart';
+import 'package:secure_note/features/task/data/repository/task_repository.dart';
 
 class CTask extends CBase {
   final ITaskRepository _iTaskRepository;

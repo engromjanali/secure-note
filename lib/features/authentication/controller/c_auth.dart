@@ -1,5 +1,5 @@
-import 'package:daily_info/core/functions/f_printer.dart';
-import 'package:daily_info/core/services/navigation_service.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/core/services/navigation_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:power_state/power_state.dart';
 import '../../../core/constants/keys.dart';

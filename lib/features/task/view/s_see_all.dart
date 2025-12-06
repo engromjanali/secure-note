@@ -1,7 +1,7 @@
-import 'package:daily_info/core/constants/all_enums.dart';
-import 'package:daily_info/core/extensions/ex_padding.dart';
-import 'package:daily_info/core/widgets/w_task_section.dart';
-import 'package:daily_info/core/widgets/w_timer_task_section.dart';
+import 'package:secure_note/core/constants/all_enums.dart';
+import 'package:secure_note/core/extensions/ex_padding.dart';
+import 'package:secure_note/core/widgets/w_task_section.dart';
+import 'package:secure_note/core/widgets/w_timer_task_section.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 

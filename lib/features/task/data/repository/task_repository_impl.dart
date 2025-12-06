@@ -1,7 +1,7 @@
-import 'package:daily_info/features/task/data/datasource/task_datasource.dart';
-import 'package:daily_info/features/task/data/model/m_query.dart';
-import 'package:daily_info/features/task/data/model/m_task.dart';
-import 'package:daily_info/features/task/data/repository/task_repository.dart';
+import 'package:secure_note/features/task/data/datasource/task_datasource.dart';
+import 'package:secure_note/features/task/data/model/m_query.dart';
+import 'package:secure_note/features/task/data/model/m_task.dart';
+import 'package:secure_note/features/task/data/repository/task_repository.dart';
 
 class TaskRepositoryImpl extends ITaskRepository {
   final ITaskDataSource _iTaskDataSource;

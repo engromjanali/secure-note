@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:daily_info/core/constants/keys.dart';
-import 'package:daily_info/core/functions/f_printer.dart';
-import 'package:daily_info/features/profile/data/models/m_profile.dart';
+import 'package:secure_note/core/constants/keys.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/features/profile/data/models/m_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../model/m_auth.dart';
 import '../model/m_token.dart';

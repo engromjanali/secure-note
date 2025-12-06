@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:daily_info/core/functions/f_printer.dart';
-import 'package:daily_info/core/services/image_picker_services.dart';
-import 'package:daily_info/core/widgets/w_bottom_nav_button.dart';
-import 'package:daily_info/core/widgets/w_image_source_dialog.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/core/services/image_picker_services.dart';
+import 'package:secure_note/core/widgets/w_bottom_nav_button.dart';
+import 'package:secure_note/core/widgets/w_image_source_dialog.dart';
 import '/core/extensions/ex_build_context.dart';
 import '/core/extensions/ex_keyboards.dart';
 import '/core/extensions/ex_padding.dart';

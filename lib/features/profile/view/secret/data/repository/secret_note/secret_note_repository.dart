@@ -1,6 +1,5 @@
-import 'package:daily_info/features/profile/view/secret/data/model/m_secret_query.dart';
-import 'package:daily_info/features/profile/view/secret/data/model/m_secret.dart';
-
+import 'package:secure_note/features/profile/view/secret/data/model/m_secret_query.dart';
+import 'package:secure_note/features/profile/view/secret/data/model/m_secret.dart';
 
 abstract class ISecretRepository {
   Future<void> addSecretNote(MSecret payload);

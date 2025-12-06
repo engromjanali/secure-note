@@ -1,12 +1,13 @@
 import 'dart:async';
-import 'package:daily_info/core/constants/dimension_theme.dart';
-import 'package:daily_info/core/extensions/ex_build_context.dart';
-import 'package:daily_info/core/extensions/ex_padding.dart';
-import 'package:daily_info/core/functions/f_call_back.dart';
-import 'package:daily_info/core/functions/f_is_null.dart';
-import 'package:daily_info/core/functions/f_printer.dart';
-import 'package:daily_info/features/stopwatch/controller/c_stopwatch.dart';
-import 'package:daily_info/features/stopwatch/data/model/m_stopwatch.dart';
+import 'package:secure_note/core/constants/dimension_theme.dart';
+import 'package:secure_note/core/extensions/ex_build_context.dart';
+import 'package:secure_note/core/extensions/ex_padding.dart';
+import 'package:secure_note/core/functions/f_call_back.dart';
+import 'package:secure_note/core/functions/f_is_null.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/core/services/local_auth_services.dart';
+import 'package:secure_note/features/stopwatch/controller/c_stopwatch.dart';
+import 'package:secure_note/features/stopwatch/data/model/m_stopwatch.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -269,8 +270,9 @@ class _SStopwatchState extends State<SStopwatch> {
 
                   // lap
                   GestureDetector(
-                    onTap: () {
-                      addLap();
+                    onTap: () async {
+                      // addLap();
+                      await LocalAuthServices().showBiometric();
                     },
                     child: Container(
                       decoration: BoxDecoration(

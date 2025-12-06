@@ -1,15 +1,15 @@
 import 'package:another_flushbar/flushbar.dart';
-import 'package:daily_info/core/constants/all_enums.dart';
-import 'package:daily_info/core/constants/colors.dart';
-import 'package:daily_info/core/constants/dimension_theme.dart';
-import 'package:daily_info/core/extensions/ex_padding.dart';
-import 'package:daily_info/core/functions/f_is_null.dart';
-import 'package:daily_info/core/services/navigation_service.dart';
-import 'package:daily_info/core/widgets/w_container.dart';
-import 'package:daily_info/core/widgets/w_dialog.dart';
-import 'package:daily_info/features/add/view/s_add.dart';
-import 'package:daily_info/features/profile/view/secret/view/s_add_passkey.dart';
-import 'package:daily_info/features/profile/view/secret/widgets/w_select_note_type.dart';
+import 'package:secure_note/core/constants/all_enums.dart';
+import 'package:secure_note/core/constants/colors.dart';
+import 'package:secure_note/core/constants/dimension_theme.dart';
+import 'package:secure_note/core/extensions/ex_padding.dart';
+import 'package:secure_note/core/functions/f_is_null.dart';
+import 'package:secure_note/core/services/navigation_service.dart';
+import 'package:secure_note/core/widgets/w_container.dart';
+import 'package:secure_note/core/widgets/w_dialog.dart';
+import 'package:secure_note/features/add/view/s_add.dart';
+import 'package:secure_note/features/profile/view/secret/view/s_add_passkey.dart';
+import 'package:secure_note/features/profile/view/secret/widgets/w_select_note_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

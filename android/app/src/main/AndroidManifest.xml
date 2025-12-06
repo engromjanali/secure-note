@@ -1,16 +1,19 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<!-- <manifest xmlns:android="http://schemas.android.com/apk/res/android"> -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.engromjanali.securenote">
+
 <!-- to access camera and storage referance "image_picker" -->
 <uses-permission android:name="android.permission.CAMERA"/>
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 <!-- local auth reference -->
 <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
 
-   
     <application
-        android:label="your_info"
+        android:label="secure note"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:allowBackup="false"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="false">
         <activity
             android:name=".MainActivity"

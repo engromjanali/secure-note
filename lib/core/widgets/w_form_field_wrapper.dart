@@ -1,5 +1,5 @@
-import 'package:daily_info/core/extensions/ex_build_context.dart';
-import 'package:daily_info/core/extensions/ex_padding.dart';
+import 'package:secure_note/core/extensions/ex_build_context.dart';
+import 'package:secure_note/core/extensions/ex_padding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -34,14 +34,21 @@ class WFormFieldWrapper extends StatelessWidget {
           Row(
             children: [
               Text(title!, style: labelStyle),
-              if (isRequired) Text(" *", style: labelStyle?.copyWith(color: context.redColor)),
+              if (isRequired)
+                Text(
+                  " *",
+                  style: labelStyle?.copyWith(color: context.redColor),
+                ),
             ],
           ).pB(value: 5),
         child,
         if (errorText != null)
           Text(
             "$title is $errorText",
-            style: context.textTheme?.labelMedium?.copyWith(color: context.redColor, fontSize: 12.sp),
+            style: context.textTheme?.labelMedium?.copyWith(
+              color: context.redColor,
+              fontSize: 12.sp,
+            ),
           ).pV(value: 3),
       ],
     );

@@ -1,5 +1,5 @@
-import 'package:daily_info/core/services/navigation_service.dart';
-import 'package:daily_info/core/widgets/load_and_error/widgets/loading_widget.dart';
+import 'package:secure_note/core/services/navigation_service.dart';
+import 'package:secure_note/core/widgets/load_and_error/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 
 /// ⏳ showLoader() — Shows modal loading spinner (WOnScreenLoading)

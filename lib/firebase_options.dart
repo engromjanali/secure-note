@@ -50,20 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBnpfxhPtaDkIl9t2mFY3jRrAKee4KcKQ0',
-    appId: '1:21751634883:android:b08ee46826207592c8fb76',
-    messagingSenderId: '21751634883',
-    projectId: 'daily-info-56509',
-    storageBucket: 'daily-info-56509.firebasestorage.app',
+    apiKey: 'AIzaSyDPPrAeEtDNCP4m-zinej6jlzgpG7XcFHA',
+    appId: '1:537971701870:android:6810c432e4cb10da828e7f',
+    messagingSenderId: '537971701870',
+    projectId: 'note-dd0cc',
+    storageBucket: 'note-dd0cc.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyByyGlmi-tnwRGI1RAGdpIFNP243TYMaRk',
-    appId: '1:21751634883:ios:2400842367c3f278c8fb76',
-    messagingSenderId: '21751634883',
-    projectId: 'daily-info-56509',
-    storageBucket: 'daily-info-56509.firebasestorage.app',
-    iosBundleId: 'com.example.yourInfo',
+    apiKey: 'AIzaSyC72bfph2EN6K7w992ucsrIa4hQFuB0jEo',
+    appId: '1:537971701870:ios:26352e13bec8e75f828e7f',
+    messagingSenderId: '537971701870',
+    projectId: 'note-dd0cc',
+    storageBucket: 'note-dd0cc.firebasestorage.app',
+    iosBundleId: 'com.engromjanali.securenote',
   );
-
 }

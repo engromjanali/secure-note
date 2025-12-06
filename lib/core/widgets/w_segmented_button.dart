@@ -1,6 +1,6 @@
-import 'package:daily_info/core/constants/dimension_theme.dart';
-import 'package:daily_info/core/extensions/ex_build_context.dart';
-import 'package:daily_info/core/widgets/w_form_field_wrapper.dart';
+import 'package:secure_note/core/constants/dimension_theme.dart';
+import 'package:secure_note/core/extensions/ex_build_context.dart';
+import 'package:secure_note/core/widgets/w_form_field_wrapper.dart';
 import 'package:flutter/material.dart';
 
 /// 📊 WSegmentedButtonFormField<>

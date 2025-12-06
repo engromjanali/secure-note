@@ -1,6 +1,6 @@
-import 'package:daily_info/core/constants/colors.dart';
-import 'package:daily_info/core/constants/dimension_theme.dart';
-import 'package:daily_info/core/controllers/c_base.dart';
+import 'package:secure_note/core/constants/colors.dart';
+import 'package:secure_note/core/constants/dimension_theme.dart';
+import 'package:secure_note/core/controllers/c_base.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

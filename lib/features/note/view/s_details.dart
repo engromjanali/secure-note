@@ -1,17 +1,17 @@
-import 'package:daily_info/core/constants/colors.dart';
-import 'package:daily_info/core/constants/default_values.dart';
-import 'package:daily_info/core/extensions/ex_build_context.dart';
-import 'package:daily_info/core/extensions/ex_date_time.dart';
-import 'package:daily_info/core/extensions/ex_duration.dart';
-import 'package:daily_info/core/extensions/ex_padding.dart';
-import 'package:daily_info/core/extensions/ex_strings.dart';
-import 'package:daily_info/core/functions/f_call_back.dart';
-import 'package:daily_info/core/functions/f_is_null.dart';
-import 'package:daily_info/core/functions/f_timer.dart';
-import 'package:daily_info/core/services/navigation_service.dart';
-import 'package:daily_info/features/add/view/s_add.dart';
-import 'package:daily_info/features/profile/view/secret/data/model/m_secret.dart';
-import 'package:daily_info/features/task/data/model/m_task.dart';
+import 'package:secure_note/core/constants/colors.dart';
+import 'package:secure_note/core/constants/default_values.dart';
+import 'package:secure_note/core/extensions/ex_build_context.dart';
+import 'package:secure_note/core/extensions/ex_date_time.dart';
+import 'package:secure_note/core/extensions/ex_duration.dart';
+import 'package:secure_note/core/extensions/ex_padding.dart';
+import 'package:secure_note/core/extensions/ex_strings.dart';
+import 'package:secure_note/core/functions/f_call_back.dart';
+import 'package:secure_note/core/functions/f_is_null.dart';
+import 'package:secure_note/core/functions/f_timer.dart';
+import 'package:secure_note/core/services/navigation_service.dart';
+import 'package:secure_note/features/add/view/s_add.dart';
+import 'package:secure_note/features/profile/view/secret/data/model/m_secret.dart';
+import 'package:secure_note/features/task/data/model/m_task.dart';
 import 'package:flutter/material.dart';
 
 class SDetails extends StatefulWidget {

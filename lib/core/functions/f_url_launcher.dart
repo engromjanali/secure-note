@@ -1,5 +1,5 @@
-import 'package:daily_info/core/functions/f_printer.dart';
-import 'package:daily_info/core/functions/f_snackbar.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/core/functions/f_snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// 🌐 OpenURLs.open()
@@ -58,20 +58,31 @@ class OpenURLs {
           if (await canLaunchUrl(uri)) {
             await launchUrl(
               uri,
-              mode: (type == OpenType.url) ? LaunchMode.externalApplication : LaunchMode.platformDefault,
+              mode: (type == OpenType.url)
+                  ? LaunchMode.externalApplication
+                  : LaunchMode.platformDefault,
             );
           } else {
             errorPrint('🐞 Could not launch $type for $value 🐛');
-            showSnackBar('🐞 Could not launch $type for $value 🐛', snackBarType: SnackBarType.warning);
+            showSnackBar(
+              '🐞 Could not launch $type for $value 🐛',
+              snackBarType: SnackBarType.warning,
+            );
           }
         } catch (e) {
           errorPrint('🐞 Could not launch $type for $value 🐛');
-          showSnackBar('🐞 Could not launch $type for $value 🐛', snackBarType: SnackBarType.warning);
+          showSnackBar(
+            '🐞 Could not launch $type for $value 🐛',
+            snackBarType: SnackBarType.warning,
+          );
         }
       }
     } catch (e) {
       errorPrint('🐞 Could not launch $type for $value 🐛');
-      showSnackBar('🐞 Could not launch $type for $value 🐛', snackBarType: SnackBarType.warning);
+      showSnackBar(
+        '🐞 Could not launch $type for $value 🐛',
+        snackBarType: SnackBarType.warning,
+      );
     }
   }
 }

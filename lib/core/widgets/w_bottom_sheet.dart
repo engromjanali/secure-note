@@ -1,10 +1,10 @@
 import 'dart:ui';
-import 'package:daily_info/core/extensions/ex_build_context.dart';
-import 'package:daily_info/core/extensions/ex_padding.dart';
-import 'package:daily_info/core/functions/f_loader.dart';
-import 'package:daily_info/core/services/navigation_service.dart';
-import 'package:daily_info/core/widgets/w_button.dart';
-import 'package:daily_info/core/widgets/w_close_button.dart';
+import 'package:secure_note/core/extensions/ex_build_context.dart';
+import 'package:secure_note/core/extensions/ex_padding.dart';
+import 'package:secure_note/core/functions/f_loader.dart';
+import 'package:secure_note/core/services/navigation_service.dart';
+import 'package:secure_note/core/widgets/w_button.dart';
+import 'package:secure_note/core/widgets/w_close_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

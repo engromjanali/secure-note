@@ -1,5 +1,5 @@
-import 'package:daily_info/core/functions/f_printer.dart';
-import 'package:daily_info/core/functions/f_snackbar.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/core/functions/f_snackbar.dart';
 import 'package:local_auth/local_auth.dart';
 
 class LocalAuthServices {
@@ -9,8 +9,11 @@ class LocalAuthServices {
   final LocalAuthentication auth = LocalAuthentication();
   Future<bool> showBiometric({bool biometricOnly = false}) async {
     final bool canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
+    printer("canAuthenticateWithBiometrics $canAuthenticateWithBiometrics");
     final bool canAuthenticate =
         canAuthenticateWithBiometrics || await auth.isDeviceSupported();
+    printer("canAuthenticate $canAuthenticate");
+
     if (canAuthenticate) {
       final List<BiometricType> availableBiometrics = await auth
           .getAvailableBiometrics();
@@ -23,10 +26,10 @@ class LocalAuthServices {
           // may it's ignore face in android.
         }
         printer(availableBiometrics);
-        return authenticate(biometricOnly: biometricOnly);
+        return await authenticate(biometricOnly: biometricOnly);
       } else {
         // biomatric not found
-        return authenticate(biometricOnly: biometricOnly);
+        return await authenticate(biometricOnly: biometricOnly);
       }
     } else {
       // can't authenticate
@@ -44,6 +47,7 @@ class LocalAuthServices {
       return didAuthenticate;
     } on LocalAuthException catch (e) {
       handelLocalAuthException(e);
+      errorPrint(e);
     } catch (_) {
       showSnackBar("Unexcepted Error!");
     }

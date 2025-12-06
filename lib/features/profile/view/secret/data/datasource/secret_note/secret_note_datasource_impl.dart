@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:daily_info/core/constants/default_values.dart';
-import 'package:daily_info/core/constants/keys.dart';
-import 'package:daily_info/core/functions/f_encrypt_decrypt.dart';
-import 'package:daily_info/core/functions/f_is_null.dart';
-import 'package:daily_info/core/functions/f_printer.dart';
-import 'package:daily_info/features/profile/controllers/c_profile.dart';
-import 'package:daily_info/features/profile/view/secret/data/datasource/secret_note/secret_note_datasource.dart';
-import 'package:daily_info/features/profile/view/secret/data/model/m_secret_query.dart';
-import 'package:daily_info/features/profile/view/secret/data/model/m_secret.dart';
+import 'package:secure_note/core/constants/default_values.dart';
+import 'package:secure_note/core/constants/keys.dart';
+import 'package:secure_note/core/functions/f_encrypt_decrypt.dart';
+import 'package:secure_note/core/functions/f_is_null.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/features/profile/controllers/c_profile.dart';
+import 'package:secure_note/features/profile/view/secret/data/datasource/secret_note/secret_note_datasource.dart';
+import 'package:secure_note/features/profile/view/secret/data/model/m_secret_query.dart';
+import 'package:secure_note/features/profile/view/secret/data/model/m_secret.dart';
 import 'package:power_state/power_state.dart';
 
 class SecretDatasourceImpl extends ISecretDataSource {

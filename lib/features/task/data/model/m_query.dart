@@ -1,4 +1,4 @@
-import 'package:daily_info/core/constants/all_enums.dart';
+import 'package:secure_note/core/constants/all_enums.dart';
 
 class MQuery {
   final int? pageNo;

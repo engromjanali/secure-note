@@ -1,41 +1,48 @@
 {
   "project_info": {
-    "project_number": "21751634883",
-    "firebase_url": "https://daily-info-56509-default-rtdb.firebaseio.com",
-    "project_id": "daily-info-56509",
-    "storage_bucket": "daily-info-56509.firebasestorage.app"
+    "project_number": "537971701870",
+    "project_id": "note-dd0cc",
+    "storage_bucket": "note-dd0cc.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:21751634883:android:b08ee46826207592c8fb76",
+        "mobilesdk_app_id": "1:537971701870:android:6810c432e4cb10da828e7f",
         "android_client_info": {
-          "package_name": "com.example.your_info"
+          "package_name": "com.engromjanali.securenote"
         }
       },
       "oauth_client": [
         {
-          "client_id": "21751634883-jtot21lkbadv58bo6l9ias6pgsb49gdf.apps.googleusercontent.com",
+          "client_id": "537971701870-6np97khiqmv4hlk9dqmh83l0lqg0msso.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.engromjanali.securenote",
+            "certificate_hash": "8e9012280681b792601037cb49d25f2e168ba0c5"
+          }
+        },
+        {
+          "client_id": "537971701870-3h3pun0girhq1ijsngkmbc1b74mork34.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBnpfxhPtaDkIl9t2mFY3jRrAKee4KcKQ0"
+          "current_key": "AIzaSyDPPrAeEtDNCP4m-zinej6jlzgpG7XcFHA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "21751634883-jtot21lkbadv58bo6l9ias6pgsb49gdf.apps.googleusercontent.com",
+              "client_id": "537971701870-3h3pun0girhq1ijsngkmbc1b74mork34.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "21751634883-kad6kurlj08gu5n5gf15qu5hkmc0c4dq.apps.googleusercontent.com",
+              "client_id": "537971701870-1rsdth8eplvngiln2i8r4mptonujh7ml.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.yourInfo"
+                "bundle_id": "com.engromjanali.securenote"
               }
             }
           ]

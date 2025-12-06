@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:daily_info/core/controllers/c_base.dart';
+import 'package:secure_note/core/controllers/c_base.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../functions/f_printer.dart';
@@ -27,23 +27,27 @@ class CNotification {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    const DarwinInitializationSettings initializationSettingsIOS = DarwinInitializationSettings(
-      defaultPresentAlert: true,
-      defaultPresentBadge: true,
-      defaultPresentSound: true,
-      requestSoundPermission: true,
-    );
+    const DarwinInitializationSettings initializationSettingsIOS =
+        DarwinInitializationSettings(
+          defaultPresentAlert: true,
+          defaultPresentBadge: true,
+          defaultPresentSound: true,
+          requestSoundPermission: true,
+        );
 
-    const InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-    );
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
+          android: initializationSettingsAndroid,
+          iOS: initializationSettingsIOS,
+        );
 
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
     // 📡 Create the notification channel for Android
     flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >()
         ?.createNotificationChannel(channel);
 
     // 🔔 Set display options for foreground messages (iOS)
@@ -67,18 +71,20 @@ class CNotification {
         // TODO: Implement logic to update FCM token to user profile
       }
     } catch (e, s) {
-      CBase().setException(error: e, stackTrace: s, setExceptionOnly: true, showSnackbar: false);
+      CBase().setException(
+        error: e,
+        stackTrace: s,
+        setExceptionOnly: true,
+        showSnackbar: false,
+      );
     }
   }
 
   /// 🔐 Request notification permission on iOS
   Future<void> requestPermission() async {
     if (Platform.isIOS) {
-      NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
-        alert: true,
-        badge: true,
-        sound: true,
-      );
+      NotificationSettings settings = await FirebaseMessaging.instance
+          .requestPermission(alert: true, badge: true, sound: true);
 
       // 🧾 Log permission status
       switch (settings.authorizationStatus) {
@@ -107,7 +113,8 @@ class CNotification {
             android: AndroidNotificationDetails(
               channel.id,
               channel.name,
-              channelDescription: 'This channel is used for important notifications.',
+              channelDescription:
+                  'This channel is used for important notifications.',
               importance: Importance.high,
               priority: Priority.high,
               playSound: true,

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:daily_info/core/functions/f_printer.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
 
 class TimerService {
   Timer? _timer;

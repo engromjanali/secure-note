@@ -1,9 +1,9 @@
-import 'package:daily_info/core/controllers/c_theme.dart';
-import 'package:daily_info/core/functions/f_call_back.dart';
-import 'package:daily_info/features/profile/controllers/c_profile.dart';
-import 'package:daily_info/features/profile/data/data_source/profile_data_source_impl.dart';
-import 'package:daily_info/features/profile/data/repository/patient_repository_impl.dart';
-import 'package:daily_info/features/s_home.dart';
+import 'package:secure_note/core/controllers/c_theme.dart';
+import 'package:secure_note/core/functions/f_call_back.dart';
+import 'package:secure_note/features/profile/controllers/c_profile.dart';
+import 'package:secure_note/features/profile/data/data_source/profile_data_source_impl.dart';
+import 'package:secure_note/features/profile/data/repository/patient_repository_impl.dart';
+import 'package:secure_note/features/s_home.dart';
 import 'package:flutter/material.dart';
 import 'package:power_state/power_state.dart';
 import '/./core/services/navigation_service.dart';

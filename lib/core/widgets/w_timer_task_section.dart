@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:daily_info/core/constants/all_enums.dart';
-import 'package:daily_info/core/services/navigation_service.dart';
-import 'package:daily_info/core/widgets/w_task_section.dart';
-import 'package:daily_info/features/task/data/model/m_task.dart';
+import 'package:secure_note/core/constants/all_enums.dart';
+import 'package:secure_note/core/services/navigation_service.dart';
+import 'package:secure_note/core/widgets/w_task_section.dart';
+import 'package:secure_note/features/task/data/model/m_task.dart';
 import 'package:flutter/material.dart';
 
 /// Timer version of the section

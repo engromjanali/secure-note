@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:daily_info/core/constants/keys.dart';
-import 'package:daily_info/core/extensions/ex_date_time.dart';
-import 'package:daily_info/features/authentication/data/model/m_token.dart';
-import 'package:daily_info/features/profile/data/models/m_profile.dart';
+import 'package:secure_note/core/constants/keys.dart';
+import 'package:secure_note/core/extensions/ex_date_time.dart';
+import 'package:secure_note/features/authentication/data/model/m_token.dart';
+import 'package:secure_note/features/profile/data/models/m_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../../../core/functions/f_printer.dart';

@@ -1,6 +1,5 @@
-
-import 'package:daily_info/features/task/data/model/m_query.dart';
-import 'package:daily_info/features/task/data/model/m_task.dart';
+import 'package:secure_note/features/task/data/model/m_query.dart';
+import 'package:secure_note/features/task/data/model/m_task.dart';
 
 abstract class ITaskDataSource {
   Future<MTask> addTask(MTask payload);

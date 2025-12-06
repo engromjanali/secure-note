@@ -1,8 +1,8 @@
-import 'package:daily_info/core/extensions/ex_expanded.dart';
-import 'package:daily_info/core/widgets/load_and_error/models/view_state_model.dart';
-import 'package:daily_info/core/widgets/load_and_error/widgets/error_section.dart';
-import 'package:daily_info/core/widgets/load_and_error/widgets/loading_widget.dart';
-import 'package:daily_info/core/widgets/load_and_error/widgets/no_data_found_section.dart';
+import 'package:secure_note/core/extensions/ex_expanded.dart';
+import 'package:secure_note/core/widgets/load_and_error/models/view_state_model.dart';
+import 'package:secure_note/core/widgets/load_and_error/widgets/error_section.dart';
+import 'package:secure_note/core/widgets/load_and_error/widgets/loading_widget.dart';
+import 'package:secure_note/core/widgets/load_and_error/widgets/no_data_found_section.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
