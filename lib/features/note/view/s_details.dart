@@ -180,13 +180,13 @@ Widget showDateAsFormated(
   if (doNotShowIfNull) {
     return isNotNull(dateTime)
         ? Text(
-            "$leading: ${dateTime?.format(DateTimeFormattingExtension.formatDDMMMYYYY_I_HHMMA)}",
+            "$leading: ${dateTime?.format(DateTimeFormattingExtension.formatDDMMMYYYY_I_HHMMA) ?? PDefaultValues.noName}",
             style: context.textTheme?.bodyMedium?.copyWith(color: color),
           )
         : SizedBox.shrink();
   } else {
     return Text(
-      "$leading: ${dateTime?.format(DateTimeFormattingExtension.formatDDMMMYYYY_I_HHMMA)}",
+      "$leading: ${dateTime?.format(DateTimeFormattingExtension.formatDDMMMYYYY_I_HHMMA) ?? PDefaultValues.noName}",
       style: context.textTheme?.bodyMedium?.copyWith(color: color),
     );
   }

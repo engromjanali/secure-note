@@ -200,7 +200,6 @@ class _SAddState extends State<SAdd> with RouteAware {
         titleController.text = "";
         pointTController.text = "";
         detailsController.text = "";
-        fromKey.currentState?.reset();
         targetdDateTimeListener.value = null;
         targetedDurationListener.value = null;
       }
@@ -211,14 +210,6 @@ class _SAddState extends State<SAdd> with RouteAware {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // leading: Center(
-        //   child: WPButton.remove(
-        //     onTap: () {
-        //       SHome(selectedPage: 0).pushReplacement();
-        //     },
-        //     size: 25,
-        //   ),
-        // ),
         title: ValueListenableBuilder(
           valueListenable: isTaskListener,
           builder: (context, isTask, child) {

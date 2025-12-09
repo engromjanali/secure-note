@@ -9,7 +9,6 @@
 import 'package:flutter/widgets.dart';
 
 class PDefaultValues {
-
   static const String encryption = "encryption";
   static const String noFee = "N/A";
   static const String noName = "N/A";
@@ -19,6 +18,8 @@ class PDefaultValues {
   static const List<String> allowedFileTypes = ['jpg', 'pdf', 'png'];
   static const int minDOBDate = 1900;
   static const int passwordMinLength = 8;
+
+  /// limit[ limit ]
   static const int limit = 20;
   static const privacyUrlLink =
       "https://groups.google.com/u/0/g/apptestingservicex-xxx";

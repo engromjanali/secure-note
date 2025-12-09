@@ -23,9 +23,7 @@ class CAuth extends CBase {
   CAuth(IAuthRepository iAuthRepository) : _iAuthRepository = iAuthRepository;
 
   final SharedPrefService _sharedPrefService = SharedPrefService.instance;
-  final CProfile _cProfile = PowerVault.put(
-    CProfile(ProfileRepositoryImpl(ProfileDataSourceImpl())),
-  );
+  final CProfile _cProfile = PowerVault.find<CProfile>();
 
   void updateViewState({ViewState? viewState}) {
     this.viewState = viewState ?? this.viewState;

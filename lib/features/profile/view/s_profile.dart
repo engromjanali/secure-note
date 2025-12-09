@@ -3,6 +3,7 @@ import 'package:secure_note/core/constants/dimension_theme.dart';
 import 'package:secure_note/core/extensions/ex_build_context.dart';
 import 'package:secure_note/core/extensions/ex_expanded.dart';
 import 'package:secure_note/core/extensions/ex_padding.dart';
+import 'package:secure_note/core/functions/f_call_back.dart';
 import 'package:secure_note/core/functions/f_is_null.dart';
 import 'package:secure_note/core/functions/f_printer.dart';
 import 'package:secure_note/core/services/navigation_service.dart';
@@ -32,6 +33,16 @@ class _SProfileState extends State<SProfile> {
   CProfile cProfile = PowerVault.put(
     CProfile(ProfileRepositoryImpl(ProfileDataSourceImpl())),
   );
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    callBackFunction(() {
+      cProfile.getPatientList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

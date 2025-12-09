@@ -16,6 +16,7 @@ class CPasskey extends CBase {
   bool hasMoreNext = true;
   bool hasMorePrev = false;
   bool isLoadingMore = false;
+  bool isLoadNext = true;
 
   void clear() {
     passkeyList = [];
@@ -125,6 +126,7 @@ class CPasskey extends CBase {
     try {
       isLoadingMore = true;
       update();
+      print("delete $id");
       await _iPasskeyRepository.detetePasskey(id);
       // clear from runtime storage
       passkeyList.removeWhere((mPasskey) => mPasskey.id == id);
@@ -149,6 +151,9 @@ class CPasskey extends CBase {
         firstEid: payload?.firstEid ?? firstSId,
         lastEid: payload?.lastEid ?? lastSId,
       );
+      // set load from flag
+      isLoadNext = payload?.isLoadNext ?? true;
+      printer(isLoadNext);
 
       printer("call 2");
       if (isLoadingMore) {
@@ -169,12 +174,15 @@ class CPasskey extends CBase {
       isLoadingMore = true;
       update();
       List<MPasskey> res = await _iPasskeyRepository.fetchPasskey(newPayload);
+      printer(res.length);
+      await Future.delayed(Duration(seconds: 5));
       if (newPayload.isLoadNext!) {
         passkeyList.addAll(res);
         if (res.length < limit) {
           hasMoreNext = false;
           printer("has more next has been false");
         }
+        firstSId = passkeyList.first.id;
         lastSId = passkeyList.last.id;
       } else {
         printer("loaded previous");
@@ -184,6 +192,7 @@ class CPasskey extends CBase {
           printer("has more hasMorePrev has been false");
         }
         firstSId = passkeyList.first.id;
+        lastSId = passkeyList.last.id;
       }
       update();
       printer("call 6");

@@ -1,7 +1,6 @@
 import 'package:secure_note/features/add/view/s_add.dart';
 import 'package:secure_note/features/note/view/s_note.dart';
 import 'package:secure_note/features/profile/view/s_profile.dart';
-import 'package:secure_note/features/profile/view/s_profile.dart';
 import 'package:secure_note/features/stopwatch/view/s_stopwatch.dart';
 import 'package:secure_note/features/task/view/s_task.dart';
 import 'package:secure_note/gen/assets.gen.dart';

@@ -177,7 +177,7 @@ class _SSAuthState extends State<SSAuth> {
         if (isNotNull(widget.serverSecondaryAuthKey)) {
           if (encryptedString == widget.serverSecondaryAuthKey) {
             // verifyed
-            showSnackBar("Verifyed");
+            // showSnackBar("Verifyed");
           } else {
             // unverifyed
             showSnackBar("Wrong Sunmition", snackBarType: SnackBarType.warning);
@@ -204,6 +204,7 @@ class _SSAuthState extends State<SSAuth> {
             ) ==
             inputCode) {
           printer("Verifyed!");
+          await FSSService().delete("attemptCount");
           SecretService secretService = SecretService();
           await secretService.init(widget.secondaryAuthKey!);
           SSerets().pushReplacement();
@@ -223,8 +224,8 @@ class _SSAuthState extends State<SSAuth> {
             "Your account has locked!",
             snackBarType: SnackBarType.important,
           );
+          await FSSService().setString("attemptCount", attemptCount.toString());
         }
-        await FSSService().setString("attemptCount", attemptCount.toString());
       }
     } else {
       showSnackBar(

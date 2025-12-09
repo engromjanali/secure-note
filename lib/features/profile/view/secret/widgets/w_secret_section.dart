@@ -7,8 +7,11 @@ import 'package:secure_note/core/extensions/ex_expanded.dart';
 import 'package:secure_note/core/extensions/ex_padding.dart';
 import 'package:secure_note/core/functions/f_call_back.dart';
 import 'package:secure_note/core/functions/f_is_null.dart';
+import 'package:secure_note/core/functions/f_loader.dart';
 import 'package:secure_note/core/functions/f_printer.dart';
 import 'package:secure_note/core/services/navigation_service.dart';
+import 'package:secure_note/core/widgets/load_and_error/widgets/loading_widget.dart';
+import 'package:secure_note/core/widgets/w_app_shimmer.dart';
 import 'package:secure_note/core/widgets/w_dismisable.dart';
 import 'package:secure_note/features/add/view/s_add.dart';
 import 'package:secure_note/features/note/view/s_details.dart';
@@ -287,11 +290,19 @@ class _WSecretSectionState extends State<WSecretSection> {
         if (isNotNull(widget.title) &&
             (widget.isSecretNote ? secretItems : passkeyItems).isNotEmpty)
           header(context),
+        if ((cPasskey.isLoadingMore || cSecret.isLoadingMore) &&
+            (cPasskey.hasMorePrev || cSecret.hasMorePrev))
+          ListView.builder(
+            shrinkWrap: true,
+            // controller: NeverScrollableScrollPhysics(),
+            itemCount: 2,
+            itemBuilder: (context, index) => WAppsShimmer().pB(value: 16),
+          ),
         ScrollablePositionedList.builder(
           physics: AlwaysScrollableScrollPhysics(),
-          itemCount: (widget.isSecretNote
-              ? secretItems.length
-              : passkeyItems.length),
+          itemCount:
+              (widget.isSecretNote ? secretItems.length : passkeyItems.length) +
+              1,
           itemBuilder: builder,
           itemScrollController: itemScrollController,
           scrollOffsetController: scrollOffsetController,
@@ -303,17 +314,50 @@ class _WSecretSectionState extends State<WSecretSection> {
   }
 
   Widget builder(BuildContext context, int index) {
-    String dateTime =
-        (widget.isSecretNote
-                ? secretItems[index].createdAt
-                : passkeyItems[index].createdAt)
-            ?.format(DateTimeFormattingExtension.formatDDMMMYYYY_I_HHMMA) ??
-        PDefaultValues.noName;
+    Widget? prevChild;
+    Widget? nextChild;
+    // for previous loader
+    if (index == 0 &&
+        (cPasskey.isLoadingMore || cSecret.isLoadingMore) &&
+        !(cPasskey.isLoadNext || cSecret.isLoadNext)) {
+      prevChild = ListView.builder(
+        padding: EdgeInsets.all(0),
+        shrinkWrap: true,
+        itemCount: 2,
+        itemBuilder: (context, index) => WAppsShimmer().pB(value: 16),
+      );
+    }
+    // next loader
+    if (index ==
+            (widget.isSecretNote ? secretItems.length : passkeyItems.length) &&
+        (cPasskey.isLoadNext || cSecret.isLoadNext) &&
+        (cPasskey.isLoadingMore || cSecret.isLoadingMore)) {
+      printer("loading next");
+      nextChild = ListView.builder(
+        padding: EdgeInsets.all(0),
+        shrinkWrap: true,
+        itemCount: 2,
+        itemBuilder: (context, index) => WAppsShimmer().pB(value: 16),
+      );
+    }
+    String? dateTime;
+    if (index <
+        (widget.isSecretNote ? secretItems.length : passkeyItems.length)) {
+      dateTime =
+          (widget.isSecretNote
+                  ? secretItems[index].createdAt
+                  : passkeyItems[index].createdAt)
+              ?.format(DateTimeFormattingExtension.formatDDMMMYYYY_I_HHMMA) ??
+          PDefaultValues.noName;
+    }
 
-    return (widget.isSecretNote ? secretItems.length : passkeyItems.length) ==
-            index
-        ? CircularProgressIndicator()
-        : WDismisable(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (isNotNull(prevChild)) prevChild!,
+        if (index <
+            (widget.isSecretNote ? secretItems.length : passkeyItems.length))
+          WDismisable(
             withDismissable: false,
             isFromVault: true,
             taskState: TaskState.note,
@@ -336,7 +380,10 @@ class _WSecretSectionState extends State<WSecretSection> {
                 : passkeyItems[index].title,
             subTitle: dateTime,
             mSecret: widget.isSecretNote ? secretItems[index] : null,
-          );
+          ),
+        if (isNotNull(nextChild)) nextChild!,
+      ],
+    );
   }
 
   Widget header(BuildContext context) => Row(

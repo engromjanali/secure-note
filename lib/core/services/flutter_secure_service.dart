@@ -24,6 +24,10 @@ class FSSService {
   }
 
   Future<void> clear() async {
-   await storage.deleteAll();
+    await storage.deleteAll();
+  }
+
+  Future<void> delete(String key) async {
+    await storage.delete(key: key);
   }
 }

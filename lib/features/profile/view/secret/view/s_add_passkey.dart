@@ -200,13 +200,6 @@ class _SAPasskeyState extends State<SAPasskey> {
           createdAt: DateTime.timestamp(),
         );
       }
-      for (int i = 0; i < 500; i++) {
-        payload.title = i.toString();
-        payload.id = DateTime.now().timestamp;
-        await (widget.isEdit
-            ? cPasskey.updatePasskey(payload)
-            : cPasskey.addPasskey(payload));
-      }
       await (widget.isEdit
           ? cPasskey.updatePasskey(payload)
           : cPasskey.addPasskey(payload));
@@ -215,7 +208,6 @@ class _SAPasskeyState extends State<SAPasskey> {
       passController.text = "";
       backupController.text = "";
       noteController.text = "";
-      fromKey.currentState?.reset();
       backupCodeListeners.value = [];
     }
   }

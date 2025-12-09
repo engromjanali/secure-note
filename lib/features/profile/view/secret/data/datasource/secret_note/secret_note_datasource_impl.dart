@@ -24,7 +24,12 @@ class SecretDatasourceImpl extends ISecretDataSource {
 
   @override
   Future<void> deteteSecretNote(String id) async {
-    await firebaseFirestore.collection(PKeys.secretNote).doc(id).delete();
+    await firebaseFirestore
+        .collection(PKeys.secretNote)
+        .doc(cProfile.mProfileData.id)
+        .collection(PKeys.secretNote)
+        .doc(id)
+        .delete();
   }
 
   @override
@@ -45,6 +50,10 @@ class SecretDatasourceImpl extends ISecretDataSource {
           .endBefore([payload.firstEid])
           .limitToLast(payload.limit ?? PDefaultValues.limit);
     }
+    if (isNull(payload.firstEid) && isNull(payload.lastEid)) {
+      query = query.limit(payload.limit!);
+    }
+
     await query.get().then((querySnapshot) {
       // Append the new documents to your existing list...
       if (querySnapshot.docs.isNotEmpty) {

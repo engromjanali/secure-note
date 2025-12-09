@@ -26,7 +26,13 @@ class PasskeyDataSourceImpl extends IPasskeyDataSource {
 
   @override
   Future<void> detetePasskey(String id) async {
-    await firebaseFirestore.collection(PKeys.passkey).doc(id).delete();
+    printer("trying to delete $id");
+    await firebaseFirestore
+        .collection(PKeys.passkey)
+        .doc(cProfile.mProfileData.id)
+        .collection(PKeys.passkey)
+        .doc(id)
+        .delete();
   }
 
   @override
@@ -47,6 +53,10 @@ class PasskeyDataSourceImpl extends IPasskeyDataSource {
           .endBefore([payload.firstEid])
           .limitToLast(payload.limit ?? PDefaultValues.limit);
     }
+    if (isNull(payload.firstEid) && isNull(payload.lastEid)) {
+      query = query.limit(payload.limit!);
+    }
+    
     await query.get().then((querySnapshot) {
       // Append the new documents to your existing list...
       if (querySnapshot.docs.isNotEmpty) {

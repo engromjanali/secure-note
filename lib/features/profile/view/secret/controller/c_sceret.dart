@@ -17,6 +17,7 @@ class CSecret extends CBase {
   bool hasMoreNext = true;
   bool hasMorePrev = false;
   bool isLoadingMore = false;
+  bool isLoadNext = true;
 
   void clear() {
     secretList = [];
@@ -125,6 +126,7 @@ class CSecret extends CBase {
     try {
       isLoadingMore = true;
       update();
+      print("delete");
       await _iSecretRepository.deteteSecretNote(id);
       // clear from runtime storage
       secretList.removeWhere((mSecret) => mSecret.id == id);
@@ -149,6 +151,7 @@ class CSecret extends CBase {
         firstEid: payload?.firstEid ?? firstSId,
         lastEid: payload?.lastEid ?? lastSId,
       );
+      isLoadNext = payload?.isLoadNext ?? true;
 
       printer("call 2");
       if (isLoadingMore) {
@@ -176,6 +179,7 @@ class CSecret extends CBase {
           hasMoreNext = false;
           printer("has more has been false");
         }
+        firstSId = secretList.first.id;
         lastSId = secretList.last.id;
       } else {
         printer("loaded previous");
@@ -185,6 +189,7 @@ class CSecret extends CBase {
           printer("has more has been false");
         }
         firstSId = secretList.first.id;
+        lastSId = secretList.last.id;
       }
       update();
       printer("call 6");

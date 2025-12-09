@@ -53,6 +53,9 @@ class CCheckPoint {
       await Future.delayed(const Duration(milliseconds: 500));
       final context = NavigationService.currentContext;
       if (!context.mounted) return;
+      CProfile cProfile = PowerVault.put(
+        CProfile(ProfileRepositoryImpl(ProfileDataSourceImpl())),
+      );
       await const SHome().pushAndRemoveUntil();
     });
   }
