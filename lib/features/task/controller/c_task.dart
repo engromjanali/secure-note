@@ -2,6 +2,7 @@ import 'package:secure_note/core/constants/all_enums.dart';
 import 'package:secure_note/core/constants/default_values.dart';
 import 'package:secure_note/core/controllers/c_base.dart';
 import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/core/functions/f_snackbar.dart';
 import 'package:secure_note/features/task/data/model/m_query.dart';
 import 'package:secure_note/features/task/data/model/m_task.dart';
 import 'package:secure_note/features/task/data/repository/task_repository.dart';
@@ -171,6 +172,7 @@ class CTask extends CBase {
       return res;
     } catch (e) {
       errorPrint(e);
+      showSnackBar(e.toString());
     } finally {
       printer("call 7");
       isLoadingMore = false;

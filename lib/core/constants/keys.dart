@@ -12,5 +12,6 @@ class PKeys {
   static const secretNote = "secretNote";
   static const users = "users";
   static const eKey = "eKey";
+  // static const sessionKey = "sessionKey";
 
 }

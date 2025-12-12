@@ -36,7 +36,7 @@ class CAuth extends CBase {
       MToken token = await _iAuthRepository.signInWithEmailAndPassword(payload);
       updateViewState(viewState: ViewState.loaded);
       // _sharedPrefService.setString(PKeys.usertoken, token?.token ?? "");
-      await _cProfile.getPatientList();
+      await _cProfile.getPatientList(isSignIn: true);
       Navigation.pop();
     } catch (e, s) {
       updateViewState(viewState: ViewState.error);
@@ -52,7 +52,7 @@ class CAuth extends CBase {
       );
       updateViewState(viewState: ViewState.loaded);
       // _sharedPrefService.setString(PKeys.usertoken, token?.token ?? "");
-      await _cProfile.getPatientList();
+      await _cProfile.getPatientList(isSignIn: true);
       Navigation.pop();
     } catch (e, s) {
       updateViewState(viewState: ViewState.error);
@@ -66,9 +66,9 @@ class CAuth extends CBase {
       final ISocialAuthService socialAuthService = _getAuthService(type);
       final MToken auth = await socialAuthService.authenticate();
       // _sharedPrefService.setString(PKeys.usertoken, token?.token ?? "");
-      await _cProfile.getPatientList();
-      Navigation.pop();
+      await _cProfile.getPatientList(isSignIn: true);
       hideOverlay();
+      Navigation.pop();
       // SRoot().pushAndRemoveUntil();
     } catch (e, s) {
       hideOverlay();

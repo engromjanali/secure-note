@@ -220,7 +220,11 @@ class DBHelper {
   Future<void> clear() async {
     Database db = await getDB();
     try {
+      //Note: remove all of thing without secret valut data or related data.
       await db.delete(tableName);
+      await FSSService().delete('dbKey');
+      await FSSService().delete("eSkey");
+      await FSSService().delete("eSIV");
     } catch (e) {
       rethrow;
     }

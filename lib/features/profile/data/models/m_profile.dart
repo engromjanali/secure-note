@@ -1,16 +1,18 @@
 class MProfile {
-  final String? id;
-  final String? name;
-  final String? email;
-  final String? image;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
+  String? id;
+  String? name;
+  String? email;
+  String? image;
+  String? sessionKey;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   MProfile({
     this.id,
     this.name,
     this.email,
     this.image,
+    this.sessionKey,
     this.createdAt,
     this.updatedAt,
   });
@@ -20,6 +22,7 @@ class MProfile {
     name: json["name"],
     email: json["email"],
     image: json["image"],
+    sessionKey: json["sessionKey"],
     createdAt: json["createdAt"] == null
         ? null
         : DateTime.parse(json["createdAt"]),
@@ -33,6 +36,7 @@ class MProfile {
     "name": name,
     "email": email,
     "image": image,
+    "sessionKey": sessionKey,
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
   };

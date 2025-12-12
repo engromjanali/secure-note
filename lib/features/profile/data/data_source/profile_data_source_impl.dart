@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:secure_note/core/constants/keys.dart';
 import 'package:secure_note/core/functions/f_is_null.dart';
-import 'package:secure_note/features/profile/data/models/m_profile_update_payload.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../core/constants/env.dart';
@@ -25,7 +24,7 @@ class ProfileDataSourceImpl extends ENV implements IProfileData {
   }
 
   @override
-  Future<MProfile> updateProfile(MProfileUpdatePayload payload) async {
+  Future<MProfile> updateProfile(MProfile payload) async {
     if (isNull(payload.id)) {
       throw "user-id can't be null";
     }
@@ -37,9 +36,9 @@ class ProfileDataSourceImpl extends ENV implements IProfileData {
         ),
       'name': payload.name,
       'email': payload.email,
-      if (!isNull(payload.password))
-        'password':
-            payload.password, // otherwise pass will be change even we send null
+      // if (!isNull(payload.password))
+      //   'password':
+      //       payload.password, // otherwise pass will be change even we send null
     });
     final res = await makeRequest(
       path: payload.id.toString(),
@@ -47,5 +46,25 @@ class ProfileDataSourceImpl extends ENV implements IProfileData {
       data: data,
     );
     return MProfile.fromJson(res.data["data"]);
+  }
+
+  @override
+  Future<MProfile> changeSessionKey(MProfile payload) async {
+    if (isNull(payload.id)) {
+      throw "user-id can't be null";
+    }
+    final user = firebaseAuth.currentUser;
+    final docRef = FirebaseFirestore.instance
+        .collection(PKeys.users)
+        .doc(user?.uid);
+
+    // update sessionKey
+    await docRef.set(payload.toJson(), SetOptions(mergeFields: ["sessionKey"]));
+    // get updated data.
+    final doc = await docRef.get();
+    if (isNull(doc.data())) {
+      throw "Somthing Want Wrong";
+    }
+    return MProfile.fromJson(Map<String, dynamic>.from(doc.data()!));
   }
 }

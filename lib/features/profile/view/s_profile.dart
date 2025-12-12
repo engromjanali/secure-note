@@ -30,9 +30,7 @@ class SProfile extends StatefulWidget {
 }
 
 class _SProfileState extends State<SProfile> {
-  CProfile cProfile = PowerVault.put(
-    CProfile(ProfileRepositoryImpl(ProfileDataSourceImpl())),
-  );
+  CProfile cProfile = PowerVault.find();
 
   @override
   void initState() {
@@ -108,6 +106,7 @@ class _SProfileState extends State<SProfile> {
     return PowerBuilder<CProfile>(
       builder: (cProfile) {
         printer("_WProfile");
+        printer(cProfile.mProfileData.hashCode);
         printer(cProfile.mProfileData.toJson());
 
         return Stack(

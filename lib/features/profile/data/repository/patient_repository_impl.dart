@@ -1,4 +1,3 @@
-import 'package:secure_note/features/profile/data/models/m_profile_update_payload.dart';
 import '../data_source/patient_data_source.dart';
 import '../models/m_profile.dart';
 import 'patient_repository.dart';
@@ -15,8 +14,13 @@ class ProfileRepositoryImpl implements IProfileRepository {
   }
 
   @override
-  Future<MProfile> updateProfile(MProfileUpdatePayload payload) async {
+  Future<MProfile> updateProfile(MProfile payload) async {
     final res = await _profileDataSource.updateProfile(payload);
+    return res;
+  }
+  @override
+  Future<MProfile> changeSessionKey(MProfile payload) async {
+    final res = await _profileDataSource.changeSessionKey(payload);
     return res;
   }
 }

@@ -5,6 +5,7 @@ import 'package:secure_note/core/data/local/db_local.dart';
 import 'package:secure_note/core/extensions/ex_build_context.dart';
 import 'package:secure_note/core/extensions/ex_padding.dart';
 import 'package:secure_note/core/functions/f_is_null.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
 import 'package:secure_note/core/functions/f_snackbar.dart';
 import 'package:secure_note/core/functions/f_url_launcher.dart';
 import 'package:secure_note/core/services/flutter_secure_service.dart';
@@ -166,6 +167,21 @@ List<MSItem> menuList = [
     label: "Privacy Policy",
     onTap: () {
       OpenURLs.open(type: OpenType.url, value: PDefaultValues.linkedIn);
+    },
+  ),
+  MSItem(
+    icon: Assets.icons.power,
+    label: "SignOut For All Devices",
+    onTap: () async {
+      WDialog.confirmExitLogout(
+        context: NavigationService.currentContext,
+        isLogOut: true,
+        onYesPressed: () {
+          Navigation.pop();
+          CProfile cProfile = PowerVault.find<CProfile>();
+          cProfile.changeSessionKey();
+        },
+      );
     },
   ),
   MSItem(

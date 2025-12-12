@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/core/functions/f_snackbar.dart';
 import 'package:secure_note/core/services/image_picker_services.dart';
 import 'package:secure_note/core/widgets/w_bottom_nav_button.dart';
 import 'package:secure_note/core/widgets/w_image_source_dialog.dart';
+import 'package:secure_note/features/profile/data/models/m_profile.dart';
 import '/core/extensions/ex_build_context.dart';
 import '/core/extensions/ex_keyboards.dart';
 import '/core/extensions/ex_padding.dart';
@@ -17,7 +19,6 @@ import '/core/widgets/image/m_image_payload.dart';
 import '/core/widgets/image/w_image.dart';
 import '/core/widgets/w_text_field.dart';
 import '../controllers/c_profile.dart';
-import '../data/models/m_profile_update_payload.dart';
 
 class SEditProfile extends StatefulWidget {
   const SEditProfile({super.key});
@@ -30,10 +31,9 @@ class _SEditProfileState extends State<SEditProfile> {
   final CProfile cProfile = PowerVault.find<CProfile>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ValueNotifier<XFile> selectedImage = ValueNotifier(XFile(""));
-  MProfileUpdatePayload payload = MProfileUpdatePayload();
+  MProfile payload = MProfile();
 
   void _onUpdate() {
-    printer("sdfsd");
     context.unFocus();
     if (_formKey.currentState?.validate() ?? false) {
       cProfile.editPrifle(payload);
@@ -54,8 +54,8 @@ class _SEditProfileState extends State<SEditProfile> {
 
   @override
   void dispose() {
-    selectedImage.value = XFile('');
-    payload = MProfileUpdatePayload();
+    selectedImage.dispose();
+    payload = MProfile();
     super.dispose();
   }
 
@@ -66,7 +66,9 @@ class _SEditProfileState extends State<SEditProfile> {
       appBar: AppBar(title: Text("Edit prfile"), centerTitle: true),
       bottomNavigationBar: WBottomNavButton(
         label: 'Update',
-        ontap: () {},
+        ontap: () {
+          showSnackBar("We Have Issue With Password, Check On Change Field!");
+        },
         // child: PowerBuilder<CProfile>(
         //   builder: (controller) {
         //     final isLoading = controller.viewState == ViewState.loading;
@@ -171,7 +173,7 @@ class _SEditProfileState extends State<SEditProfile> {
                     return null;
                   },
                   onChanged: (v) {
-                    payload.password = v;
+                    // payload.password = v;
                   },
                 ).pB(value: 16),
                 WTextField.obsecureText(
@@ -187,7 +189,7 @@ class _SEditProfileState extends State<SEditProfile> {
                     return null;
                   },
                   onChanged: (v) {
-                    payload.password = v;
+                    // payload.password = v;
                   },
                 ).pB(value: 16),
               ],

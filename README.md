@@ -14,8 +14,11 @@ we just store your encrypted/hash data.
 7. Local to Cloude/Vault
 8. Vault/Cloude to Local
 9. Save passkey in valut
+10. user can logout from signed all devices
+11. local data and cloude data separated storage functionality,
+12. 
 
 # screens
 !["no image found"](ss/1.jpg)
 
-### Made with ❤️ by Jahangir Alam, inspired by Jahangir Alam
+### Made with ❤️ by Romjan Ali, inspired by Jahangir Alam

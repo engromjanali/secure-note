@@ -224,8 +224,8 @@ class _SSAuthState extends State<SSAuth> {
             "Your account has locked!",
             snackBarType: SnackBarType.important,
           );
-          await FSSService().setString("attemptCount", attemptCount.toString());
         }
+        await FSSService().setString("attemptCount", attemptCount.toString());
       }
     } else {
       showSnackBar(
