@@ -85,7 +85,7 @@ List<MSItem> profileItem = [
           // first signin, or new device sign in
           FirebaseFirestore.instance
               .collection(PKeys.users)
-              .doc(cProfile.mProfileData.id)
+              .doc(cProfile.uid)
               .collection(PKeys.eKey)
               .doc(PKeys.eKey)
               .get()
@@ -105,7 +105,8 @@ List<MSItem> profileItem = [
                   // key not found in server so set key
                   SSAuth(isSetkey: true).push();
                 }
-              });
+                
+              }).onError((e,l){});
         }
       } else {
         showSnackBar("Please Sign In !!!", snackBarType: SnackBarType.warning);

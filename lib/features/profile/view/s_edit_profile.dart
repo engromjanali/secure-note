@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:secure_note/core/functions/f_printer.dart';
 import 'package:secure_note/core/functions/f_snackbar.dart';
 import 'package:secure_note/core/services/image_picker_services.dart';
 import 'package:secure_note/core/widgets/w_bottom_nav_button.dart';
@@ -30,13 +29,27 @@ class SEditProfile extends StatefulWidget {
 class _SEditProfileState extends State<SEditProfile> {
   final CProfile cProfile = PowerVault.find<CProfile>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController newPass = TextEditingController();
+  TextEditingController confirmPass = TextEditingController();
   final ValueNotifier<XFile> selectedImage = ValueNotifier(XFile(""));
   MProfile payload = MProfile();
 
-  void _onUpdate() {
+  void _onUpdate() async {
     context.unFocus();
-    if (_formKey.currentState?.validate() ?? false) {
-      cProfile.editPrifle(payload);
+    if ((_formKey.currentState?.validate() ?? false) &&
+        newPass.text == confirmPass.text) {
+      payload.updatedAt = DateTime.timestamp();
+      await cProfile.editPrifle(payload);
+      if (newPass.text.length >= 6) {
+        cProfile.changePassword(newPass.text);
+      }
+    } else {
+      showSnackBar(
+        newPass.text != confirmPass.text
+            ? "Confirm password dose not matched"
+            : 'please fill all required field!',
+        snackBarType: SnackBarType.warning,
+      );
     }
   }
 
@@ -50,10 +63,13 @@ class _SEditProfileState extends State<SEditProfile> {
     payload.id = cProfile.mProfileData?.id;
     payload.name = cProfile.mProfileData?.name;
     payload.email = cProfile.mProfileData?.email;
+    payload.image = cProfile.mProfileData?.image;
   }
 
   @override
   void dispose() {
+    newPass.dispose();
+    confirmPass.dispose();
     selectedImage.dispose();
     payload = MProfile();
     super.dispose();
@@ -67,18 +83,8 @@ class _SEditProfileState extends State<SEditProfile> {
       bottomNavigationBar: WBottomNavButton(
         label: 'Update',
         ontap: () {
-          showSnackBar("We Have Issue With Password, Check On Change Field!");
+          _onUpdate();
         },
-        // child: PowerBuilder<CProfile>(
-        //   builder: (controller) {
-        //     final isLoading = controller.viewState == ViewState.loading;
-        //     return WPrimaryButton(
-        //       text: "Update",
-        //       isLoading: isLoading,
-        //       onTap: _onUpdate,
-        //     );
-        //   },
-        // ),
       ).pAll(),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(
@@ -106,34 +112,25 @@ class _SEditProfileState extends State<SEditProfile> {
                                     choseFrom: res!,
                                   ) ??
                                   selectedImage.value;
-                              payload.image = selectedImage.value.path;
+                              if (isNotNull(selectedImage.value.path)) {
+                                payload.image = selectedImage.value.path;
+                              }
                             }
                           },
-                          child: isNull(image.path)
-                              ? PowerBuilder<CProfile>(
-                                  builder: (controller) {
-                                    return WImage(
-                                      controller.mProfileData?.image,
-                                      payload: MImagePayload(
-                                        height: 100.h,
-                                        width: 100.w,
-                                        isCircular: true,
-                                      ),
-                                    );
-                                  },
-                                )
-                              : Container(
+                          child: PowerBuilder<CProfile>(
+                            builder: (controller) {
+                              return WImage(
+                                isNotNull(image.path)
+                                    ? image.path
+                                    : controller.mProfileData.image,
+                                payload: MImagePayload(
                                   height: 100.h,
-                                  width: 120.w,
-                                  decoration: BoxDecoration(
-                                    color: context.indicatorColor,
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      image: FileImage(File(image.path)),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
+                                  width: 100.w,
+                                  isCircular: true,
                                 ),
+                              );
+                            },
+                          ),
                         );
                       },
                     ),
@@ -149,6 +146,7 @@ class _SEditProfileState extends State<SEditProfile> {
                 ).pB(),
 
                 WTextField.requiredField(
+                  enable: false,
                   initialText: cProfile.mProfileData?.email,
                   label: "Email Address",
                   validator: (value) {
@@ -160,10 +158,12 @@ class _SEditProfileState extends State<SEditProfile> {
                     payload.email = v;
                   },
                 ).pB(),
+
                 WTextField.obsecureText(
-                  isRequired: true,
-                  label: "Password",
-                  hintText: "Enter password",
+                  controller: newPass,
+                  isRequired: false,
+                  label: "New Password",
+                  hintText: "Enter password (ignore, to keep unchanged)",
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) return null;
                     if (value.contains(" ")) return "Spaces not allowed!";
@@ -177,9 +177,10 @@ class _SEditProfileState extends State<SEditProfile> {
                   },
                 ).pB(value: 16),
                 WTextField.obsecureText(
+                  controller: confirmPass,
                   isRequired: false,
-                  label: "New Password",
-                  hintText: "Enter password (ignore, if you don't want change)",
+                  label: "Confirm Password",
+                  hintText: "Enter password (ignore, to keep unchanged)",
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) return null;
                     if (value.contains(" ")) return "Spaces not allowed!";

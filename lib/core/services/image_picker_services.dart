@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:secure_note/core/functions/f_printer.dart';
 import 'package:secure_note/core/functions/f_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,7 +28,7 @@ class SvImagePicker {
       List<XFile> pickedFileList = await _picker.pickMultiImage(limit: limit);
       return pickedFileList.take(limit).toList();
     } catch (e) {
-      print("error $e");
+      errorPrint("error $e");
       showSnackBar(title: "Image Picker", "Somthing Want Wrong!");
     }
   }
@@ -47,7 +48,7 @@ class SvImagePicker {
         showSnackBar(title: "Image Picker", "Picked Image Lost!");
       }
     } catch (e) {
-      print(e);
+      errorPrint(e);
       showSnackBar("Somthing Want Wrong!", title: "Image Picker");
     }
   }

@@ -8,6 +8,7 @@ class SecretService {
   late Key _key;
   late IV _iv;
   late Encrypter _encrypter;
+  bool isInitiated = false;
 
   SecretService._();
   static SecretService _instance = SecretService._();
@@ -17,6 +18,7 @@ class SecretService {
     _key = Key(Uint8List.fromList(utf8.encode(rawKey)));
     _iv = IV(Uint8List.fromList(utf8.encode(rawKey)));
     _encrypter = Encrypter(AES(_key, mode: AESMode.cbc));
+    isInitiated = true;
   }
 
   // --- Private Key/IV Generation ---

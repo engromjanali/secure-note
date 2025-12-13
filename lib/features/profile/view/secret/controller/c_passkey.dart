@@ -126,7 +126,7 @@ class CPasskey extends CBase {
     try {
       isLoadingMore = true;
       update();
-      print("delete $id");
+      printer("delete $id");
       await _iPasskeyRepository.detetePasskey(id);
       // clear from runtime storage
       passkeyList.removeWhere((mPasskey) => mPasskey.id == id);

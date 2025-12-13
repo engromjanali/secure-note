@@ -137,13 +137,13 @@ class _SAddState extends State<SAdd> with RouteAware {
   void didPushNext() {
     _timer?.cancel();
 
-    print('FirstScreen: নতুন screen এ গেছি');
+    printer('FirstScreen: নতুন screen এ গেছি');
   }
 
   @override
   void didPopNext() {
     startTimer();
-    print('FirstScreen: ফিরে এসেছি');
+    printer('FirstScreen: ফিরে এসেছি');
   }
 
   @override

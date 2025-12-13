@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:secure_note/core/constants/keys.dart';
 import 'package:secure_note/core/extensions/ex_date_time.dart';
@@ -74,13 +76,14 @@ class GoogleAuthService implements ISocialAuthService {
         name: googleUser.displayName,
         email: googleUser.email,
         image: googleUser.photoUrl,
+        sessionKey: Random().nextInt(9999).toString(),
         createdAt: DateTime.timestamp(),
         updatedAt: DateTime.timestamp(),
       );
       await docRef.set(payload.toJson());
-      print("🔥 New user created in Firestore");
+      printer("🔥 New user created in Firestore");
     } else {
-      print("⚡ User already exists");
+      printer("⚡ User already exists");
     }
   }
 }

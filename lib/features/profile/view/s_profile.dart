@@ -105,10 +105,7 @@ class _SProfileState extends State<SProfile> {
   Widget _WProfile() {
     return PowerBuilder<CProfile>(
       builder: (cProfile) {
-        printer("_WProfile");
-        printer(cProfile.mProfileData.hashCode);
-        printer(cProfile.mProfileData.toJson());
-
+        printer("_WProfile ${cProfile.mProfileData.toJson()}");
         return Stack(
           children: [
             Container(

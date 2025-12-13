@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:secure_note/core/constants/keys.dart';
+import 'package:secure_note/core/functions/f_encrypt_decrypt.dart';
 import 'package:secure_note/core/functions/f_is_null.dart';
 import 'package:secure_note/core/functions/f_loader.dart';
 import 'package:secure_note/core/functions/f_printer.dart';
@@ -29,6 +30,9 @@ class CProfile extends CBase {
   bool get isSigned => isNotNull(firebaseAuth.currentUser);
   StreamSubscription? authStatusListener;
 
+  String get uid =>
+      firebaseAuth.currentUser?.uid ?? "uid_not_found_may_you_are_not_Signed!";
+
   // functions
   Future getPatientList({bool isSignIn = false}) async {
     printer("getPatientList");
@@ -39,7 +43,10 @@ class CProfile extends CBase {
     try {
       mProfileData = await _profileRepository.fetchProfile();
       if (isSignIn) {
-        await FSSService().setString("sessionKey", mProfileData.sessionKey!);
+        await FSSService().setString(
+          "sessionKey",
+          mProfileData.sessionKey ?? "No-Session Key",
+        );
       }
       printer(mProfileData.toJson());
     } catch (e, s) {
@@ -82,15 +89,14 @@ class CProfile extends CBase {
 
   // listen if user signout this device from anoter device,
   void listenIUSTDFAD() async {
+    // give a delay to stable our application!
+    await Future.delayed(Duration(seconds: 5));
+    printer("go ahed listenIUSTDFAD}");
     if (isNull(firebaseAuth.currentUser?.uid)) {
-      printer(
-        "retrying:  listenIUSTDFAD ${isNull(firebaseAuth.currentUser?.uid)}",
+      errorPrint(
+        "Prevent auth status Listening because of you are not signed!",
       );
-      await Future.delayed(Duration(seconds: 5));
-      listenIUSTDFAD();
       return;
-    } else {
-      printer("go ahed listenIUSTDFAD}");
     }
     authStatusListener?.cancel();
     authStatusListener = FirebaseFirestore.instance
@@ -129,7 +135,18 @@ class CProfile extends CBase {
     await FSSService().delete("sessionKey");
     await FSSService().delete("secondaryAuthKey");
     await FSSService().delete("attemptCount");
+    authStatusListener?.cancel();
+    secretService.isInitiated = false;
     PowerVault.delete<CProfile>();
     SpalshScreen().pushAndRemoveUntil();
+  }
+
+  Future<void> changePassword(String pass) async {
+    try {
+      await firebaseAuth.currentUser?.updatePassword(pass);
+      showSnackBar("Pass Update Success!");
+    } catch (e) {
+      showSnackBar("Pass Update Failed!", snackBarType: SnackBarType.warning);
+    }
   }
 }

@@ -126,7 +126,7 @@ class CSecret extends CBase {
     try {
       isLoadingMore = true;
       update();
-      print("delete");
+      printer("delete");
       await _iSecretRepository.deteteSecretNote(id);
       // clear from runtime storage
       secretList.removeWhere((mSecret) => mSecret.id == id);

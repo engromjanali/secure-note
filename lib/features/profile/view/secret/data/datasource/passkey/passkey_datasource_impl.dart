@@ -18,7 +18,7 @@ class PasskeyDataSourceImpl extends IPasskeyDataSource {
     printer("addPasskey data source ${payload.toString()}");
     await firebaseFirestore
         .collection(PKeys.passkey)
-        .doc(cProfile.mProfileData.id)
+        .doc(cProfile.uid)
         .collection(PKeys.passkey)
         .doc(payload.id)
         .set(encrypt(payload.toMap()));
@@ -29,7 +29,7 @@ class PasskeyDataSourceImpl extends IPasskeyDataSource {
     printer("trying to delete $id");
     await firebaseFirestore
         .collection(PKeys.passkey)
-        .doc(cProfile.mProfileData.id)
+        .doc(cProfile.uid)
         .collection(PKeys.passkey)
         .doc(id)
         .delete();
@@ -40,7 +40,7 @@ class PasskeyDataSourceImpl extends IPasskeyDataSource {
     List<MPasskey> list = [];
     Query query = FirebaseFirestore.instance
         .collection(PKeys.passkey)
-        .doc(cProfile.mProfileData.id)
+        .doc(cProfile.uid)
         .collection(PKeys.passkey)
         .orderBy("id", descending: true);
 
@@ -75,7 +75,7 @@ class PasskeyDataSourceImpl extends IPasskeyDataSource {
   Future<void> updatePasskey(MPasskey payload) async {
     return firebaseFirestore
         .collection(PKeys.passkey)
-        .doc(cProfile.mProfileData.id)
+        .doc(cProfile.uid)
         .collection(PKeys.passkey)
         .doc(payload.id)
         .update(encrypt(payload.toMap()));

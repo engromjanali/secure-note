@@ -12,6 +12,7 @@ import 'package:secure_note/core/functions/f_printer.dart';
 import 'package:secure_note/core/services/navigation_service.dart';
 import 'package:secure_note/core/widgets/load_and_error/widgets/loading_widget.dart';
 import 'package:secure_note/core/widgets/w_app_shimmer.dart';
+import 'package:secure_note/core/widgets/w_dialog.dart';
 import 'package:secure_note/core/widgets/w_dismisable.dart';
 import 'package:secure_note/features/add/view/s_add.dart';
 import 'package:secure_note/features/note/view/s_details.dart';
@@ -185,10 +186,10 @@ class _WSecretSectionState extends State<WSecretSection> {
         // set scroll direction.
         double currentPosition = firstVisibleItem.itemLeadingEdge;
         if (currentPosition > lastPosition) {
-          // print("⬇️ Scrolling Forward");
+          // printer("⬇️ Scrolling Forward");
           currentScrollDirection = ScrollDirection.forward;
         } else if (currentPosition < lastPosition) {
-          // print("⬆️ Scrolling Reverse");
+          // printer("⬆️ Scrolling Reverse");
           currentScrollDirection = ScrollDirection.reverse;
         }
         lastPosition = currentPosition;
@@ -432,7 +433,12 @@ class _WSecretSectionState extends State<WSecretSection> {
     if (actionType == ActionType.edit) {
       if (widget.isSecretNote) {
         // note
-        SAdd(isEditPage: true, onlyNote: true, mSecret: mSecret).push();
+        SAdd(
+          isEditPage: true,
+          onlyNote: true,
+          mSecret: mSecret,
+          isSecret: true,
+        ).push();
       } else {
         //passkey
         SAPasskey(isEdit: true, mPasskey: mPasskey).push();
@@ -456,11 +462,18 @@ class _WSecretSectionState extends State<WSecretSection> {
       PowerVault.delete<CTask>();
     } else if (actionType == ActionType.delete) {
       // delete
-      if (widget.isSecretNote) {
-        cSecret!.deleteSecret(mSecret!.id!);
-      } else {
-        cPasskey!.deletePasskey(mPasskey!.id!);
-      }
+      WDialog.show(
+        title: "Confirm Delete?",
+        content: "if you delete you will not avail to restore it again!",
+        context: context,
+        onConfirm: () {
+          if (widget.isSecretNote) {
+            cSecret!.deleteSecret(mSecret!.id!);
+          } else {
+            cPasskey!.deletePasskey(mPasskey!.id!);
+          }
+        },
+      );
     }
   }
 }

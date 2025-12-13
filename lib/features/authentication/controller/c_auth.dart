@@ -2,14 +2,11 @@ import 'package:secure_note/core/functions/f_printer.dart';
 import 'package:secure_note/core/services/navigation_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:power_state/power_state.dart';
-import '../../../core/constants/keys.dart';
 import '../../../core/controllers/c_base.dart';
 import '../../../core/functions/f_loader.dart';
 import '../../../core/services/shared_preference_service.dart';
 import '../../../core/widgets/load_and_error/models/view_state_model.dart';
 import '../../profile/controllers/c_profile.dart';
-import '../../profile/data/data_source/profile_data_source_impl.dart';
-import '../../profile/data/repository/patient_repository_impl.dart';
 import '../data/social_media/apple_source_impl.dart';
 import '../data/social_media/google_auth_source_impl.dart';
 import '../data/social_media/social_data_source.dart';
@@ -36,11 +33,11 @@ class CAuth extends CBase {
       MToken token = await _iAuthRepository.signInWithEmailAndPassword(payload);
       updateViewState(viewState: ViewState.loaded);
       // _sharedPrefService.setString(PKeys.usertoken, token?.token ?? "");
-      await _cProfile.getPatientList(isSignIn: true);
       Navigation.pop();
+      await _cProfile.getPatientList(isSignIn: true);
     } catch (e, s) {
       updateViewState(viewState: ViewState.error);
-      setException(error: e, stackTrace: s, setExceptionOnly: true);
+      setException(error: e, stackTrace: s);
     }
   }
 
@@ -52,8 +49,8 @@ class CAuth extends CBase {
       );
       updateViewState(viewState: ViewState.loaded);
       // _sharedPrefService.setString(PKeys.usertoken, token?.token ?? "");
-      await _cProfile.getPatientList(isSignIn: true);
       Navigation.pop();
+      await _cProfile.getPatientList(isSignIn: true);
     } catch (e, s) {
       updateViewState(viewState: ViewState.error);
       setException(error: e, stackTrace: s, setExceptionOnly: true);
@@ -66,13 +63,13 @@ class CAuth extends CBase {
       final ISocialAuthService socialAuthService = _getAuthService(type);
       final MToken auth = await socialAuthService.authenticate();
       // _sharedPrefService.setString(PKeys.usertoken, token?.token ?? "");
-      await _cProfile.getPatientList(isSignIn: true);
       hideOverlay();
       Navigation.pop();
+      await _cProfile.getPatientList(isSignIn: true);
       // SRoot().pushAndRemoveUntil();
     } catch (e, s) {
       hideOverlay();
-      setException(error: e, stackTrace: s, showSnackbar: true);
+      setException(error: e, stackTrace: s);
       // await SharedPrefService.instance.setString(PKeys.usertoken, "");
     }
   }

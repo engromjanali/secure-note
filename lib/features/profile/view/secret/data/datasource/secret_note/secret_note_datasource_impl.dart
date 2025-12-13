@@ -16,7 +16,7 @@ class SecretDatasourceImpl extends ISecretDataSource {
   Future<void> addSecretNote(MSecret payload) async {
     await firebaseFirestore
         .collection(PKeys.secretNote)
-        .doc(cProfile.mProfileData.id)
+        .doc(cProfile.uid)
         .collection(PKeys.secretNote)
         .doc(payload.id)
         .set(encrypt(payload.toMap()));
@@ -26,7 +26,7 @@ class SecretDatasourceImpl extends ISecretDataSource {
   Future<void> deteteSecretNote(String id) async {
     await firebaseFirestore
         .collection(PKeys.secretNote)
-        .doc(cProfile.mProfileData.id)
+        .doc(cProfile.uid)
         .collection(PKeys.secretNote)
         .doc(id)
         .delete();
@@ -37,7 +37,7 @@ class SecretDatasourceImpl extends ISecretDataSource {
     List<MSecret> list = [];
     Query query = FirebaseFirestore.instance
         .collection(PKeys.secretNote)
-        .doc(cProfile.mProfileData.id)
+        .doc(cProfile.uid)
         .collection(PKeys.secretNote)
         .orderBy("id", descending: true);
 
@@ -75,7 +75,7 @@ class SecretDatasourceImpl extends ISecretDataSource {
   Future<void> updateSecretNote(MSecret payload) async {
     return firebaseFirestore
         .collection(PKeys.secretNote)
-        .doc(cProfile.mProfileData.id)
+        .doc(cProfile.uid)
         .collection(PKeys.secretNote)
         .doc(payload.id)
         .update(encrypt(payload.toMap()));

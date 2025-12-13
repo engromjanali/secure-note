@@ -6,5 +6,5 @@ import 'package:flutter/foundation.dart';
 /// 🔁 Automatically switches base URLs accordingly.
 class ENV {
   final bool isLive = !kDebugMode;
-  late String baseUrl = isLive ? "https://api.google.com/" : "https://api.google.com/";
+  late String baseUrl = isLive ? "https://api.cloudinary.com" : "https://api.cloudinary.com";
 }

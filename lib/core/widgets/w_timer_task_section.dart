@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:secure_note/core/constants/all_enums.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
 import 'package:secure_note/core/services/navigation_service.dart';
 import 'package:secure_note/core/widgets/w_task_section.dart';
 import 'package:secure_note/features/task/data/model/m_task.dart';
@@ -69,13 +70,13 @@ class _WTimerTaskSectionSliversState extends State<WTimerTaskSection>
   void didPushNext() {
     _timer?.cancel();
 
-    print('FirstScreen: নতুন screen এ গেছি');
+    printer('FirstScreen: নতুন screen এ গেছি');
   }
 
   @override
   void didPopNext() {
     startTimer();
-    print('FirstScreen: ফিরে এসেছি');
+    printer('FirstScreen: ফিরে এসেছি');
   }
 
   @override

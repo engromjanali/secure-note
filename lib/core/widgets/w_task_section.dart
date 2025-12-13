@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:secure_note/core/constants/all_enums.dart';
 import 'package:secure_note/core/constants/colors.dart';
 import 'package:secure_note/core/constants/default_values.dart';
 import 'package:secure_note/core/constants/dimension_theme.dart';
+import 'package:secure_note/core/constants/keys.dart';
 import 'package:secure_note/core/data/local/db_local.dart';
 import 'package:secure_note/core/extensions/ex_build_context.dart';
 import 'package:secure_note/core/extensions/ex_date_time.dart';
@@ -9,17 +11,24 @@ import 'package:secure_note/core/extensions/ex_duration.dart';
 import 'package:secure_note/core/extensions/ex_expanded.dart';
 import 'package:secure_note/core/extensions/ex_padding.dart';
 import 'package:secure_note/core/functions/f_call_back.dart';
+import 'package:secure_note/core/functions/f_encrypt_decrypt.dart';
 import 'package:secure_note/core/functions/f_is_null.dart';
 import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/core/functions/f_snackbar.dart';
+import 'package:secure_note/core/services/flutter_secure_service.dart';
 import 'package:secure_note/core/services/navigation_service.dart';
+import 'package:secure_note/core/services/secret_service.dart';
+import 'package:secure_note/core/widgets/w_dialog.dart';
 import 'package:secure_note/core/widgets/w_dismisable.dart';
 import 'package:secure_note/features/add/view/s_add.dart';
 import 'package:secure_note/features/note/view/s_details.dart';
+import 'package:secure_note/features/profile/controllers/c_profile.dart';
 import 'package:secure_note/features/profile/view/secret/controller/c_sceret.dart';
 import 'package:secure_note/features/profile/view/secret/data/datasource/passkey/passkey_datasource_impl.dart';
 import 'package:secure_note/features/profile/view/secret/data/datasource/secret_note/secret_note_datasource_impl.dart';
 import 'package:secure_note/features/profile/view/secret/data/model/m_secret.dart';
 import 'package:secure_note/features/profile/view/secret/data/repository/secret_note/secret_note_repository_impl.dart';
+import 'package:secure_note/features/profile/view/secret/view/s_secondary_auth.dart';
 import 'package:secure_note/features/task/controller/c_task.dart';
 import 'package:secure_note/features/task/data/model/m_query.dart';
 import 'package:secure_note/features/task/data/model/m_task.dart';
@@ -156,10 +165,10 @@ class _WTaskSectionState extends State<WTaskSection> {
         // set scroll direction.
         double currentPosition = firstVisibleItem.itemLeadingEdge;
         if (currentPosition > lastPosition) {
-          print("⬇️ Scrolling Forward");
+          printer("⬇️ Scrolling Forward");
           currentScrollDirection = ScrollDirection.forward;
         } else if (currentPosition < lastPosition) {
-          print("⬆️ Scrolling Reverse");
+          printer("⬆️ Scrolling Reverse");
           currentScrollDirection = ScrollDirection.reverse;
         }
         lastPosition = currentPosition;
@@ -276,7 +285,8 @@ class _WTaskSectionState extends State<WTaskSection> {
               onAction(actionType, index);
             },
             title: items[index].title,
-            subTitle: "$dateTime | $status",
+            subTitle:
+                "$dateTime ${widget.taskState == TaskState.note ? "" : "| $status"}",
             mTask: items[index],
           );
   }
@@ -312,7 +322,7 @@ class _WTaskSectionState extends State<WTaskSection> {
       ),
     ],
   );
-  void onAction(ActionType actionType, int index) {
+  void onAction(ActionType actionType, int index) async {
     MTask mTask = items[index];
     items.removeAt(index);
     cTask.update();
@@ -334,9 +344,59 @@ class _WTaskSectionState extends State<WTaskSection> {
         createdAt: mTask.createdAt,
         updatedAt: mTask.updatedAt,
       );
-      cSecret.addSecret(payload);
-      cTask.deleteTask(mTask.id!);
-      PowerVault.delete<CSecret>();
+      CProfile cProfile = PowerVault.find<CProfile>();
+      SecretService secretService = SecretService();
+      if (cProfile.isSigned) {
+        if (!secretService.isInitiated) {
+          // at first init secrest service
+          String? secondaryAuthKey = await FSSService().getString(
+            "secondaryAuthKey",
+          );
+          if (isNull(secondaryAuthKey)) {
+            // at first set secondary auth key
+            // first signin, or new device sign in
+            showSnackBar(
+              "At First Set Secondary Authentication key",
+              snackBarType: SnackBarType.warning,
+            );
+            FirebaseFirestore.instance
+                .collection(PKeys.users)
+                .doc(cProfile.uid)
+                .collection(PKeys.eKey)
+                .doc(PKeys.eKey)
+                .get()
+                .then((DocumentSnapshot snapshot) {
+                  final data = snapshot.data();
+                  if (isNotNull(data) &&
+                      isNotNull(
+                        (data as Map<String, dynamic>)["secondaryAuthKey"],
+                      )) {
+                    // key found in server
+                    // so set key in local storage
+                    printer(
+                      "key found in server so set key in local storage ${data["secondaryAuthKey"]}",
+                    );
+                    SSAuth(
+                      isSetkey: true,
+                      serverSecondaryAuthKey: data["secondaryAuthKey"],
+                    ).push();
+                  } else {
+                    // key not found in server so set key
+                    printer("key not found in server so set key");
+                    SSAuth(isSetkey: true).push();
+                  }
+                })
+                .onError((e, l) {});
+            return;
+          }
+          await secretService.init(secondaryAuthKey!);
+        }
+        await cSecret.addSecret(payload);
+        cTask.deleteTask(mTask.id!);
+        PowerVault.delete<CSecret>();
+      } else {
+        showSnackBar("Please Sign-In", snackBarType: SnackBarType.warning);
+      }
     } else if (actionType == ActionType.markAsComplete) {
       Map<String, dynamic> data = mTask.toMap();
       data.update(
@@ -355,7 +415,14 @@ class _WTaskSectionState extends State<WTaskSection> {
       cTask.updateTask(payload);
     } else if (actionType == ActionType.delete) {
       // delete
-      cTask.deleteTask(mTask.id!);
+      WDialog.show(
+        title: "Confirm Delete?",
+        content: "if you delete you will not avail to restore it again!",
+        context: context,
+        onConfirm: () {
+          cTask.deleteTask(mTask.id!);
+        },
+      );
     }
   }
 }

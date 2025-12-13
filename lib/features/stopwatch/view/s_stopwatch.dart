@@ -156,7 +156,7 @@ class _SStopwatchState extends State<SStopwatch> {
               PowerSelector<CStopwatch>(
                 selector: () {
                   // selector compare with object reference not value.
-                  // print("ss${state.mStopwatch.lapList.hashCode}");
+                  // printer("ss${state.mStopwatch.lapList.hashCode}");
                   return controller.mStopwatch.lapList;
                 },
                 builder: (_) {
