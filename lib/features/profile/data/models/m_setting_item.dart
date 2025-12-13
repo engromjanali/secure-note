@@ -47,6 +47,7 @@ List<MSItem> profileItem = [
             await DBHelper.getInstance.clear();
             showSnackBar("History Cleared");
           } catch (e) {
+            errorPrint(e);
             showSnackBar(
               "Somthing Want Wrong!",
               snackBarType: SnackBarType.warning,
@@ -105,8 +106,8 @@ List<MSItem> profileItem = [
                   // key not found in server so set key
                   SSAuth(isSetkey: true).push();
                 }
-                
-              }).onError((e,l){});
+              })
+              .onError((e, l) {});
         }
       } else {
         showSnackBar("Please Sign In !!!", snackBarType: SnackBarType.warning);

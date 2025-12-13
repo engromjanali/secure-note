@@ -13,10 +13,7 @@ import 'package:secure_note/core/functions/f_snackbar.dart';
 import 'package:secure_note/core/services/flutter_secure_service.dart';
 import 'package:secure_note/core/services/jailbreak_service.dart';
 import 'package:secure_note/core/services/navigation_service.dart';
-import 'package:secure_note/features/task/controller/c_task.dart';
-import 'package:secure_note/features/task/data/datasource/task_datasource_impl.dart';
-import 'package:secure_note/features/task/data/repository/task_repository.dart';
-import 'package:secure_note/features/task/data/repository/task_repository_impl.dart';
+import 'package:secure_note/core/services/secret_service.dart';
 import 'package:secure_note/spalsh.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:power_state/power_state.dart';
@@ -29,7 +26,7 @@ class CProfile extends CBase {
   CProfile(IProfileRepository profileRepository)
     : _profileRepository = profileRepository {
     listenIUSTDFAD();
-    checkDeviceTempered();
+    // checkDeviceTempered();
   }
 
   MProfile mProfileData = MProfile();
@@ -144,7 +141,6 @@ class CProfile extends CBase {
     await FSSService().delete("secondaryAuthKey");
     await FSSService().delete("attemptCount");
     authStatusListener?.cancel();
-    secretService.isInitiated = false;
     PowerVault.delete<CProfile>();
     SpalshScreen().pushAndRemoveUntil();
   }

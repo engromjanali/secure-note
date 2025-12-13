@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:secure_note/core/functions/f_genarate_randome_data.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
 import 'package:secure_note/core/services/flutter_secure_service.dart';
 import 'package:encrypt/encrypt.dart';
 
@@ -8,17 +9,20 @@ class SecretService {
   late Key _key;
   late IV _iv;
   late Encrypter _encrypter;
-  bool isInitiated = false;
+  // bool isInitiated = false;
 
   SecretService._();
   static SecretService _instance = SecretService._();
   factory SecretService() => _instance;
 
+
+
   Future<void> init(String rawKey) async {
+    printer("raw ;$rawKey");
     _key = Key(Uint8List.fromList(utf8.encode(rawKey)));
     _iv = IV(Uint8List.fromList(utf8.encode(rawKey)));
     _encrypter = Encrypter(AES(_key, mode: AESMode.cbc));
-    isInitiated = true;
+    // isInitiated = true;
   }
 
   // --- Private Key/IV Generation ---

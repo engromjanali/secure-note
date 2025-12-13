@@ -5,9 +5,9 @@ import 'package:secure_note/core/services/flutter_secure_service.dart';
 import 'package:encrypt/encrypt.dart';
 
 class EncryptionService {
-  late final Key _key;
-  late final IV _iv;
-  late final Encrypter _encrypter;
+  late Key _key;
+  late IV _iv;
+  late Encrypter _encrypter;
 
   EncryptionService._();
   static EncryptionService _instance = EncryptionService._();

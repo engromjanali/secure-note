@@ -1,10 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import "package:crypto/crypto.dart";
-import 'package:secure_note/core/constants/all_enums.dart';
-import 'package:secure_note/core/extensions/ex_date_time.dart';
 import 'package:secure_note/core/functions/f_genarate_randome_data.dart';
-import 'package:secure_note/core/functions/f_is_null.dart';
 import 'package:secure_note/core/functions/f_printer.dart';
 import 'package:secure_note/core/functions/f_snackbar.dart';
 import 'package:secure_note/core/services/encryption_service.dart';
@@ -47,6 +44,7 @@ class DBHelper {
       key = EncryptionService().encrypt(key);
       await FSSService().setString('dbKey', key);
     }
+
     encryptionKey = EncryptionService().decrypt(key);
   }
 
@@ -67,28 +65,28 @@ class DBHelper {
   }
 
   Future<Database> openDB() async {
-    Directory appDir = await getApplicationDocumentsDirectory();
-    String dbPath = join(appDir.path, "taskDB_encrypted.db");
+    final dbDir = await getDatabasesPath();
+    final dbPath = join(dbDir, "taskDB_encrypted.db");
 
     return await openDatabase(
       dbPath,
       password: encryptionKey, // 🔐 Encryption password
-      onCreate: (db, version) {
-        db.execute(
+      version: 1,
+      onCreate: (db, version) async {
+        await db.execute(
           "CREATE TABLE $tableName ("
           "$id INTEGER PRIMARY KEY AUTOINCREMENT, "
           "$title TEXT, "
           "$points TEXT, "
           "$details TEXT, "
           "$endAt DATETIME DEFAULT NULL, "
-          "$createdAt DATETIME DEFAULT CURRENT_DATETIME NOT NULL, "
+          "$createdAt DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, "
           "$updatedAt DATETIME DEFAULT NULL, "
           "$finishedAt DATETIME DEFAULT NULL, "
-          "$hash TEXT "
+          "$hash TEXT"
           ");",
         );
       },
-      version: 1,
     );
   }
 
@@ -206,14 +204,28 @@ class DBHelper {
   }
 
   Future<void> clear() async {
-    Database db = await getDB();
     try {
-      //Note: remove all of thing without secret valut data or related data.
-      await db.delete(tableName);
+      // Close & reset DB
+      if (myDB != null) {
+        await myDB!.close();
+        myDB = null;
+      }
+
+      // Delete DB file
+      final dbDir = await getDatabasesPath();
+      final path = join(dbDir, 'taskDB_encrypted.db');
+      printer(path);
+      await deleteDatabase(path);
+
+      // Remove keys
       await FSSService().delete('dbKey');
-      await FSSService().delete("eSkey");
-      await FSSService().delete("eSIV");
-      // initiate again
+      await FSSService().delete('eSkey');
+      await FSSService().delete('eSIV');
+
+      // Reset encryption service
+      await EncryptionService().init();
+
+      // Re-init DBHelper
       await init();
     } catch (e) {
       rethrow;
