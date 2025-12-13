@@ -23,6 +23,8 @@ we just store your encrypted/hash data.
 16. secondary authentication,
 17. local authentication
 18. verify every time to navigate secret vault
+19. prevent unauthorized request or trafic
+20. delete all local data on detected device was tampered/root
 
 
 # screens

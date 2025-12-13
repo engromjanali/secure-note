@@ -213,6 +213,8 @@ class DBHelper {
       await FSSService().delete('dbKey');
       await FSSService().delete("eSkey");
       await FSSService().delete("eSIV");
+      // initiate again
+      await init();
     } catch (e) {
       rethrow;
     }
