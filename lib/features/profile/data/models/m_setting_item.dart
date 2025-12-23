@@ -161,14 +161,14 @@ List<MSItem> menuList = [
     icon: Assets.icons.tramsOfUse,
     label: "Terms of Use",
     onTap: () {
-      OpenURLs.open(type: OpenType.url, value: PDefaultValues.linkedIn);
+      OpenURLs.open(type: OpenType.url, value: PDefaultValues.termsConditionUrl);
     },
   ),
   MSItem(
     icon: Assets.icons.privacyAndPolicy,
     label: "Privacy Policy",
     onTap: () {
-      OpenURLs.open(type: OpenType.url, value: PDefaultValues.linkedIn);
+      OpenURLs.open(type: OpenType.url, value: PDefaultValues.privacyUrlLink);
     },
   ),
   MSItem(
