@@ -321,12 +321,6 @@ class _WTaskSectionState extends State<WTaskSection> {
           ],
         ),
       ),
-
-      WTextField(
-        suffixIcon: GestureDetector(onTap: (){
-          // send message 
-        }, child: Icon(Icons.send)),
-      )
     ],
   );
   void onAction(ActionType actionType, int index) async {
