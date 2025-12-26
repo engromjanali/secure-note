@@ -1,6 +1,6 @@
+import 'package:secure_note/core/extensions/ex_build_context.dart';
 import 'package:secure_note/core/extensions/ex_padding.dart';
 import 'package:secure_note/core/functions/f_is_null.dart';
-import './/core/extensions/ex_build_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';

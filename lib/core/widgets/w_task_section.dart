@@ -20,6 +20,7 @@ import 'package:secure_note/core/services/navigation_service.dart';
 import 'package:secure_note/core/services/secret_service.dart';
 import 'package:secure_note/core/widgets/w_dialog.dart';
 import 'package:secure_note/core/widgets/w_dismisable.dart';
+import 'package:secure_note/core/widgets/w_text_field.dart';
 import 'package:secure_note/features/add/view/s_add.dart';
 import 'package:secure_note/features/note/view/s_details.dart';
 import 'package:secure_note/features/profile/controllers/c_profile.dart';
@@ -320,6 +321,12 @@ class _WTaskSectionState extends State<WTaskSection> {
           ],
         ),
       ),
+
+      WTextField(
+        suffixIcon: GestureDetector(onTap: (){
+          // send message 
+        }, child: Icon(Icons.send)),
+      )
     ],
   );
   void onAction(ActionType actionType, int index) async {

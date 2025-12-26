@@ -1,6 +1,6 @@
-import './/core/constants/dimension_theme.dart';
-import './/core/extensions/ex_build_context.dart';
 import 'package:flutter/material.dart';
+import 'package:secure_note/core/constants/dimension_theme.dart';
+import 'package:secure_note/core/extensions/ex_build_context.dart';
 import '../models/m_nav_bar_item.dart';
 import 'w_nav_body.dart';
 
