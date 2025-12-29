@@ -39,6 +39,7 @@ class WTextField extends StatefulWidget {
   final int? minLines;
   final bool? expands;
   final AutovalidateMode? autovalidateMode;
+  final TextAlignVertical? textAlignVertical;
   const WTextField({
     super.key,
     this.label,
@@ -60,6 +61,7 @@ class WTextField extends StatefulWidget {
     this.textInputAction = TextInputAction.next,
     this.expands,
     this.autovalidateMode,
+    this.textAlignVertical,
   }) : obsecureText = false,
        isRequired = false;
 
@@ -85,6 +87,7 @@ class WTextField extends StatefulWidget {
     this.textInputAction = TextInputAction.next,
     this.expands,
     this.autovalidateMode,
+    this.textAlignVertical,
   }) : obsecureText = true;
   const WTextField.requiredField({
     super.key,
@@ -107,6 +110,7 @@ class WTextField extends StatefulWidget {
     this.textInputAction = TextInputAction.next,
     this.expands,
     this.autovalidateMode,
+    this.textAlignVertical,
   }) : obsecureText = false,
        isRequired = true;
 
@@ -172,7 +176,7 @@ class _WTextFieldState extends State<WTextField> {
 
   Widget _textField() {
     return TextFormField(
-      textAlignVertical: TextAlignVertical.top,
+      textAlignVertical: widget.textAlignVertical ?? TextAlignVertical.center,
       validator: (v) {
         final validation = widget.validator?.call(v);
 
@@ -200,21 +204,21 @@ class _WTextFieldState extends State<WTextField> {
       textInputAction: widget.textInputAction,
       style: context.textTheme?.titleLarge?.copyWith(
         fontWeight: FontWeight.w400,
-        fontSize: 14.sp,
+        fontSize: 14,
       ),
       decoration: InputDecoration(
         filled: true,
         fillColor: context.fillColor,
-        prefixIconConstraints: BoxConstraints(maxHeight: 17.w),
+        prefixIconConstraints: BoxConstraints(maxHeight: 17),
         errorStyle: context.textTheme?.labelSmall?.copyWith(
           color: context.redColor,
-          fontSize: 12.sp,
+          fontSize: 12,
           fontWeight: FontWeight.w400,
         ),
         border: InputBorder.none,
         contentPadding: EdgeInsets.symmetric(
-          vertical: 10.h,
-          horizontal: widget.prefixIconPath == null ? 10.w : 0.0,
+          vertical: 10,
+          horizontal: widget.prefixIconPath == null ? 10 : 0.0,
         ),
         hintText:
             widget.hintText ??
@@ -227,8 +231,8 @@ class _WTextFieldState extends State<WTextField> {
                 padding: EdgeInsets.symmetric(horizontal: PTheme.paddingX - 5),
                 child: SvgPicture.asset(
                   widget.prefixIconPath!,
-                  height: 20.w,
-                  width: 20.w,
+                  height: 20,
+                  width: 20,
                   colorFilter: ColorFilter.mode(
                     context.primaryTextColor!,
                     BlendMode.srcIn,
