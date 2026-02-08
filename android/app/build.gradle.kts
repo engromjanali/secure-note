@@ -1,123 +1,69 @@
-// plugins {
-//     id("com.android.application")
-//     // START: FlutterFire Configuration
-//     id("com.google.gms.google-services")
-//     id("kotlin-android")
-//     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
-//     id("dev.flutter.flutter-gradle-plugin")
-// }
-// 
-// android {
-//     namespace = "com.engromjanali.securenote"
-//     compileSdk = 36
-//     ndkVersion = flutter.ndkVersion
-// 
-//     compileOptions {
-//         sourceCompatibility = JavaVersion.VERSION_11
-//         targetCompatibility = JavaVersion.VERSION_11
-// 
-//         // reference of "flutter local notification"
-//         isCoreLibraryDesugaringEnabled = true
-//     }
-// 
-//     kotlinOptions {
-//         jvmTarget = JavaVersion.VERSION_11.toString()
-//     }
-// 
-//     defaultConfig {
-//         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-//         applicationId = "com.engromjanali.securenote"
-//         // You can update the following values to match your application needs.
-//         // For more information, see: https://flutter.dev/to/review-gradle-config.
-//         minSdk = flutter.minSdkVersion
-//         targetSdk = 36
-//         versionCode = flutter.versionCode
-//         versionName = flutter.versionName
-// 
-//         // reference of "flutter local notification"
-//         multiDexEnabled = true
-//     }
-// 
-//     buildTypes {
-//         release {
-//             // TODO: Add your own signing config for the release build.
-//             // Signing with the debug keys for now, so `flutter run --release` works.
-//             signingConfig = signingConfigs.getByName("debug")
-//         }
-//     }
-// }
-// 
-// flutter {
-//     source = "../.."
-// }
-// 
-// 
-// dependencies {
-//     // reference of flutter local notification
-//     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
-//     implementation("androidx.window:window:1.0.0")
-//     implementation("androidx.window:window-java:1.0.0")
-// }
+import java.util.Properties
+import java.io.FileInputStream
 
 
 plugins {
     id("com.android.application")
-    // START: FlutterFire Configuration
     id("com.google.gms.google-services")
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
 android {
-    // added
-    signingConfigs {
-        create("release") {
-            storeFile = file("secure_note.jks")   // path relative to android/app
-            storePassword = "010204"
-            keyAlias = "engromjanali"           // e.g., upload
-            keyPassword = "010204"
-        }
+    // Add at the top of android block
+    val keystorePropertiesFile = rootProject.file("keystore.properties")
+    val keystoreProperties = Properties()
+    if (keystorePropertiesFile.exists()) {
+        keystoreProperties.load(FileInputStream(keystorePropertiesFile))
     }
-
-
 
     namespace = "com.engromjanali.securenote"
     compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+    // Update signingConfigs
+    signingConfigs {
+        create("release") {
+            storeFile = file(keystoreProperties["storeFile"] as String)
+            storePassword = keystoreProperties["storePassword"] as String
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword = keystoreProperties["keyPassword"] as String
+        }
+    }
 
+    defaultConfig {
+        applicationId = "com.engromjanali.securenote"
+        minSdk = flutter.minSdkVersion  // Recommended minimum for modern Flutter apps
+        targetSdk = 36
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+        // reference of "flutter local notification"
+        multiDexEnabled = true
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
         // reference of "flutter local notification"
         isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = "17"
     }
 
-    defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.engromjanali.securenote"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = 36
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
-
-        // reference of "flutter local notification"
-        multiDexEnabled = true
-        
-    }
-
-    //replaced
     buildTypes {
+        debug {
+            isDebuggable = true
+        }
+        
         release {
-            isMinifyEnabled = true  // optional, you can enable Proguard if needed
-            isShrinkResources = true 
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             signingConfig = signingConfigs.getByName("release")
         }
     }
@@ -127,10 +73,9 @@ flutter {
     source = "../.."
 }
 
-
 dependencies {
-    // reference of flutter local notification
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
     implementation("androidx.window:window:1.0.0")
     implementation("androidx.window:window-java:1.0.0")
+    implementation("com.google.android.material:material:1.14.0-alpha08")
 }

@@ -47,6 +47,7 @@ List<MSItem> profileItem = [
             await DBHelper.getInstance.clear();
             showSnackBar("History Cleared");
           } catch (e) {
+            errorPrint(e);
             showSnackBar(
               "Somthing Want Wrong!",
               snackBarType: SnackBarType.warning,
@@ -105,8 +106,8 @@ List<MSItem> profileItem = [
                   // key not found in server so set key
                   SSAuth(isSetkey: true).push();
                 }
-                
-              }).onError((e,l){});
+              })
+              .onError((e, l) {});
         }
       } else {
         showSnackBar("Please Sign In !!!", snackBarType: SnackBarType.warning);
@@ -128,13 +129,13 @@ List<MSItem> profileItem = [
 ];
 
 List<MSItem> menuList = [
-  MSItem(
-    icon: Assets.icons.restorePurchase,
-    label: "Restore Purchase",
-    onTap: () {
-      showSnackBar("Under build");
-    },
-  ),
+  // MSItem(
+  //   icon: Assets.icons.restorePurchase,
+  //   label: "Restore Purchase",
+  //   onTap: () {
+  //     showSnackBar("Under build");
+  //   },
+  // ),
   MSItem(
     icon: Assets.icons.faq,
     label: "FAQ",
@@ -160,14 +161,14 @@ List<MSItem> menuList = [
     icon: Assets.icons.tramsOfUse,
     label: "Terms of Use",
     onTap: () {
-      OpenURLs.open(type: OpenType.url, value: PDefaultValues.linkedIn);
+      OpenURLs.open(type: OpenType.url, value: PDefaultValues.termsConditionUrl);
     },
   ),
   MSItem(
     icon: Assets.icons.privacyAndPolicy,
     label: "Privacy Policy",
     onTap: () {
-      OpenURLs.open(type: OpenType.url, value: PDefaultValues.linkedIn);
+      OpenURLs.open(type: OpenType.url, value: PDefaultValues.privacyUrlLink);
     },
   ),
   MSItem(

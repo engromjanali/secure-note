@@ -3,6 +3,9 @@
 project overview: the secure note application maintain highly security, your data can't see server owner also, your data are encrypted by your private key we do not store your encryption key,
 we just store your encrypted/hash data.
 
+Note: this project dose not allow to run in simolator because of security resion,
+but i am developing by temporary disable the temper detection service.
+
 
 ### features
 1. Dark/light mode

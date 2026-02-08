@@ -49,7 +49,7 @@ class _SNoteState extends State<SNote> {
         color: context.textTheme?.titleMedium?.color,
         backgroundColor: context.fillColor,
         child: Column(children: [WTaskSection(taskState: TaskState.note)]),
-      ),
-    ).pAll();
+      ).pAll(),
+    );
   }
 }

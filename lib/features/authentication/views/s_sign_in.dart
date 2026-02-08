@@ -1,5 +1,6 @@
 import 'package:secure_note/core/extensions/ex_build_context.dart';
 import 'package:secure_note/core/extensions/ex_expanded.dart';
+import 'package:secure_note/core/functions/f_printer.dart';
 import 'package:secure_note/core/services/navigation_service.dart';
 import 'package:secure_note/core/widgets/w_app_bar.dart';
 import 'package:secure_note/features/authentication/views/s_forget_pass.dart';
@@ -89,6 +90,7 @@ class _SSignInState extends State<SSignIn> {
 
   @override
   Widget build(BuildContext context) {
+    printer("rebuilded signin");
     return Scaffold(
       appBar: widget.keepTheBackButton == true ? WAppBar(text: "") : null,
       body: SafeArea(
@@ -128,11 +130,15 @@ class _SSignInState extends State<SSignIn> {
                         builder: (controller) {
                           final isLoading =
                               controller.viewState == ViewState.loading;
-                          return WPrimaryButton(
-                            text: signUp ? "Sign Up" : "Sign In",
-                            isLoading: isLoading,
-                            isDisabled: signUp && !agree,
-                            onTap: _onSubmit,
+                          return Row(
+                            children: [
+                              WPrimaryButton(
+                                text: signUp ? "Sign Up" : "Sign In",
+                                isLoading: isLoading,
+                                isDisabled: signUp && !agree,
+                                onTap: _onSubmit,
+                              ).pH(value: 50).expd(),
+                            ],
                           );
                         },
                       );

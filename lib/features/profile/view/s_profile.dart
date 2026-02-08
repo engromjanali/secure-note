@@ -105,7 +105,7 @@ class _SProfileState extends State<SProfile> {
   Widget _WProfile() {
     return PowerBuilder<CProfile>(
       builder: (cProfile) {
-        printer("_WProfile ${cProfile.mProfileData.toJson()}");
+        // printer("_WProfile ${cProfile.mProfileData.toJson()}");
         return Stack(
           children: [
             Container(
@@ -240,8 +240,7 @@ class _WSItem extends StatelessWidget {
                   context.primaryTextColor ?? Colors.grey,
                   BlendMode.srcIn,
                 ),
-                errorBuilder: (context, error, stackTrace) =>
-                    Image.asset(Assets.images.x.path),
+                errorBuilder: (context, error, stackTrace) => Text("ERROR!"),
                 height: 20.w,
               ),
               Expanded(

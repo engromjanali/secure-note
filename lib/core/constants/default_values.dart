@@ -22,9 +22,9 @@ class PDefaultValues {
   /// limit[ limit ]
   static const int limit = 20;
   static const privacyUrlLink =
-      "https://groups.google.com/u/0/g/apptestingservicex-xxx";
+      "https://docs.google.com/document/d/1jSM2v4XdcQFqzF8N1E68LY5S-pMeeVv3_GvkGRtgC6Y/edit?usp=sharing";
   static const termsConditionUrl =
-      "https://groups.google.com/u/0/g/apptestingservicex-xxx";
+      "https://docs.google.com/document/d/1JUKmCdzRqxBZ5RMtYaAQZU-NzSZ17WU4cY3tzHSl5Tw/edit?usp=sharing";
   static const instagramLink = "https://www.instagram.com/engromjanali";
   static const tiktokLink = "https://www.tiktok.com/404?fromUrl=/engromjanali";
   static const facebookLink =

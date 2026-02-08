@@ -17,7 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:power_state/power_state.dart';
 
 void main() async {
-  await init();
+  await _init();
   runApp(
     // DevicePreview(enabled: !kReleaseMode, builder: (context) => _SCheckPoint()),
     DevicePreview(enabled: false, builder: (context) => _SCheckPoint()),
@@ -26,7 +26,7 @@ void main() async {
 }
 
 // MyDebugToken D13CC233-97A1-42A1-A511-EC15AF3995E6
-Future<void> init() async {
+Future<void> _init() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

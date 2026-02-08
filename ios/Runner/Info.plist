@@ -5,8 +5,23 @@
 	<!-- reference of url laucher -->
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-	<string>sms</string>
-	<string>tel</string>
+		<string>sms</string>
+		<string>tel</string>
+
+		<!-- for sign-in with google -->
+		<string>google</string>
+		<string>com.googleusercontent.apps</string>
+	</array>
+
+	<!-- sign in with google -->
+	<key>CFBundleURLTypes</key>
+	<array>
+	<dict>
+		<key>CFBundleURLSchemes</key>
+		<array>
+			<string>com.googleusercontent.apps.537971701870-1rsdth8eplvngiln2i8r4mptonujh7ml</string>
+		</array>
+	</dict>
 	</array>
 	
 	<!-- reference of image picker -->

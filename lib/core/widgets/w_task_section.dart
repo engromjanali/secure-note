@@ -20,6 +20,7 @@ import 'package:secure_note/core/services/navigation_service.dart';
 import 'package:secure_note/core/services/secret_service.dart';
 import 'package:secure_note/core/widgets/w_dialog.dart';
 import 'package:secure_note/core/widgets/w_dismisable.dart';
+import 'package:secure_note/core/widgets/w_text_field.dart';
 import 'package:secure_note/features/add/view/s_add.dart';
 import 'package:secure_note/features/note/view/s_details.dart';
 import 'package:secure_note/features/profile/controllers/c_profile.dart';
@@ -347,50 +348,48 @@ class _WTaskSectionState extends State<WTaskSection> {
       CProfile cProfile = PowerVault.find<CProfile>();
       SecretService secretService = SecretService();
       if (cProfile.isSigned) {
-        if (!secretService.isInitiated) {
-          // at first init secrest service
-          String? secondaryAuthKey = await FSSService().getString(
-            "secondaryAuthKey",
+        // at first init secrest service
+        String? secondaryAuthKey = await FSSService().getString(
+          "secondaryAuthKey",
+        );
+        if (isNull(secondaryAuthKey)) {
+          // at first set secondary auth key
+          // first signin, or new device sign in
+          showSnackBar(
+            "At First Set Secondary Authentication key",
+            snackBarType: SnackBarType.warning,
           );
-          if (isNull(secondaryAuthKey)) {
-            // at first set secondary auth key
-            // first signin, or new device sign in
-            showSnackBar(
-              "At First Set Secondary Authentication key",
-              snackBarType: SnackBarType.warning,
-            );
-            FirebaseFirestore.instance
-                .collection(PKeys.users)
-                .doc(cProfile.uid)
-                .collection(PKeys.eKey)
-                .doc(PKeys.eKey)
-                .get()
-                .then((DocumentSnapshot snapshot) {
-                  final data = snapshot.data();
-                  if (isNotNull(data) &&
-                      isNotNull(
-                        (data as Map<String, dynamic>)["secondaryAuthKey"],
-                      )) {
-                    // key found in server
-                    // so set key in local storage
-                    printer(
-                      "key found in server so set key in local storage ${data["secondaryAuthKey"]}",
-                    );
-                    SSAuth(
-                      isSetkey: true,
-                      serverSecondaryAuthKey: data["secondaryAuthKey"],
-                    ).push();
-                  } else {
-                    // key not found in server so set key
-                    printer("key not found in server so set key");
-                    SSAuth(isSetkey: true).push();
-                  }
-                })
-                .onError((e, l) {});
-            return;
-          }
-          await secretService.init(secondaryAuthKey!);
+          FirebaseFirestore.instance
+              .collection(PKeys.users)
+              .doc(cProfile.uid)
+              .collection(PKeys.eKey)
+              .doc(PKeys.eKey)
+              .get()
+              .then((DocumentSnapshot snapshot) {
+                final data = snapshot.data();
+                if (isNotNull(data) &&
+                    isNotNull(
+                      (data as Map<String, dynamic>)["secondaryAuthKey"],
+                    )) {
+                  // key found in server
+                  // so set key in local storage
+                  printer(
+                    "key found in server so set key in local storage ${data["secondaryAuthKey"]}",
+                  );
+                  SSAuth(
+                    isSetkey: true,
+                    serverSecondaryAuthKey: data["secondaryAuthKey"],
+                  ).push();
+                } else {
+                  // key not found in server so set key
+                  printer("key not found in server so set key");
+                  SSAuth(isSetkey: true).push();
+                }
+              })
+              .onError((e, l) {});
+          return;
         }
+        await secretService.init(secondaryAuthKey!);
         await cSecret.addSecret(payload);
         cTask.deleteTask(mTask.id!);
         PowerVault.delete<CSecret>();

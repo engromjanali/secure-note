@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:secure_note/core/controllers/c_theme.dart';
 import 'package:secure_note/core/functions/f_call_back.dart';
 import 'package:secure_note/core/functions/f_printer.dart';
@@ -48,15 +50,13 @@ import '../services/shared_preference_service.dart';
 class CCheckPoint {
   Future<void> initialization() async {
     printer("- a");
-    callBackFunction(() async {
-      printer("a");
-      await Future.delayed(const Duration(milliseconds: 500));
-      final context = NavigationService.currentContext;
-      if (!context.mounted) return;
-      CProfile cProfile = PowerVault.put(
-        CProfile(ProfileRepositoryImpl(ProfileDataSourceImpl())),
-      );
-      await const SHome().pushAndRemoveUntil();
-    });
+    await Future.delayed(const Duration(milliseconds: 500));
+    final context = NavigationService.currentContext;
+    if (!context.mounted) return;
+    CProfile cProfile = PowerVault.put(
+      CProfile(ProfileRepositoryImpl(ProfileDataSourceImpl())),
+    );
+    await const SHome().pushAndRemoveUntil();
   }
 }
+

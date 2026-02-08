@@ -20,14 +20,12 @@ class _SHomeState extends State<SHome> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     currentIndex.value = widget.selectedPage;
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     currentIndex.dispose();
     super.dispose();
   }
@@ -67,7 +65,7 @@ class _SHomeState extends State<SHome> {
         ),
         body: ValueListenableBuilder(
           valueListenable: currentIndex,
-          builder: (_, _, _) => homeNevItem[currentIndex.value].child!,
+          builder: (_, _, _) =>  homeNevItem[currentIndex.value].child!,
         ),
       ),
     );
