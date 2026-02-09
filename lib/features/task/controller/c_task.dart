@@ -36,7 +36,7 @@ class CTask extends CBase {
       isLoadingMore = true;
       update();
       MTask mTask = await _iTaskRepository.addTask(payload);
-      await Future.delayed(Duration(seconds: 2));
+      showSnackBar("Note Added Successfully.");
       printer(pendingList.length);
     } catch (e) {
       errorPrint(e);
@@ -51,6 +51,7 @@ class CTask extends CBase {
       isLoadingMore = true;
       update();
       MTask mTask = await _iTaskRepository.updateTask(payload);
+      showSnackBar("Note Updated.");
     } catch (e) {
       errorPrint(e);
     } finally {
@@ -70,6 +71,7 @@ class CTask extends CBase {
       timeOutList.removeWhere((mTask) => mTask.id == id);
       completedList.removeWhere((mTask) => mTask.id == id);
       noteList.removeWhere((mTask) => mTask.id == id);
+      showSnackBar("Note Deleted!");
     } catch (e) {
       errorPrint(e);
     } finally {

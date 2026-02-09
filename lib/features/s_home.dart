@@ -47,21 +47,23 @@ class _SHomeState extends State<SHome> {
         );
       },
       child: Scaffold(
-        bottomNavigationBar: ValueListenableBuilder(
-          valueListenable: currentIndex,
-          builder: (context, value, _) {
-            return WNavigationBar(
-              items: homeNevItem,
-              currentIndex: value,
-              onChanged: (index) {
-                if (index == 2) {
-                  SAdd().push();
-                  return;
-                }
-                currentIndex.value = index;
-              },
-            );
-          },
+        bottomNavigationBar: SafeArea(
+          child: ValueListenableBuilder(
+            valueListenable: currentIndex,
+            builder: (context, value, _) {
+              return WNavigationBar(
+                items: homeNevItem,
+                currentIndex: value,
+                onChanged: (index) {
+                  if (index == 2) {
+                    SAdd().push();
+                    return;
+                  }
+                  currentIndex.value = index;
+                },
+              );
+            },
+          ),
         ),
         body: ValueListenableBuilder(
           valueListenable: currentIndex,

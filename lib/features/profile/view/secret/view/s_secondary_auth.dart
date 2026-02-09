@@ -93,9 +93,9 @@ class _SSAuthState extends State<SSAuth> {
                 ),
                 textAlign: TextAlign.center,
               ),
-
+    
               gapY(40),
-
+    
               /// Profile Image
               WImage(
                 PDefaultValues.profileImage,
@@ -106,7 +106,7 @@ class _SSAuthState extends State<SSAuth> {
                   fit: BoxFit.cover,
                 ),
               ),
-
+    
               /// Title
               Column(
                 children: [
@@ -126,14 +126,14 @@ class _SSAuthState extends State<SSAuth> {
                   ),
                 ],
               ),
-
+    
               Form(
                 key: formKey,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: List.generate(6, (index) {
                     bool enabled = enabledIndexes.contains(index);
-
+    
                     return WOTPBox(
                       contriller: enabled ? controllers[index] : null,
                       previous: index > 0 ? focusNodes[index - 1] : null,
@@ -144,7 +144,7 @@ class _SSAuthState extends State<SSAuth> {
                   }),
                 ),
               ),
-
+    
               WBottomNavButton(label: "Submit", ontap: submit),
             ],
           ).pAll(),

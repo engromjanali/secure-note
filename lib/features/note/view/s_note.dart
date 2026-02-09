@@ -38,18 +38,20 @@ class _SNoteState extends State<SNote> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Nots")),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          cTask.noteList.clear();
-          cTask.clearPaigenationChace();
-          await cTask.fetchSpacificItem(
-            payload: MQuery(taskState: TaskState.note),
-          );
-        },
-        color: context.textTheme?.titleMedium?.color,
-        backgroundColor: context.fillColor,
-        child: Column(children: [WTaskSection(taskState: TaskState.note)]),
-      ).pAll(),
+      body: SafeArea(
+        child: RefreshIndicator(
+          onRefresh: () async {
+            cTask.noteList.clear();
+            cTask.clearPaigenationChace();
+            await cTask.fetchSpacificItem(
+              payload: MQuery(taskState: TaskState.note),
+            );
+          },
+          color: context.textTheme?.titleMedium?.color,
+          backgroundColor: context.fillColor,
+          child: Column(children: [WTaskSection(taskState: TaskState.note)]),
+        ).pAll(),
+      ),
     );
   }
 }

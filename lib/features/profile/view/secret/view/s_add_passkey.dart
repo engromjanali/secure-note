@@ -114,7 +114,7 @@ class _SAPasskeyState extends State<SAPasskey> {
                     controller: backupController,
                     suffixIcon: Column(
                       mainAxisSize: MainAxisSize.min,
-
+    
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -146,7 +146,7 @@ class _SAPasskeyState extends State<SAPasskey> {
                       isLoading: cPasskey.isLoadingMore,
                     ),
                   ),
-
+    
                 if (widget.viewOnly)
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
