@@ -87,3 +87,10 @@ class GoogleAuthService implements ISocialAuthService {
     }
   }
 }
+
+    // -------- how to get access token ---------
+    // const List<String> scopes = <String>['email'];
+    //    GoogleSignInClientAuthorization? auth  = await googleUser?.authorizationClient.authorizationForScopes(scopes);
+    //  final a =  auth?.accessToken;
+
+
