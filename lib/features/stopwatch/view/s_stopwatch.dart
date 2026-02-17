@@ -111,193 +111,189 @@ class _SStopwatchState extends State<SStopwatch> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(title: Text("Stopwatch")),
-        body: SafeArea(
-          child: PowerBuilder<CStopwatch>(
-            builder: (controller) {
-              return Column(
-                children: [
-                  SizedBox.square(
-                    dimension: 190.w,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: context.button?.primary.withAlpha(50),
-                        border: Border.all(
-                          color: context.button?.primary ?? Colors.amber,
-                          width: 10.w,
-                        ),
-                      ),
-                      child: PowerSelector<CStopwatch>(
-                        selector: () => controller.mStopwatch.duration,
-                        builder: (controller) {
-                          printer(controller.mStopwatch.duration);
-                          Duration currentCountTime =
-                              controller.mStopwatch.duration;
-                
-                          return Center(
-                            child: Text(
-                              currentCountTime.toString().split(".").first +
-                                  ":" +
-                                  currentCountTime
-                                      .toString()
-                                      .split(".")
-                                      .last
-                                      .substring(0, 2),
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                          );
-                        },
-                      ),
+    return Scaffold(
+      appBar: AppBar(title: Text("Stopwatch")),
+      body: PowerBuilder<CStopwatch>(
+        builder: (controller) {
+          return Column(
+            children: [
+              SizedBox.square(
+                dimension: 190.w,
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: context.button?.primary.withAlpha(50),
+                    border: Border.all(
+                      color: context.button?.primary ?? Colors.amber,
+                      width: 10.w,
                     ),
-                  ).pV(value: 50),
-                
-                  // list while
-                  PowerSelector<CStopwatch>(
-                    selector: () {
-                      // selector compare with object reference not value.
-                      // printer("ss${state.mStopwatch.lapList.hashCode}");
-                      return controller.mStopwatch.lapList;
-                    },
-                    builder: (_) {
-                      return StatefulBuilder(
-                        builder: (context, setLocalState) {
-                          // debugPrint("ss listwheel rebuilded $lapList");
-                          return SizedBox(
-                            child: ClipRRect(
-                              child: Align(
-                                alignment: Alignment.topCenter,
-                                heightFactor: 0.6, // show only top half
-                                child: SizedBox(
-                                  height: 400,
-                                  child: ListWheelScrollView.useDelegate(
-                                    controller: listWheelController,
-                                    physics: FixedExtentScrollPhysics(),
-                                    itemExtent: 30,
-                
-                                    onSelectedItemChanged: (value) {
-                                      setLocalState(() {
-                                        selectedIndex = value;
-                                      });
-                                    },
-                                    dragStartBehavior: DragStartBehavior.down,
-                                    //       initialIndex: cBloc.state.mStopwatch.lapList.isEmpty
-                                    // ? 0
-                                    // : cBloc.state.mStopwatch.lapList.length - 1,
-                                    childDelegate: ListWheelChildBuilderDelegate(
-                                      childCount:
-                                          controller.mStopwatch.lapList.length,
-                                      builder: (BuildContext context, int index) {
-                                        String lap = controller
-                                            .mStopwatch
-                                            .lapList[index]
-                                            .toString();
-                                        return Center(
-                                          child: Text(
-                                            "#${index + 1} ${lap.split(".").first}:${lap.split(".").last.substring(0, 2)}",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleSmall!
-                                                .copyWith(
-                                                  fontWeight: index == selectedIndex
-                                                      ? FontWeight.bold
-                                                      : null,
-                                                ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
+                  ),
+                  child: PowerSelector<CStopwatch>(
+                    selector: () => controller.mStopwatch.duration,
+                    builder: (controller) {
+                      printer(controller.mStopwatch.duration);
+                      Duration currentCountTime =
+                          controller.mStopwatch.duration;
+
+                      return Center(
+                        child: Text(
+                          currentCountTime.toString().split(".").first +
+                              ":" +
+                              currentCountTime
+                                  .toString()
+                                  .split(".")
+                                  .last
+                                  .substring(0, 2),
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
                       );
                     },
                   ),
-                
-                  // buttons tile
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      // Rest
-                      GestureDetector(
-                        onTap: () {
-                          restStopwatch();
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: context.button?.primary,
-                            borderRadius: BorderRadius.circular(
-                              PTheme.borderRadius,
-                            ),
-                          ),
-                          child: Text(
-                            "Rest",
-                            style: Theme.of(
-                              context,
-                            ).textTheme.titleSmall!.copyWith(color: Colors.white),
-                          ).pH().pV(value: 5),
-                        ),
-                      ),
-                
-                      // play / pose
-                      StatefulBuilder(
-                        builder: (context, setLocalState) {
-                          return GestureDetector(
-                            onTap: () {
-                              setLocalState(() {
-                                _startTimer();
-                              });
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: context.button?.primary,
-                                shape: BoxShape.circle,
+                ),
+              ).pV(value: 50),
+
+              // list while
+              PowerSelector<CStopwatch>(
+                selector: () {
+                  // selector compare with object reference not value.
+                  // printer("ss${state.mStopwatch.lapList.hashCode}");
+                  return controller.mStopwatch.lapList;
+                },
+                builder: (_) {
+                  return StatefulBuilder(
+                    builder: (context, setLocalState) {
+                      // debugPrint("ss listwheel rebuilded $lapList");
+                      return SizedBox(
+                        child: ClipRRect(
+                          child: Align(
+                            alignment: Alignment.topCenter,
+                            heightFactor: 0.6, // show only top half
+                            child: SizedBox(
+                              height: 400,
+                              child: ListWheelScrollView.useDelegate(
+                                controller: listWheelController,
+                                physics: FixedExtentScrollPhysics(),
+                                itemExtent: 30,
+
+                                onSelectedItemChanged: (value) {
+                                  setLocalState(() {
+                                    selectedIndex = value;
+                                  });
+                                },
+                                dragStartBehavior: DragStartBehavior.down,
+                                //       initialIndex: cBloc.state.mStopwatch.lapList.isEmpty
+                                // ? 0
+                                // : cBloc.state.mStopwatch.lapList.length - 1,
+                                childDelegate: ListWheelChildBuilderDelegate(
+                                  childCount:
+                                      controller.mStopwatch.lapList.length,
+                                  builder: (BuildContext context, int index) {
+                                    String lap = controller
+                                        .mStopwatch
+                                        .lapList[index]
+                                        .toString();
+                                    return Center(
+                                      child: Text(
+                                        "#${index + 1} ${lap.split(".").first}:${lap.split(".").last.substring(0, 2)}",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall!
+                                            .copyWith(
+                                              fontWeight: index == selectedIndex
+                                                  ? FontWeight.bold
+                                                  : null,
+                                            ),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                              child: Icon(
-                                !controller.mStopwatch.isRunning
-                                    ? Icons.play_arrow
-                                    : Icons.stop,
-                                color: Colors.white,
-                                size: 25,
-                              ).pAll(),
                             ),
-                          );
-                        },
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+
+              // buttons tile
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  // Rest
+                  GestureDetector(
+                    onTap: () {
+                      restStopwatch();
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: context.button?.primary,
+                        borderRadius: BorderRadius.circular(
+                          PTheme.borderRadius,
+                        ),
                       ),
-                
-                      // lap
-                      GestureDetector(
-                        onTap: () async {
-                          addLap();
-                          // await LocalAuthServices().showBiometric();
+                      child: Text(
+                        "Rest",
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleSmall!.copyWith(color: Colors.white),
+                      ).pH().pV(value: 5),
+                    ),
+                  ),
+
+                  // play / pose
+                  StatefulBuilder(
+                    builder: (context, setLocalState) {
+                      return GestureDetector(
+                        onTap: () {
+                          setLocalState(() {
+                            _startTimer();
+                          });
                         },
                         child: Container(
                           decoration: BoxDecoration(
                             color: context.button?.primary,
-                            borderRadius: BorderRadius.circular(
-                              PTheme.borderRadius,
-                            ),
+                            shape: BoxShape.circle,
                           ),
-                          child: Text(
-                            "Lap",
-                            style: Theme.of(
-                              context,
-                            ).textTheme.titleSmall!.copyWith(color: Colors.white),
-                          ).pH().pV(value: 5),
+                          child: Icon(
+                            !controller.mStopwatch.isRunning
+                                ? Icons.play_arrow
+                                : Icons.stop,
+                            color: Colors.white,
+                            size: 25,
+                          ).pAll(),
+                        ),
+                      );
+                    },
+                  ),
+
+                  // lap
+                  GestureDetector(
+                    onTap: () async {
+                      // addLap();
+                      await LocalAuthServices().showBiometric();
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: context.button?.primary,
+                        borderRadius: BorderRadius.circular(
+                          PTheme.borderRadius,
                         ),
                       ),
-                    ],
-                  ).pV(),
+                      child: Text(
+                        "Lap",
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleSmall!.copyWith(color: Colors.white),
+                      ).pH().pV(value: 5),
+                    ),
+                  ),
                 ],
-              );
-            },
-          ),
-        ),
+              ).pV(),
+            ],
+          );
+        },
       ),
     );
   }
