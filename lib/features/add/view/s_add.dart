@@ -221,140 +221,142 @@ class _SAddState extends State<SAdd> with RouteAware {
           },
         ),
       ),
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Column(
-            spacing: spacing,
-            children: [
-              Form(
-                key: fromKey,
-                child: Column(
-                  spacing: spacing,
-                  children: [
-                    WTextField(label: "Title", controller: titleController),
-                    WTextField(
-                      label: "Points",
-                      hintText: "Points-1\nPoints-2",
-                      controller: pointTController,
-                      textInputAction: TextInputAction.newline,
-                      minLines: 1,
-                      maxLines: 6,
-                    ),
-                    Column(
-                      children: [
-                        WTextField.requiredField(
-                          label: "Details",
-                          controller: detailsController,
-                          maxLines: 14,
-                          minLines: 4,
-                          validator: (value) {
-                            if (value?.trim().isEmpty ?? true) {
-                              return "Invalid Details";
-                            }
-                            return null;
-                          },
-                          textInputAction: TextInputAction.newline,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              ValueListenableBuilder(
-                valueListenable: isTaskListener,
-                builder: (context, isTask, child) {
-                  return Column(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: SafeArea(
+            child: Column(
+              spacing: spacing,
+              children: [
+                Form(
+                  key: fromKey,
+                  child: Column(
+                    spacing: spacing,
                     children: [
-                      // switch
-                      WCard(
-                        child: SwitchListTile.adaptive(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 5),
-                          title: Text(
-                            "Add As Task",
-                            style: context.textTheme?.labelMedium,
-                          ),
-                          value: isTask,
-                          activeTrackColor: context.button?.primary,
-                          onChanged: (value) {
-                            // puse action if edit page or only note
-                            if (widget.onlyNote || widget.isEditPage) return;
-                            isTaskListener.value = value;
-                          },
-                        ),
+                      WTextField(label: "Title", controller: titleController),
+                      WTextField(
+                        label: "Points",
+                        hintText: "Points-1\nPoints-2",
+                        controller: pointTController,
+                        textInputAction: TextInputAction.newline,
+                        minLines: 1,
+                        maxLines: 6,
                       ),
-                      // date time
-                      if (isTaskListener.value)
-                        Column(
-                          children: [
-                            // time
-                            ValueListenableBuilder(
-                              valueListenable: targetdDateTimeListener,
-                              builder: (context, value, child) {
-                                printer(value);
-                                return Column(
-                                  children: [
-                                    WDate(
-                                      isDepamdedWidget: depandOnTime,
-                                      dateTime: value,
-                                      onTap: () async {
-                                        targetdDateTimeListener.value =
-                                            await pickeDateTime(
-                                              context: context,
-                                            ) ??
-                                            targetdDateTimeListener.value;
-                                        depandOnTime = true;
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            ).pB(),
-                            // duration
-                            ValueListenableBuilder(
-                              valueListenable: targetedDurationListener,
-                              builder: (context, value, child) {
-                                printer(value);
-                                return Column(
-                                  children: [
-                                    WDate(
-                                      duration: value,
-                                      isDuration: true,
-                                      isDepamdedWidget: !depandOnTime,
-                                      dateTime: targetdDateTimeListener.value,
-                                      onTap: () async {
-                                        targetedDurationListener.value =
-                                            await WDialog.showCustom(
-                                              children: [WSDuration()],
-                                              context: context,
-                                            ) ??
-                                            targetedDurationListener.value;
-                                        depandOnTime = false;
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
-                          ],
-                        ),
+                      Column(
+                        children: [
+                          WTextField.requiredField(
+                            label: "Details",
+                            controller: detailsController,
+                            maxLines: 14,
+                            minLines: 4,
+                            validator: (value) {
+                              if (value?.trim().isEmpty ?? true) {
+                                return "Invalid Details";
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.newline,
+                          ),
+                        ],
+                      ),
                     ],
-                  );
-                },
-              ),
-
-              PowerBuilder<CTask>(
-                builder: (cTask) => PowerBuilder<CSecret>(
-                  builder: (cSecret) => WPrimaryButton(
-                    text: "Submit",
-                    onTap: submit,
-                    isLoading: widget.isSecret
-                        ? cSecret.isLoadingMore
-                        : cTask.isLoadingMore,
                   ),
                 ),
-              ),
-            ],
-          ).pAll(),
+                ValueListenableBuilder(
+                  valueListenable: isTaskListener,
+                  builder: (context, isTask, child) {
+                    return Column(
+                      children: [
+                        // switch
+                        WCard(
+                          child: SwitchListTile.adaptive(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                            title: Text(
+                              "Add As Task",
+                              style: context.textTheme?.labelMedium,
+                            ),
+                            value: isTask,
+                            activeTrackColor: context.button?.primary,
+                            onChanged: (value) {
+                              // puse action if edit page or only note
+                              if (widget.onlyNote || widget.isEditPage) return;
+                              isTaskListener.value = value;
+                            },
+                          ),
+                        ),
+                        // date time
+                        if (isTaskListener.value)
+                          Column(
+                            children: [
+                              // time
+                              ValueListenableBuilder(
+                                valueListenable: targetdDateTimeListener,
+                                builder: (context, value, child) {
+                                  printer(value);
+                                  return Column(
+                                    children: [
+                                      WDate(
+                                        isDepamdedWidget: depandOnTime,
+                                        dateTime: value,
+                                        onTap: () async {
+                                          targetdDateTimeListener.value =
+                                              await pickeDateTime(
+                                                context: context,
+                                              ) ??
+                                              targetdDateTimeListener.value;
+                                          depandOnTime = true;
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ).pB(),
+                              // duration
+                              ValueListenableBuilder(
+                                valueListenable: targetedDurationListener,
+                                builder: (context, value, child) {
+                                  printer(value);
+                                  return Column(
+                                    children: [
+                                      WDate(
+                                        duration: value,
+                                        isDuration: true,
+                                        isDepamdedWidget: !depandOnTime,
+                                        dateTime: targetdDateTimeListener.value,
+                                        onTap: () async {
+                                          targetedDurationListener.value =
+                                              await WDialog.showCustom(
+                                                children: [WSDuration()],
+                                                context: context,
+                                              ) ??
+                                              targetedDurationListener.value;
+                                          depandOnTime = false;
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                      ],
+                    );
+                  },
+                ),
+        
+                PowerBuilder<CTask>(
+                  builder: (cTask) => PowerBuilder<CSecret>(
+                    builder: (cSecret) => WPrimaryButton(
+                      text: "Submit",
+                      onTap: submit,
+                      isLoading: widget.isSecret
+                          ? cSecret.isLoadingMore
+                          : cTask.isLoadingMore,
+                    ),
+                  ),
+                ),
+              ],
+            ).pAll(),
+          ),
         ),
       ),
     );

@@ -47,8 +47,7 @@ dependencies:
   shared_preferences: ^2.5.3
   dio: ^5.9.0
 
-  flutter_svg: ^2.2.1 # to show svg logo
-
+  flutter_svg: ^2.2.3 # to show svg logo
   firebase_core: ^4.2.0 # Core Firebase initialisation
   firebase_messaging: ^16.0.3 # FCM push notifications
   flutter_local_notifications: ^19.4.2 # Local/scheduled notifications
@@ -95,6 +94,7 @@ flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/logo/appIcon.png"
+  remove_alpha_ios: true # Add this line
   min_sdk_android: 21 # android min sdk min:16, default 21
 
 
@@ -117,8 +117,6 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/images/good/
-    - assets/images/bad/
     - assets/icons/
     - assets/fonts/
     - assets/logo/

@@ -55,45 +55,47 @@ class _SSeretsState extends State<SSerets> with SingleTickerProviderStateMixin {
           }
         },
       ),
-      body: NestedScrollView(
-        floatHeaderSlivers: true,
-        headerSliverBuilder: (context, scrollable) {
-          return [
-            SliverAppBar(
-              title: AnimatedBuilder(
-                animation: _tabController!,
-                builder: (context, child) {
-                  return Text(tabs[_tabController!.index]);
-                },
+      body: SafeArea(
+        child: NestedScrollView(
+          floatHeaderSlivers: true,
+          headerSliverBuilder: (context, scrollable) {
+            return [
+              SliverAppBar(
+                title: AnimatedBuilder(
+                  animation: _tabController!,
+                  builder: (context, child) {
+                    return Text(tabs[_tabController!.index]);
+                  },
+                ),
+                actions: [],
+                floating: true,
+                snap: true,
+                pinned: true,
+                elevation: 0,
+                bottom: TabBar(
+                  mouseCursor: MouseCursor.uncontrolled,
+                  automaticIndicatorColorAdjustment: false,
+                  controller: _tabController,
+                  isScrollable: true, // must assign otherwise get an error
+                  tabAlignment: TabAlignment.start,
+                  labelColor: context.primaryTextColor,
+                  labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                  indicatorColor: context.primaryTextColor,
+                  unselectedLabelColor: context.primaryTextColor?.withAlpha(200),
+                  unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
+                  tabs: tabs
+                      .map(
+                        (e) =>
+                            Tab(text: e.toString(), icon: icons[tabs.indexOf(e)]),
+                      )
+                      .toList(),
+                ),
               ),
-              actions: [],
-              floating: true,
-              snap: true,
-              pinned: true,
-              elevation: 0,
-              bottom: TabBar(
-                mouseCursor: MouseCursor.uncontrolled,
-                automaticIndicatorColorAdjustment: false,
-                controller: _tabController,
-                isScrollable: true, // must assign otherwise get an error
-                tabAlignment: TabAlignment.start,
-                labelColor: context.primaryTextColor,
-                labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                indicatorColor: context.primaryTextColor,
-                unselectedLabelColor: context.primaryTextColor?.withAlpha(200),
-                unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
-                tabs: tabs
-                    .map(
-                      (e) =>
-                          Tab(text: e.toString(), icon: icons[tabs.indexOf(e)]),
-                    )
-                    .toList(),
-              ),
-            ),
-          ];
-        },
-
-        body: TabBarView(controller: _tabController, children: items),
+            ];
+          },
+              
+          body: SafeArea(child: TabBarView(controller: _tabController, children: items)),
+        ),
       ),
     );
   }

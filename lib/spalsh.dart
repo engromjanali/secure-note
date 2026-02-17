@@ -37,28 +37,30 @@ class _SpalshScreenState extends State<SpalshScreen> {
     return GestureDetector(
       onDoubleTap: checkAuth,
       child: Scaffold(
-        body: Column(
-          children: [
-            Expanded(
-              child: Center(
-                child: SvgPicture.asset(
-                  Assets.logo.logo,
-                  height: 200.w,
-                  width: 200.w,
-                  colorFilter: ColorFilter.mode(
-                    context.primaryTextColor!,
-                    BlendMode.srcIn,
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: Center(
+                  child: SvgPicture.asset(
+                    Assets.logo.logo,
+                    height: 200.w,
+                    width: 200.w,
+                    colorFilter: ColorFilter.mode(
+                      context.primaryTextColor!,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Text(
-              "Loading...",
-              style: context.textTheme?.titleSmall?.copyWith(
-                color: context.primaryTextColor,
-              ),
-            ).pB(value: 50),
-          ],
+              Text(
+                "Loading...",
+                style: context.textTheme?.titleSmall?.copyWith(
+                  color: context.primaryTextColor,
+                ),
+              ).pB(value: 50),
+            ],
+          ),
         ),
       ),
     );

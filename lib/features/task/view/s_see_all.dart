@@ -24,36 +24,38 @@ class _SSeeAllState extends State<SSeeAll> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.taskState == TaskState.pending
-              ? "Pending Task"
-              : widget.taskState == TaskState.timeOut
-              ? "Time-Out"
-              : "Completed",
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            widget.taskState == TaskState.pending
+                ? "Pending Task"
+                : widget.taskState == TaskState.timeOut
+                ? "Time-Out"
+                : "Completed",
+          ),
         ),
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            TextField(
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search_sharp),
-                hintText: "Search Task Here",
-                contentPadding: EdgeInsets.zero,
-                suffixIcon: IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.tune_rounded),
+        body: SafeArea(
+          child: Column(
+            children: [
+              TextField(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search_sharp),
+                  hintText: "Search Task Here",
+                  contentPadding: EdgeInsets.zero,
+                  suffixIcon: IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.tune_rounded),
+                  ),
                 ),
-              ),
-            ).pB(),
-
-            (widget.taskState == TaskState.pending)
-                ? WTimerTaskSection(taskState: widget.taskState)
-                : WTaskSection(taskState: widget.taskState),
-          ],
-        ).pAll(),
+              ).pB(),
+      
+              (widget.taskState == TaskState.pending)
+                  ? WTimerTaskSection(taskState: widget.taskState)
+                  : WTaskSection(taskState: widget.taskState),
+            ],
+          ).pAll(),
+        ),
       ),
     );
   }

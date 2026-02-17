@@ -1,9 +1,9 @@
-import '/core/extensions/ex_build_context.dart';
-import '/core/extensions/ex_padding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '/core/widgets/w_container.dart';
-import '/core/widgets/w_shimmer.dart';
+import 'package:secure_note/core/extensions/ex_build_context.dart';
+import 'package:secure_note/core/extensions/ex_padding.dart';
+import 'package:secure_note/core/widgets/w_container.dart';
+import 'package:secure_note/core/widgets/w_shimmer.dart';
 
 class WAppsShimmer extends StatelessWidget {
   const WAppsShimmer({super.key});

@@ -37,14 +37,8 @@ class $AssetsFontsGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
-  /// File path: assets/icons/Explore.svg
-  String get explore => 'assets/icons/Explore.svg';
-
   /// File path: assets/icons/add.svg
   String get add => 'assets/icons/add.svg';
-
-  /// File path: assets/icons/after_before.svg
-  String get afterBefore => 'assets/icons/after_before.svg';
 
   /// File path: assets/icons/clear.svg
   String get clear => 'assets/icons/clear.svg';
@@ -54,9 +48,6 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/close.png
   AssetGenImage get close => const AssetGenImage('assets/icons/close.png');
-
-  /// File path: assets/icons/dashicons.svg
-  String get dashicons => 'assets/icons/dashicons.svg';
 
   /// File path: assets/icons/faq.svg
   String get faq => 'assets/icons/faq.svg';
@@ -99,13 +90,10 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<dynamic> get values => [
-    explore,
     add,
-    afterBefore,
     clear,
     close2,
     close,
-    dashicons,
     faq,
     feedback,
     notebook,
@@ -120,29 +108,6 @@ class $AssetsIconsGen {
     tramsOfUse,
     vault,
   ];
-}
-
-class $AssetsImagesGen {
-  const $AssetsImagesGen();
-
-  /// File path: assets/images/Rating Icon.png
-  AssetGenImage get ratingIcon =>
-      const AssetGenImage('assets/images/Rating Icon.png');
-
-  /// Directory path: assets/images/bad
-  $AssetsImagesBadGen get bad => const $AssetsImagesBadGen();
-
-  /// Directory path: assets/images/good
-  $AssetsImagesGoodGen get good => const $AssetsImagesGoodGen();
-
-  /// File path: assets/images/logo.png
-  AssetGenImage get logo => const AssetGenImage('assets/images/logo.png');
-
-  /// File path: assets/images/x.jpg
-  AssetGenImage get x => const AssetGenImage('assets/images/x.jpg');
-
-  /// List of all assets
-  List<AssetGenImage> get values => [ratingIcon, logo, x];
 }
 
 class $AssetsLogoGen {
@@ -280,65 +245,11 @@ class $AssetsSocialGen {
   List<AssetGenImage> get values => [fb, insta, save, tktok, ws];
 }
 
-class $AssetsImagesBadGen {
-  const $AssetsImagesBadGen();
-
-  /// File path: assets/images/bad/1.png
-  AssetGenImage get a1 => const AssetGenImage('assets/images/bad/1.png');
-
-  /// File path: assets/images/bad/2.png
-  AssetGenImage get a2 => const AssetGenImage('assets/images/bad/2.png');
-
-  /// File path: assets/images/bad/3.png
-  AssetGenImage get a3 => const AssetGenImage('assets/images/bad/3.png');
-
-  /// File path: assets/images/bad/4.png
-  AssetGenImage get a4 => const AssetGenImage('assets/images/bad/4.png');
-
-  /// File path: assets/images/bad/5.png
-  AssetGenImage get a5 => const AssetGenImage('assets/images/bad/5.png');
-
-  /// File path: assets/images/bad/6.png
-  AssetGenImage get a6 => const AssetGenImage('assets/images/bad/6.png');
-
-  /// File path: assets/images/bad/7.png
-  AssetGenImage get a7 => const AssetGenImage('assets/images/bad/7.png');
-
-  /// File path: assets/images/bad/8.png
-  AssetGenImage get a8 => const AssetGenImage('assets/images/bad/8.png');
-
-  /// List of all assets
-  List<AssetGenImage> get values => [a1, a2, a3, a4, a5, a6, a7, a8];
-}
-
-class $AssetsImagesGoodGen {
-  const $AssetsImagesGoodGen();
-
-  /// File path: assets/images/good/1.png
-  AssetGenImage get a1 => const AssetGenImage('assets/images/good/1.png');
-
-  /// File path: assets/images/good/2.png
-  AssetGenImage get a2 => const AssetGenImage('assets/images/good/2.png');
-
-  /// File path: assets/images/good/3.png
-  AssetGenImage get a3 => const AssetGenImage('assets/images/good/3.png');
-
-  /// File path: assets/images/good/4.png
-  AssetGenImage get a4 => const AssetGenImage('assets/images/good/4.png');
-
-  /// File path: assets/images/good/5.png
-  AssetGenImage get a5 => const AssetGenImage('assets/images/good/5.png');
-
-  /// List of all assets
-  List<AssetGenImage> get values => [a1, a2, a3, a4, a5];
-}
-
 class Assets {
   const Assets._();
 
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
-  static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLogoGen logo = $AssetsLogoGen();
   static const $AssetsSocialGen social = $AssetsSocialGen();
 }

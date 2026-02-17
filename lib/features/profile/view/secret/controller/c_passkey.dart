@@ -1,6 +1,7 @@
 import 'package:secure_note/core/constants/default_values.dart';
 import 'package:secure_note/core/controllers/c_base.dart';
 import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/core/functions/f_snackbar.dart';
 import 'package:secure_note/features/profile/view/secret/data/model/m_passkey.dart';
 import 'package:secure_note/features/profile/view/secret/data/model/m_secret_query.dart';
 import 'package:secure_note/features/profile/view/secret/data/repository/passkey/passkey_repository.dart';
@@ -100,6 +101,7 @@ class CPasskey extends CBase {
     update();
     await _iPasskeyRepository.addPasskey(payload);
     // await Future.delayed(Duration(seconds: 2));
+    showSnackBar("Passkey Added Successfully.");
     printer(passkeyList.length);
     // } catch (e) {
     // errorPrint(e);
@@ -114,6 +116,7 @@ class CPasskey extends CBase {
       isLoadingMore = true;
       update();
       await _iPasskeyRepository.updatePasskey(payload);
+      showSnackBar("Passkey Updated Successfully.");
     } catch (e) {
       errorPrint(e);
     } finally {
@@ -130,6 +133,7 @@ class CPasskey extends CBase {
       await _iPasskeyRepository.detetePasskey(id);
       // clear from runtime storage
       passkeyList.removeWhere((mPasskey) => mPasskey.id == id);
+      showSnackBar("Passkey Deleted!");
     } catch (e) {
       errorPrint(e);
     } finally {

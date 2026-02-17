@@ -49,54 +49,56 @@ class _SProfileState extends State<SProfile> {
           
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          spacing: PTheme.paddingY,
-          children: [
-            // top items
-            _WProfile(),
-
-            // profile items
-            WCard(
-              child: ListView.builder(
-                padding: EdgeInsets.all(0),
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: profileItem.length,
-                itemBuilder: (_, index) {
-                  return _WSItem(
-                    label: profileItem[index].label,
-                    iconData: profileItem[index].icon,
-                    onTap: profileItem[index].onTap,
-                    isLastitem: profileItem.length - 1 == index,
-                    child: profileItem[index].child,
-                  ).withKey(ValueKey(UniqueKey));
-                },
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            spacing: PTheme.paddingY,
+            children: [
+              // top items
+              _WProfile(),
+        
+              // profile items
+              WCard(
+                child: ListView.builder(
+                  padding: EdgeInsets.all(0),
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: profileItem.length,
+                  itemBuilder: (_, index) {
+                    return _WSItem(
+                      label: profileItem[index].label,
+                      iconData: profileItem[index].icon,
+                      onTap: profileItem[index].onTap,
+                      isLastitem: profileItem.length - 1 == index,
+                      child: profileItem[index].child,
+                    ).withKey(ValueKey(UniqueKey));
+                  },
+                ),
               ),
-            ),
-            // profile items
-            WCard(
-              child: ListView.builder(
-                padding: EdgeInsets.all(0),
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: menuList.length,
-                itemBuilder: (_, index) {
-                  return _WSItem(
-                    label: menuList[index].label,
-                    iconData: menuList[index].icon,
-                    onTap: menuList[index].onTap,
-                    isLastitem: menuList.length - 1 == index,
-                    child: menuList[index].child,
-                  );
-                },
+              // profile items
+              WCard(
+                child: ListView.builder(
+                  padding: EdgeInsets.all(0),
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: menuList.length,
+                  itemBuilder: (_, index) {
+                    return _WSItem(
+                      label: menuList[index].label,
+                      iconData: menuList[index].icon,
+                      onTap: menuList[index].onTap,
+                      isLastitem: menuList.length - 1 == index,
+                      child: menuList[index].child,
+                    );
+                  },
+                ),
               ),
-            ),
-
-            // version label
-            Text("Version 2.9.1", style: context.textTheme?.bodyMedium),
-          ],
-        ).pAll(),
+        
+              // version label
+              Text("Version 2.9.1", style: context.textTheme?.bodyMedium),
+            ],
+          ).pAll(),
+        ),
       ),
     );
   }
@@ -105,7 +107,7 @@ class _SProfileState extends State<SProfile> {
   Widget _WProfile() {
     return PowerBuilder<CProfile>(
       builder: (cProfile) {
-        printer("_WProfile ${cProfile.mProfileData.toJson()}");
+        // printer("_WProfile ${cProfile.mProfileData.toJson()}");
         return Stack(
           children: [
             Container(
@@ -240,8 +242,7 @@ class _WSItem extends StatelessWidget {
                   context.primaryTextColor ?? Colors.grey,
                   BlendMode.srcIn,
                 ),
-                errorBuilder: (context, error, stackTrace) =>
-                    Image.asset(Assets.images.x.path),
+                errorBuilder: (context, error, stackTrace) => Text("ERROR!"),
                 height: 20.w,
               ),
               Expanded(

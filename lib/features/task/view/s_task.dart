@@ -49,142 +49,144 @@ class _STaskState extends State<STask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Task")),
-      body: PowerBuilder<CTask>(
-        builder: (cTask) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextField(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search_sharp),
-                  hintText: "Search Task Here",
-                  suffixIcon: IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.tune_rounded),
+      body: SafeArea(
+        child: PowerBuilder<CTask>(
+          builder: (cTask) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.search_sharp),
+                    hintText: "Search Task Here",
+                    suffixIcon: IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.tune_rounded),
+                    ),
+                  ),
+                ).pB(),
+                Expanded(
+                  child: PowerBuilder<CTask>(
+                    builder: (cTask) {
+                      // final List<MTask> pendingList = [];
+                      // final List<MTask> timeOutList = [];
+                      // final List<MTask> completedList = [];
+        
+                      // cTask.taskList.map((mTask) {
+                      //   if (isNotNull(mTask.finishedAt)) {
+                      //     completedList.add(mTask);
+                      //     return;
+                      //   }
+                      //   switch (DateTime.now().compareTo(
+                      //     mTask.endAt ?? DateTime.now(),
+                      //   )) {
+                      //     case 1: // past
+                      //       timeOutList.add(mTask);
+                      //       return;
+                      //     case -1: // future
+                      //       pendingList.add(mTask);
+                      //       return;
+                      //     default: // now
+                      //       timeOutList.add(mTask);
+                      //       return;
+                      //   }
+                      // }).toList();
+        
+                      return RefreshIndicator(
+                        onRefresh: () async {
+                          await cTask.fetchTask();
+                        },
+                        color: context.textTheme?.titleMedium?.color,
+                        backgroundColor: context.fillColor,
+                        child: CustomScrollView(
+                          slivers: [
+                            // todays task
+                            SliverToBoxAdapter(child: gapY(20)),
+                            WTimerTaskSection(
+                              onTap: () async {
+                                // clear current items
+                                cTask.pendingList.clear();
+                                cTask.clearPaigenationChace();
+                                cTask.update();
+                                await SSeeAll(
+                                  taskState: TaskState.pending,
+                                ).push();
+                                await Future.delayed(
+                                  Duration(seconds: 1),
+                                ); // bacuse if seemore page was loading within the time if we pop we even we clear the list but when the data will be fetch it's will be added.
+                                // clear current items
+                                cTask.pendingList.clear();
+                                cTask.clearPaigenationChace();
+                                cTask.update();
+                                // load new items
+                                await cTask.fetchSpacificItem(
+                                  payload: MQuery(taskState: TaskState.pending),
+                                );
+                              },
+                              // items: pendingList,
+                              title: 'Pending Task',
+                              asSliver: true,
+                            ),
+                            WTaskSection(
+                              onTap: () async {
+                                // clear current items
+                                cTask.timeOutList.clear();
+                                cTask.clearPaigenationChace();
+                                cTask.update();
+                                // navigate
+                                await SSeeAll(
+                                  taskState: TaskState.timeOut,
+                                ).push();
+                                await Future.delayed(Duration(seconds: 1));
+                                // clear current items
+                                cTask.timeOutList.clear();
+                                cTask.clearPaigenationChace();
+                                cTask.update();
+                                // load new items
+                                await cTask.fetchSpacificItem(
+                                  payload: MQuery(taskState: TaskState.timeOut),
+                                );
+                              },
+                              // items: timeOutList,
+                              title: 'Time-Out Task',
+                              taskState: TaskState.timeOut,
+                              asSliver: true,
+                            ),
+                            WTaskSection(
+                              onTap: () async {
+                                // clear current items
+                                cTask.completedList.clear();
+                                cTask.clearPaigenationChace();
+                                cTask.update();
+                                // navigate to new page
+                                await SSeeAll(
+                                  taskState: TaskState.completed,
+                                ).push();
+                                await Future.delayed(Duration(seconds: 1));
+                                // clear current items
+                                cTask.completedList.clear();
+                                cTask.clearPaigenationChace();
+                                cTask.update();
+                                // load new items
+                                await cTask.fetchSpacificItem(
+                                  payload: MQuery(taskState: TaskState.completed),
+                                );
+                              },
+                              // items: completedList,
+                              title: 'Completed Task',
+                              taskState: TaskState.completed,
+                              asSliver: true,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ),
-              ).pB(),
-              Expanded(
-                child: PowerBuilder<CTask>(
-                  builder: (cTask) {
-                    // final List<MTask> pendingList = [];
-                    // final List<MTask> timeOutList = [];
-                    // final List<MTask> completedList = [];
-
-                    // cTask.taskList.map((mTask) {
-                    //   if (isNotNull(mTask.finishedAt)) {
-                    //     completedList.add(mTask);
-                    //     return;
-                    //   }
-                    //   switch (DateTime.now().compareTo(
-                    //     mTask.endAt ?? DateTime.now(),
-                    //   )) {
-                    //     case 1: // past
-                    //       timeOutList.add(mTask);
-                    //       return;
-                    //     case -1: // future
-                    //       pendingList.add(mTask);
-                    //       return;
-                    //     default: // now
-                    //       timeOutList.add(mTask);
-                    //       return;
-                    //   }
-                    // }).toList();
-
-                    return RefreshIndicator(
-                      onRefresh: () async {
-                        await cTask.fetchTask();
-                      },
-                      color: context.textTheme?.titleMedium?.color,
-                      backgroundColor: context.fillColor,
-                      child: CustomScrollView(
-                        slivers: [
-                          // todays task
-                          SliverToBoxAdapter(child: gapY(20)),
-                          WTimerTaskSection(
-                            onTap: () async {
-                              // clear current items
-                              cTask.pendingList.clear();
-                              cTask.clearPaigenationChace();
-                              cTask.update();
-                              await SSeeAll(
-                                taskState: TaskState.pending,
-                              ).push();
-                              await Future.delayed(
-                                Duration(seconds: 1),
-                              ); // bacuse if seemore page was loading within the time if we pop we even we clear the list but when the data will be fetch it's will be added.
-                              // clear current items
-                              cTask.pendingList.clear();
-                              cTask.clearPaigenationChace();
-                              cTask.update();
-                              // load new items
-                              await cTask.fetchSpacificItem(
-                                payload: MQuery(taskState: TaskState.pending),
-                              );
-                            },
-                            // items: pendingList,
-                            title: 'Pending Task',
-                            asSliver: true,
-                          ),
-                          WTaskSection(
-                            onTap: () async {
-                              // clear current items
-                              cTask.timeOutList.clear();
-                              cTask.clearPaigenationChace();
-                              cTask.update();
-                              // navigate
-                              await SSeeAll(
-                                taskState: TaskState.timeOut,
-                              ).push();
-                              await Future.delayed(Duration(seconds: 1));
-                              // clear current items
-                              cTask.timeOutList.clear();
-                              cTask.clearPaigenationChace();
-                              cTask.update();
-                              // load new items
-                              await cTask.fetchSpacificItem(
-                                payload: MQuery(taskState: TaskState.timeOut),
-                              );
-                            },
-                            // items: timeOutList,
-                            title: 'Time-Out Task',
-                            taskState: TaskState.timeOut,
-                            asSliver: true,
-                          ),
-                          WTaskSection(
-                            onTap: () async {
-                              // clear current items
-                              cTask.completedList.clear();
-                              cTask.clearPaigenationChace();
-                              cTask.update();
-                              // navigate to new page
-                              await SSeeAll(
-                                taskState: TaskState.completed,
-                              ).push();
-                              await Future.delayed(Duration(seconds: 1));
-                              // clear current items
-                              cTask.completedList.clear();
-                              cTask.clearPaigenationChace();
-                              cTask.update();
-                              // load new items
-                              await cTask.fetchSpacificItem(
-                                payload: MQuery(taskState: TaskState.completed),
-                              );
-                            },
-                            // items: completedList,
-                            title: 'Completed Task',
-                            taskState: TaskState.completed,
-                            asSliver: true,
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ).pAll();
-        },
+              ],
+            ).pAll();
+          },
+        ),
       ),
     );
   }

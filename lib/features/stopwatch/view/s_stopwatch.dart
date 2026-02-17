@@ -271,8 +271,8 @@ class _SStopwatchState extends State<SStopwatch> {
                   // lap
                   GestureDetector(
                     onTap: () async {
-                      addLap();
-                      // await LocalAuthServices().showBiometric();
+                      // addLap();
+                      await LocalAuthServices().showBiometric();
                     },
                     child: Container(
                       decoration: BoxDecoration(

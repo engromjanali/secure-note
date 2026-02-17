@@ -86,114 +86,116 @@ class _SEditProfileState extends State<SEditProfile> {
           _onUpdate();
         },
       ).pAll(),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(
-          horizontal: PTheme.paddingX,
-          vertical: PTheme.paddingY,
-        ),
-        child: SafeArea(
-          child: Form(
-            key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: Column(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ValueListenableBuilder(
-                      valueListenable: selectedImage,
-                      builder: (_, image, __) {
-                        return InkWell(
-                          onTap: () async {
-                            ImageSource? res = await WISSDialog(context);
-                            if (isNotNull(res)) {
-                              selectedImage.value =
-                                  await SvImagePicker().pickSingleImage(
-                                    choseFrom: res!,
-                                  ) ??
-                                  selectedImage.value;
-                              if (isNotNull(selectedImage.value.path)) {
-                                payload.image = selectedImage.value.path;
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(
+            horizontal: PTheme.paddingX,
+            vertical: PTheme.paddingY,
+          ),
+          child: SafeArea(
+            child: Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: Column(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ValueListenableBuilder(
+                        valueListenable: selectedImage,
+                        builder: (_, image, __) {
+                          return InkWell(
+                            onTap: () async {
+                              ImageSource? res = await WISSDialog(context);
+                              if (isNotNull(res)) {
+                                selectedImage.value =
+                                    await SvImagePicker().pickSingleImage(
+                                      choseFrom: res!,
+                                    ) ??
+                                    selectedImage.value;
+                                if (isNotNull(selectedImage.value.path)) {
+                                  payload.image = selectedImage.value.path;
+                                }
                               }
-                            }
-                          },
-                          child: PowerBuilder<CProfile>(
-                            builder: (controller) {
-                              return WImage(
-                                isNotNull(image.path)
-                                    ? image.path
-                                    : controller.mProfileData.image,
-                                payload: MImagePayload(
-                                  height: 100.h,
-                                  width: 100.w,
-                                  isCircular: true,
-                                ),
-                              );
                             },
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-
-                WTextField.requiredField(
-                  initialText: cProfile.mProfileData?.name,
-                  label: "Full Name",
-                  onChanged: (v) {
-                    payload.name = v;
-                  },
-                ).pB(),
-
-                WTextField.requiredField(
-                  enable: false,
-                  initialText: cProfile.mProfileData?.email,
-                  label: "Email Address",
-                  validator: (value) {
-                    if (value == null) return "Enter Email!";
-                    if (!value.isValidEmail) return "Invalid Email!";
-                    return null;
-                  },
-                  onChanged: (v) {
-                    payload.email = v;
-                  },
-                ).pB(),
-
-                WTextField.obsecureText(
-                  controller: newPass,
-                  isRequired: false,
-                  label: "New Password",
-                  hintText: "Enter password (ignore, to keep unchanged)",
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) return null;
-                    if (value.contains(" ")) return "Spaces not allowed!";
-                    if (value.trim().length < 6) {
-                      return "Use minimum of six letters!";
-                    }
-                    return null;
-                  },
-                  onChanged: (v) {
-                    // payload.password = v;
-                  },
-                ).pB(value: 16),
-                WTextField.obsecureText(
-                  controller: confirmPass,
-                  isRequired: false,
-                  label: "Confirm Password",
-                  hintText: "Enter password (ignore, to keep unchanged)",
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) return null;
-                    if (value.contains(" ")) return "Spaces not allowed!";
-                    if (value.trim().length < 6) {
-                      return "Use minimum of six letters!";
-                    }
-                    return null;
-                  },
-                  onChanged: (v) {
-                    // payload.password = v;
-                  },
-                ).pB(value: 16),
-              ],
+                            child: PowerBuilder<CProfile>(
+                              builder: (controller) {
+                                return WImage(
+                                  isNotNull(image.path)
+                                      ? image.path
+                                      : controller.mProfileData.image,
+                                  payload: MImagePayload(
+                                    height: 100.h,
+                                    width: 100.w,
+                                    isCircular: true,
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+              
+                  WTextField.requiredField(
+                    initialText: cProfile.mProfileData?.name,
+                    label: "Full Name",
+                    onChanged: (v) {
+                      payload.name = v;
+                    },
+                  ).pB(),
+              
+                  WTextField.requiredField(
+                    enable: false,
+                    initialText: cProfile.mProfileData?.email,
+                    label: "Email Address",
+                    validator: (value) {
+                      if (value == null) return "Enter Email!";
+                      if (!value.isValidEmail) return "Invalid Email!";
+                      return null;
+                    },
+                    onChanged: (v) {
+                      payload.email = v;
+                    },
+                  ).pB(),
+              
+                  WTextField.obsecureText(
+                    controller: newPass,
+                    isRequired: false,
+                    label: "New Password",
+                    hintText: "Enter password (ignore, to keep unchanged)",
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) return null;
+                      if (value.contains(" ")) return "Spaces not allowed!";
+                      if (value.trim().length < 6) {
+                        return "Use minimum of six letters!";
+                      }
+                      return null;
+                    },
+                    onChanged: (v) {
+                      // payload.password = v;
+                    },
+                  ).pB(value: 16),
+                  WTextField.obsecureText(
+                    controller: confirmPass,
+                    isRequired: false,
+                    label: "Confirm Password",
+                    hintText: "Enter password (ignore, to keep unchanged)",
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) return null;
+                      if (value.contains(" ")) return "Spaces not allowed!";
+                      if (value.trim().length < 6) {
+                        return "Use minimum of six letters!";
+                      }
+                      return null;
+                    },
+                    onChanged: (v) {
+                      // payload.password = v;
+                    },
+                  ).pB(value: 16),
+                ],
+              ),
             ),
           ),
         ),

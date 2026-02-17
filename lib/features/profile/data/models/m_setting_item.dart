@@ -129,13 +129,13 @@ List<MSItem> profileItem = [
 ];
 
 List<MSItem> menuList = [
-  MSItem(
-    icon: Assets.icons.restorePurchase,
-    label: "Restore Purchase",
-    onTap: () {
-      showSnackBar("Under build");
-    },
-  ),
+  // MSItem(
+  //   icon: Assets.icons.restorePurchase,
+  //   label: "Restore Purchase",
+  //   onTap: () {
+  //     showSnackBar("Under build");
+  //   },
+  // ),
   MSItem(
     icon: Assets.icons.faq,
     label: "FAQ",

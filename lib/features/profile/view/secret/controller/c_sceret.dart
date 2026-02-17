@@ -1,6 +1,7 @@
 import 'package:secure_note/core/constants/default_values.dart';
 import 'package:secure_note/core/controllers/c_base.dart';
 import 'package:secure_note/core/functions/f_printer.dart';
+import 'package:secure_note/core/functions/f_snackbar.dart';
 import 'package:secure_note/features/profile/view/secret/data/model/m_secret.dart';
 import 'package:secure_note/features/profile/view/secret/data/model/m_secret_query.dart';
 import 'package:secure_note/features/profile/view/secret/data/repository/secret_note/secret_note_repository.dart';
@@ -99,6 +100,7 @@ class CSecret extends CBase {
       isLoadingMore = true;
       update();
       await _iSecretRepository.addSecretNote(payload);
+      showSnackBar("Note Added Successfully.");
       await Future.delayed(Duration(seconds: 2));
       printer(secretList.length);
     } catch (e) {
@@ -114,6 +116,7 @@ class CSecret extends CBase {
       isLoadingMore = true;
       update();
       await _iSecretRepository.updateSecretNote(payload);
+      showSnackBar("Note Updated.");
     } catch (e) {
       errorPrint(e);
     } finally {
@@ -130,6 +133,7 @@ class CSecret extends CBase {
       await _iSecretRepository.deteteSecretNote(id);
       // clear from runtime storage
       secretList.removeWhere((mSecret) => mSecret.id == id);
+      showSnackBar("Note Deleted!");
     } catch (e) {
       errorPrint(e);
     } finally {

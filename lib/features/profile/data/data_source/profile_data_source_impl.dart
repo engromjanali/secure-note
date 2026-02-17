@@ -32,7 +32,7 @@ class ProfileDataSourceImpl extends ENV implements IProfileData {
     }
     final FormData data = FormData.fromMap({
       if (isNotNull(imagePath))
-        'file': await MultipartFile.fromFile(imagePath, filename: uId),
+        'file': await MultipartFile.fromFile(imagePath, filename: uId,),
       'upload_preset': "secure_note",
       "asset_folder": "secure_note",
       "public_id": uId,
