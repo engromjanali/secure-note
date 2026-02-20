@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -54,6 +51,7 @@ class DefaultFirebaseOptions {
     appId: '1:537971701870:android:6810c432e4cb10da828e7f',
     messagingSenderId: '537971701870',
     projectId: 'note-dd0cc',
+    databaseURL: 'https://note-dd0cc-default-rtdb.firebaseio.com',
     storageBucket: 'note-dd0cc.firebasestorage.app',
   );
 
@@ -62,7 +60,22 @@ class DefaultFirebaseOptions {
     appId: '1:537971701870:ios:26352e13bec8e75f828e7f',
     messagingSenderId: '537971701870',
     projectId: 'note-dd0cc',
+    databaseURL: 'https://note-dd0cc-default-rtdb.firebaseio.com',
     storageBucket: 'note-dd0cc.firebasestorage.app',
+    androidClientId: '537971701870-3cp7a1nni9k0lbkdurollb4btaaq1n7r.apps.googleusercontent.com',
+    iosClientId: '537971701870-1rsdth8eplvngiln2i8r4mptonujh7ml.apps.googleusercontent.com',
     iosBundleId: 'com.engromjanali.securenote',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDE58Nbs8swoWM0wBmYQzxphpR8oYZS54c',
+    appId: '1:537971701870:web:c496dbe3153d8093828e7f',
+    messagingSenderId: '537971701870',
+    projectId: 'note-dd0cc',
+    authDomain: 'note-dd0cc.firebaseapp.com',
+    databaseURL: 'https://note-dd0cc-default-rtdb.firebaseio.com',
+    storageBucket: 'note-dd0cc.firebasestorage.app',
+    measurementId: 'G-2CW6JG46YH',
+  );
+
 }
