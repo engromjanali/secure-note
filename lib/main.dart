@@ -15,8 +15,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:power_state/power_state.dart';
+import 'package:secure_note/web/helper/responsive_helper.dart';
+import 'package:secure_note/web/root_screen.dart';
 
 void main() async {
+  if(kIsWeb){
+    runApp(const RootScreen());
+    return;
+  }
+  
   await _init();
   runApp(
     // DevicePreview(enabled: !kReleaseMode, builder: (context) => _SCheckPoint()),
@@ -62,10 +69,11 @@ class __SCheckPointState extends State<_SCheckPoint> {
 
   @override
   Widget build(BuildContext context) {
+    Size size  = MediaQuery.of(context).size;
     return PowerBuilder<CTheme>(
       builder: (CTheme controller) {
         return ScreenUtilInit(
-          designSize: kIsWeb ? Size(430, 932) : Size(430, 932),
+          designSize: ResponsiveHelper.isMobile(context) ? Size(430, 932) : size,
           minTextAdapt: true,
           splitScreenMode: true,
           fontSizeResolver: (fontSize, screenUtil) {
