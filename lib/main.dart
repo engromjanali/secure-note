@@ -15,12 +15,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:power_state/power_state.dart';
+import 'package:secure_note/web/features_web/root/home_screen_web.dart';
 import 'package:secure_note/web/helper/responsive_helper.dart';
-import 'package:secure_note/web/root_screen.dart';
 
 void main() async {
   if(kIsWeb){
-    runApp(const RootScreen());
+    runApp(const RootMaterialScreen());
     return;
   }
   

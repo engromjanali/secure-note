@@ -19,3 +19,17 @@ class PTheme {
   static double imageDefaultY = 40.h;
   static double imageDefaultX = 40.w;
 }
+
+
+class Dimension{
+  static double paddingDefault = 16;
+
+  static double spaceX = 8;
+  static double spaceY = 8;
+  static double spaceLY = 20;
+  static double buttonHeight = 46;
+  static double borderRadius = 8;
+  static double buttonborderRadius = 36;
+  static double imageDefaultY = 40;
+  static double imageDefaultX = 40;
+}

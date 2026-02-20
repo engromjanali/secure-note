@@ -1,21 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:secure_note/core/constants/dimension_theme.dart';
+import 'package:secure_note/web/features_web/privacy_policy/privacy_policy.dart';
 import 'package:secure_note/web/helper/responsive_helper.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
 
+
+class RootMaterialScreen extends StatelessWidget {
+  const RootMaterialScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: RootScreenWeb(),
+    );
+  }
+}
+
+class RootScreenWeb extends StatefulWidget {
+ const RootScreenWeb({super.key});
+
+  @override
+  State<RootScreenWeb> createState() => _RootScreenWebState();
+}
+
+class _RootScreenWebState extends State<RootScreenWeb> {
   ValueNotifier<int> selectedIndex = ValueNotifier(0);
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
+      backgroundColor: Colors.white10,
       body: Row(
         children: [
           /// 🔹 Sidebar
           Container(
-            width: ResponsiveHelper.isDesktop(context)? 250 : 50,
-            height: double.infinity,
+            width: ResponsiveHelper.isDesktop(context)? 250 : 70,
             color: Colors.black87,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,7 +48,7 @@ class HomeScreen extends StatelessWidget {
                     child: Text(
                       "SecureNote",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.blue,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -77,25 +98,15 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
 
-                /// 🔸 Notes Grid
+                // body
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: GridView.builder(
-                      itemCount: 8,
-                      gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 20,
-                        mainAxisSpacing: 20,
-                        childAspectRatio: 1.2,
-                      ),
-                      itemBuilder: (context, index) {
-                        return _noteCard(index);
-                      },
-                    ),
+                  child: ValueListenableBuilder(
+                   valueListenable: selectedIndex,
+                    builder: (context ,value,_) {
+                      return PrivacyPolicy();
+                    }
                   ),
-                ),
+                ),     
               ],
             ),
           ),
@@ -106,15 +117,25 @@ class HomeScreen extends StatelessWidget {
 
   /// 🔹 Sidebar Item
   Widget _sidebarItem(BuildContext context, bool isSelected, IconData icon, String title, {Function()? onTap}) {
-    return Container(
-      color: isSelected? Colors.black : null,
-      child: ListTile(
-        leading: Icon(icon, color: Colors.white),
-        title: ResponsiveHelper.isDesktop(context)? Text(
-          title,
-          style: const TextStyle(color: Colors.white),
-        ) : null,
-        onTap: onTap,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(Dimension.paddingDefault),
+        color: isSelected? Colors.black : null,
+        child: Row(
+          mainAxisAlignment: ResponsiveHelper.isDesktop(context)? MainAxisAlignment.start : MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 20, color: Colors.white),
+        
+            if(ResponsiveHelper.isDesktop(context)) ...[
+              SizedBox(width: Dimension.paddingDefault),
+              Text(
+                title,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ]
+          ],
+        ),
       ),
     );
   }
