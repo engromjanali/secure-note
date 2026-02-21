@@ -22,14 +22,14 @@ class PTheme {
 
 
 class Dimension{
-  static double paddingDefault = 16;
-
-  static double spaceX = 8;
-  static double spaceY = 8;
-  static double spaceLY = 20;
-  static double buttonHeight = 46;
-  static double borderRadius = 8;
-  static double buttonborderRadius = 36;
-  static double imageDefaultY = 40;
-  static double imageDefaultX = 40;
+  static const double paddingSmall = 8;
+  static const double paddingDefault = 16;
+  static const double spaceX = 8;
+  static const double spaceY = 8;
+  static const double spaceLY = 20;
+  static const double buttonHeight = 46;
+  static const double borderRadius = 8;
+  static const double buttonborderRadius = 36;
+  static const double imageDefaultY = 40;
+  static const double imageDefaultX = 40;
 }

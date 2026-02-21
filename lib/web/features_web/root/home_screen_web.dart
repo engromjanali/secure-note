@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:secure_note/core/constants/dimension_theme.dart';
+import 'package:secure_note/web/features_web/delete_data/secrren/delete_data_screen.dart';
 import 'package:secure_note/web/features_web/privacy_policy/privacy_policy.dart';
 import 'package:secure_note/web/helper/responsive_helper.dart';
-
-
 
 class RootMaterialScreen extends StatelessWidget {
   const RootMaterialScreen({super.key});
@@ -31,13 +30,14 @@ class _RootScreenWebState extends State<RootScreenWeb> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white10,
       body: Row(
         children: [
           /// 🔹 Sidebar
           Container(
             width: ResponsiveHelper.isDesktop(context)? 250 : 70,
-            color: Colors.black87,
+            color: Colors.black,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -103,7 +103,18 @@ class _RootScreenWebState extends State<RootScreenWeb> {
                   child: ValueListenableBuilder(
                    valueListenable: selectedIndex,
                     builder: (context ,value,_) {
-                      return PrivacyPolicy();
+                      switch (value){
+                        case 0:
+                          return PrivacyPolicy();
+                        case 1:
+                          return PrivacyPolicy();
+                        case 2:
+                          return DeleteDataScreen();
+                        case 3:
+                          return PrivacyPolicy();
+                        default:
+                          return PrivacyPolicy();
+                      } 
                     }
                   ),
                 ),     
@@ -121,7 +132,7 @@ class _RootScreenWebState extends State<RootScreenWeb> {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(Dimension.paddingDefault),
-        color: isSelected? Colors.black : null,
+        color: isSelected? Colors.white54 : Colors.black,
         child: Row(
           mainAxisAlignment: ResponsiveHelper.isDesktop(context)? MainAxisAlignment.start : MainAxisAlignment.center,
           children: [
