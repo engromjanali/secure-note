@@ -1,5 +1,3 @@
-import 'dart:isolate';
-
 import 'package:power_state/power_state.dart';
 import 'package:secure_note/core/functions/f_printer.dart';
 import 'package:secure_note/web/features_web/delete_data/data/model/delete_model.dart';

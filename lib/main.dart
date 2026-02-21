@@ -16,11 +16,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:power_state/power_state.dart';
 import 'package:secure_note/web/features_web/delete_data/controller/delete_data_controller.dart';
-import 'package:secure_note/web/features_web/root/home_screen_web.dart';
+import 'package:secure_note/web/features_web/root/root_screen_web.dart';
 import 'package:secure_note/web/helper/responsive_helper.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 void main() async {
   if(kIsWeb){
+    // usePathUrlStrategy();
     PowerVault.put(DeleteDataController());
     runApp(const RootMaterialScreen());
     return;

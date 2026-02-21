@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:secure_note/core/constants/dimension_theme.dart';
+import 'package:secure_note/web/core_web/util/app_router.dart';
+import 'package:secure_note/web/core_web/util/constants/all_enum.dart';
+import 'package:secure_note/web/features_web/contact/screens/contact_screen.dart';
 import 'package:secure_note/web/features_web/delete_data/secrren/delete_data_screen.dart';
+import 'package:secure_note/web/features_web/get_app/screens/get_app_screen.dart';
+import 'package:secure_note/web/features_web/home/screens/home_screen.dart';
 import 'package:secure_note/web/features_web/privacy_policy/privacy_policy.dart';
 import 'package:secure_note/web/helper/responsive_helper.dart';
 
@@ -9,25 +15,47 @@ class RootMaterialScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: AppRouter.router,
       debugShowCheckedModeBanner: false,
-      home: RootScreenWeb(),
     );
   }
 }
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+class Get {
+  static BuildContext? get context => navigatorKey.currentContext;
+  static NavigatorState? get navigator => navigatorKey.currentState;
+}
+
+
+
+
+
+
+
 class RootScreenWeb extends StatefulWidget {
- const RootScreenWeb({super.key});
+  final int pageNo;
+  const RootScreenWeb({super.key, this.pageNo =0});
 
   @override
   State<RootScreenWeb> createState() => _RootScreenWebState();
 }
 
 class _RootScreenWebState extends State<RootScreenWeb> {
-  ValueNotifier<int> selectedIndex = ValueNotifier(0);
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+        final String location = GoRouterState.of(context).uri.toString();
+        print("-------> ${location}");
+        print("-------> done");
+
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -58,17 +86,14 @@ class _RootScreenWebState extends State<RootScreenWeb> {
 
                 Expanded(
                   child: SingleChildScrollView(
-                    child: ValueListenableBuilder(
-                      valueListenable: selectedIndex,
-                      builder: (context ,value,_) {
-                        return Column(children: [
-                          _sidebarItem(context, value == 0, Icons.home, "Home", onTap: ()=> selectedIndex.value = 0),
-                          _sidebarItem(context, value == 1, Icons.policy, "Privacy Policy", onTap: ()=> selectedIndex.value = 1),
-                          _sidebarItem(context, value == 2, Icons.auto_delete, "Delete Your Data",onTap: ()=> selectedIndex.value = 2),
-                          _sidebarItem(context, value == 3, Icons.get_app, "Get App", onTap: ()=> selectedIndex.value = 3),
-                          _sidebarItem(context, value == 4, Icons.headset_mic, "Contact", onTap: ()=> selectedIndex.value = 4),
-                        ]);
-                      }
+                    child:  Column(
+                      children: [
+                        _sidebarItem(context, widget.pageNo == 0, Icons.home, "Home", onTap: ()=> AppRouter.getHomeRoute(context,),),
+                        _sidebarItem(context, widget.pageNo == 1, Icons.policy, "Privacy Policy", onTap: ()=> AppRouter.getPrivacyPolicyRoute(context, action: RouteAction.pushNamedAndRemoveUntil,)),
+                        _sidebarItem(context, widget.pageNo == 2, Icons.auto_delete, "Delete Your Data",onTap: ()=> AppRouter.getDeleteDataRoute( context, action: RouteAction.pushNamedAndRemoveUntil,)),
+                        _sidebarItem(context, widget.pageNo == 3, Icons.get_app, "Get App", onTap: ()=> AppRouter.getGetAppRoute(context, action: RouteAction.pushNamedAndRemoveUntil,)),
+                        _sidebarItem(context, widget.pageNo == 4, Icons.headset_mic, "Contact", onTap: ()=> AppRouter.getContactRoute(context, action: RouteAction.pushNamedAndRemoveUntil,)),
+                      ],
                     ),
                   ),
                 )
@@ -100,23 +125,20 @@ class _RootScreenWebState extends State<RootScreenWeb> {
 
                 // body
                 Expanded(
-                  child: ValueListenableBuilder(
-                   valueListenable: selectedIndex,
-                    builder: (context ,value,_) {
-                      switch (value){
-                        case 0:
-                          return PrivacyPolicy();
-                        case 1:
-                          return PrivacyPolicy();
-                        case 2:
-                          return DeleteDataScreen();
-                        case 3:
-                          return PrivacyPolicy();
-                        default:
-                          return PrivacyPolicy();
-                      } 
-                    }
-                  ),
+                  child: 
+                      widget.pageNo == 0?
+                      HomeScreen()
+                      :              
+                      widget.pageNo == 1?
+                      PrivacyPolicy()
+                      :
+                      widget.pageNo ==2?
+                      DeleteDataScreen()
+                      :
+                      widget.pageNo ==3?
+                      GetAppScreen()
+                      :
+                      ContactScreen(),              
                 ),     
               ],
             ),
@@ -147,47 +169,6 @@ class _RootScreenWebState extends State<RootScreenWeb> {
             ]
           ],
         ),
-      ),
-    );
-  }
-
-  /// 🔹 Note Card
-  Widget _noteCard(int index) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            blurRadius: 6,
-            color: Colors.black12,
-          )
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Note ${index + 1}",
-            style: const TextStyle(
-                fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 10),
-          const Text(
-            "This is a sample secure note preview. Your encrypted data stays safe.",
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const Spacer(),
-          const Row(
-            children: [
-              Icon(Icons.lock, size: 16),
-              SizedBox(width: 5),
-              Text("Encrypted"),
-            ],
-          )
-        ],
       ),
     );
   }
