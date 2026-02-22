@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:secure_note/core/functions/f_snackbar.dart';
+import 'package:secure_note/core/functions/f_url_launcher.dart';
 
 class GetAppScreen extends StatefulWidget {
   const GetAppScreen({super.key});
@@ -10,6 +12,15 @@ class GetAppScreen extends StatefulWidget {
 class _GetAppGetAppScreenState extends State<GetAppScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+            onPressed: (){
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("The App was not publish yet!")));
+          // OpenURLs.open(type: OpenType.url, value: "Https://");
+        }, child: Text("Download"))
+      ],
+    );
   }
 }

@@ -1,7 +1,9 @@
 import 'package:another_flushbar/flushbar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:secure_note/core/constants/dimension_theme.dart';
 import 'package:secure_note/core/services/navigation_service.dart';
 import 'package:flutter/material.dart';
+import 'package:secure_note/web/features_web/root/root_screen_web.dart';
 
 /// 🍔 showSnackBar(message)
 /// - 🎨 Custom Flushbar styling
@@ -38,5 +40,5 @@ void showSnackBar(
     borderRadius: BorderRadius.circular(8),
     margin: EdgeInsets.symmetric(horizontal: PTheme.paddingX),
     flushbarPosition: FlushbarPosition.TOP,
-  ).show(NavigationService.currentContext);
+  ).show(kIsWeb? navigatorKey.currentState!.context : NavigationService.currentContext);
 }

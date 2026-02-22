@@ -22,7 +22,7 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 
 void main() async {
   if(kIsWeb){
-    // usePathUrlStrategy();
+    usePathUrlStrategy();
     PowerVault.put(DeleteDataController());
     runApp(const RootMaterialScreen());
     return;

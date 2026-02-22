@@ -12,16 +12,11 @@ class _ContactScreenState extends State<ContactScreen> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          context.go("/contact/example");
-          // context.pop();
-
-          if(context.canPop()){
-            print("-state--> ${GoRouterState.of(context).fullPath}");
-          }
-        }, child: Text("go to example screen")
-      ),
+      // child: ElevatedButton(
+      //   onPressed: () {
+      //     context.go("/contact/example");
+      //   }, child: Text("go to example screen")
+      // ),
     );
   }
 }

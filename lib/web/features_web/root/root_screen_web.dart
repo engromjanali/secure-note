@@ -54,7 +54,6 @@ class _RootScreenWebState extends State<RootScreenWeb> {
   Widget build(BuildContext context) {
         final String location = GoRouterState.of(context).uri.toString();
         print("-------> ${location}");
-        print("-------> done");
 
 
     return Scaffold(
@@ -132,13 +131,13 @@ class _RootScreenWebState extends State<RootScreenWeb> {
                       widget.pageNo == 1?
                       PrivacyPolicy()
                       :
-                      widget.pageNo ==2?
+                      widget.pageNo == 2?
                       DeleteDataScreen()
                       :
-                      widget.pageNo ==3?
+                      widget.pageNo == 3?
                       GetAppScreen()
                       :
-                      ContactScreen(),              
+                      ContactScreen(),
                 ),     
               ],
             ),

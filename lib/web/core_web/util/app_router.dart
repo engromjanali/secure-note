@@ -57,6 +57,7 @@ class AppRouter {
 
   static GoRouter router = GoRouter(
     navigatorKey: navigatorKey,
+    debugLogDiagnostics: true,
     initialLocation: '/',
     routes: [
 
