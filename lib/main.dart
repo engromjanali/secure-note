@@ -1,4 +1,5 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:go_router/go_router.dart';
 import 'package:secure_note/core/controllers/c_theme.dart';
 import 'package:secure_note/core/data/local/db_local.dart';
 import 'package:secure_note/core/extensions/ex_build_context.dart';
@@ -23,17 +24,18 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 void main() async {
   if(kIsWeb){
     usePathUrlStrategy();
+    GoRouter.optionURLReflectsImperativeAPIs = true;
     PowerVault.put(DeleteDataController());
     runApp(const RootMaterialScreen());
     return;
   }
-  
-  await _init();
-  runApp(
-    // DevicePreview(enabled: !kReleaseMode, builder: (context) => _SCheckPoint()),
-    DevicePreview(enabled: false, builder: (context) => _SCheckPoint()),
-  );
-  // runApp(const _SCheckPoint());
+  else{
+    await _init();
+    runApp(
+      // DevicePreview(enabled: !kReleaseMode, builder: (context) => _SCheckPoint()),
+      DevicePreview(enabled: false, builder: (context) => _SCheckPoint()),
+    );
+  }
 }
 
 // MyDebugToken D13CC233-97A1-42A1-A511-EC15AF3995E6
