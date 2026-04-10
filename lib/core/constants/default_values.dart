@@ -21,16 +21,12 @@ class PDefaultValues {
 
   /// limit[ limit ]
   static const int limit = 20;
-  static const privacyUrlLink =
-      "https://docs.google.com/document/d/1jSM2v4XdcQFqzF8N1E68LY5S-pMeeVv3_GvkGRtgC6Y/edit?usp=sharing";
-  static const termsConditionUrl =
-      "https://docs.google.com/document/d/1JUKmCdzRqxBZ5RMtYaAQZU-NzSZ17WU4cY3tzHSl5Tw/edit?usp=sharing";
+  static const privacyUrlLink = "https://note-dd0cc.web.app/privacy-Policy";
+  static const termsConditionUrl = "https://docs.google.com/document/d/1JUKmCdzRqxBZ5RMtYaAQZU-NzSZ17WU4cY3tzHSl5Tw/edit?usp=sharing";
   static const instagramLink = "https://www.instagram.com/engromjanali";
   static const tiktokLink = "https://www.tiktok.com/404?fromUrl=/engromjanali";
-  static const facebookLink =
-      "https://www.tiktok.com/404?fromUrl=/engromjanali";
+  static const facebookLink = "https://www.tiktok.com/404?fromUrl=/engromjanali";
   static const mailLink = "engromjanali@gmail.com";
   static const linkedIn = "https://www.linkedin.com/in/engromjanali/";
-  static const profileImage =
-      "https://res.cloudinary.com/dskavcx9z/image/upload/v1762793373/IMG_3963_1_fouocn.png";
+  static const profileImage = "https://res.cloudinary.com/dskavcx9z/image/upload/v1762793373/IMG_3963_1_fouocn.png";
 }
