@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:secure_note/example.dart';
 
 class ContactScreen extends StatefulWidget {
   const ContactScreen({super.key});
@@ -9,14 +10,10 @@ class ContactScreen extends StatefulWidget {
 }
 
 class _ContactScreenState extends State<ContactScreen> {
+  bool a = false;
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          context.push("/example");
-        }, child: Text("go to example screen")
-      ),
     );
   }
 }

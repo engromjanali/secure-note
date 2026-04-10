@@ -35,10 +35,6 @@ class AppRouter {
     debugLogDiagnostics: true,
     initialLocation: '/',
     routes: [
-      GoRoute(
-        path: '/example',
-        builder: (context, state) => const ExampleScreen(),
-      ),
 
       /// 🔹 Root (Dashboard)
       GoRoute(
