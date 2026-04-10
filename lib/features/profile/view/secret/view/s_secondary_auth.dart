@@ -98,7 +98,7 @@ class _SSAuthState extends State<SSAuth> {
     
               /// Profile Image
               WImage(
-                PDefaultValues.profileImage,
+                cProfile.mProfileData.image ?? PDefaultValues.profileImage,
                 payload: MImagePayload(
                   isCircular: true,
                   height: 100,
