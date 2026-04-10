@@ -1,4 +1,5 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:go_router/go_router.dart';
 import 'package:secure_note/core/controllers/c_theme.dart';
 import 'package:secure_note/core/data/local/db_local.dart';
 import 'package:secure_note/core/extensions/ex_build_context.dart';
@@ -15,14 +16,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:power_state/power_state.dart';
+import 'package:secure_note/web/features_web/delete_data/controller/delete_data_controller.dart';
+import 'package:secure_note/web/features_web/root/root_screen_web.dart';
+import 'package:secure_note/web/helper/responsive_helper.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 void main() async {
-  await _init();
-  runApp(
-    // DevicePreview(enabled: !kReleaseMode, builder: (context) => _SCheckPoint()),
-    DevicePreview(enabled: false, builder: (context) => _SCheckPoint()),
-  );
-  // runApp(const _SCheckPoint());
+  if(kIsWeb){
+    usePathUrlStrategy();
+    GoRouter.optionURLReflectsImperativeAPIs = true;
+    PowerVault.put(DeleteDataController());
+    runApp(const RootMaterialScreen());
+    return;
+  }
+  else{
+    await _init();
+    runApp(
+      // DevicePreview(enabled: !kReleaseMode, builder: (context) => _SCheckPoint()),
+      DevicePreview(enabled: false, builder: (context) => _SCheckPoint()),
+    );
+  }
 }
 
 // MyDebugToken D13CC233-97A1-42A1-A511-EC15AF3995E6
@@ -62,10 +75,11 @@ class __SCheckPointState extends State<_SCheckPoint> {
 
   @override
   Widget build(BuildContext context) {
+    Size size  = MediaQuery.of(context).size;
     return PowerBuilder<CTheme>(
       builder: (CTheme controller) {
         return ScreenUtilInit(
-          designSize: kIsWeb ? Size(430, 932) : Size(430, 932),
+          designSize: ResponsiveHelper.isMobile(context) ? Size(430, 932) : size,
           minTextAdapt: true,
           splitScreenMode: true,
           fontSizeResolver: (fontSize, screenUtil) {
