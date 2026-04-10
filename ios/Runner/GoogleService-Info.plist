@@ -7,7 +7,7 @@
 	<key>REVERSED_CLIENT_ID</key>
 	<string>com.googleusercontent.apps.537971701870-1rsdth8eplvngiln2i8r4mptonujh7ml</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>537971701870-6np97khiqmv4hlk9dqmh83l0lqg0msso.apps.googleusercontent.com</string>
+	<string>537971701870-3cp7a1nni9k0lbkdurollb4btaaq1n7r.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyC72bfph2EN6K7w992ucsrIa4hQFuB0jEo</string>
 	<key>GCM_SENDER_ID</key>
@@ -32,5 +32,7 @@
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:537971701870:ios:26352e13bec8e75f828e7f</string>
+	<key>DATABASE_URL</key>
+	<string>https://note-dd0cc-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>
