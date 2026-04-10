@@ -24,13 +24,17 @@ class GoogleAuthService implements ISocialAuthService {
 
   @override
   Future<MToken> authenticate() async {
+    printer("------>1");
     await _initialize();
+    printer("------>1.1");
+
 
     GoogleSignInAccount googleUser;
     try {
       googleUser = await _googleSignIn.authenticate(
         scopeHint: ['email'], // Add additional scopes if needed
       );
+      printer("------>2");
     } on GoogleSignInException catch (e) {
       errorPrint('Google Sign-In error: ${e.code} - ${e.description}');
       rethrow;
@@ -38,6 +42,7 @@ class GoogleAuthService implements ISocialAuthService {
       errorPrint('Unexpected error during Google authenticate(): $e');
       rethrow;
     }
+    printer("------>3");
     printer("google user");
 
     final googleAuth = googleUser.authentication; // Now synchronous
