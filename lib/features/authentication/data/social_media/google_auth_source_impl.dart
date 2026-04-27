@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:secure_note/core/constants/keys.dart';
-import 'package:secure_note/core/extensions/ex_date_time.dart';
 import 'package:secure_note/features/authentication/data/model/m_token.dart';
 import 'package:secure_note/features/profile/data/models/m_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';

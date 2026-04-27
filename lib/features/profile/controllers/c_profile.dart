@@ -144,11 +144,13 @@ class CProfile extends CBase {
 
   Future<void> changePassword(String pass) async {
     try {
+      showLoader();
       await firebaseAuth.currentUser?.updatePassword(pass);
-      showSnackBar("Pass Update Success!");
+      showSnackBar("Password Update Success!");
     } catch (e) {
-      showSnackBar("Pass Update Failed!", snackBarType: SnackBarType.warning);
+      showSnackBar("Password Update Failed!", snackBarType: SnackBarType.warning);
     }
+    showLoader();
   }
 
   Future<void> checkDeviceTempered() async {
