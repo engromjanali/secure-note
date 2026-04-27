@@ -464,7 +464,7 @@ class _WSecretSectionState extends State<WSecretSection> {
       // delete
       WDialog.show(
         title: "Confirm Delete?",
-        content: "if you delete you will not avail to restore it again!",
+        content: "Once deleted, this cannot be recovered.",
         context: context,
         onConfirm: () {
           if (widget.isSecretNote) {

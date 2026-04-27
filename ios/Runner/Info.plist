@@ -92,9 +92,10 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>com.apple.developer.applesignin</key>
+	<!-- <key>com.apple.developer.applesignin</key>
+	in command when you enable apple signin (required app developer account)
 	<array>
 		<string>Default</string>
-	</array>
+	</array> -->
 </dict>
 </plist>
