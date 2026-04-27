@@ -23,7 +23,7 @@ class CProfile extends CBase {
   CProfile(IProfileRepository profileRepository)
     : _profileRepository = profileRepository {
     listenIUSTDFAD();
-    checkDeviceTempered();
+    // checkDeviceTempered();
   }
 
   MProfile mProfileData = MProfile();
