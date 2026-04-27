@@ -65,7 +65,7 @@ class _SDetailsState extends State<SDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SelectionArea(child: Scaffold(
       appBar: AppBar(
         title: Text(widget.isTask ? "Task" : "Note"),
         actions: [
@@ -166,7 +166,7 @@ class _SDetailsState extends State<SDetails> {
           ).pAll(),
         ),
       ),
-    );
+      ));
   }
 }
 
