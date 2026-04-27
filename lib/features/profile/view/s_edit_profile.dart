@@ -41,13 +41,11 @@ class _SEditProfileState extends State<SEditProfile> {
       payload.updatedAt = DateTime.timestamp();
       await cProfile.editPrifle(payload);
       if (newPass.text.length >= 6) {
-        cProfile.changePassword(newPass.text);
+        await cProfile.changePassword(newPass.text);
       }
     } else {
       showSnackBar(
-        newPass.text != confirmPass.text
-            ? "Confirm password dose not matched"
-            : 'please fill all required field!',
+        newPass.text != confirmPass.text? "Confirm password dose not matched" : 'please fill all required field!',
         snackBarType: SnackBarType.warning,
       );
     }

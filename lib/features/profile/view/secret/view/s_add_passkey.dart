@@ -49,7 +49,6 @@ class _SAPasskeyState extends State<SAPasskey> {
   );
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     callBackFunction(() {
@@ -83,96 +82,98 @@ class _SAPasskeyState extends State<SAPasskey> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Form(
-            key: fromKey,
-            child: Column(
-              spacing: PTheme.paddingY,
-              children: [
-                WTextField.requiredField(
-                  enable: !widget.viewOnly,
-                  label: "Title",
-                  controller: titleController,
-                ),
-                WTextField(
-                  enable: !widget.viewOnly,
-                  label: "Password",
-                  controller: passController,
-                ),
-                BackupCodeWapper("Backup Codes", context, backupCodeListeners),
-                if (!widget.viewOnly)
+    return SelectionArea(
+      child: Scaffold(
+        appBar: AppBar(),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Form(
+              key: fromKey,
+              child: Column(
+                spacing: PTheme.paddingY,
+                children: [
+                  WTextField.requiredField(
+                    enable: !widget.viewOnly,
+                    label: "Title",
+                    controller: titleController,
+                  ),
                   WTextField(
                     enable: !widget.viewOnly,
-                    label: "Backup Code",
-                    hintText: "xxxxxxx xxxxxx xxxxxx\nxxxxxxx xxxxxx",
-                    minLines: 2,
-                    maxLines: 5,
+                    label: "Password",
+                    controller: passController,
+                  ),
+                  BackupCodeWapper("Backup Codes", context, backupCodeListeners),
+                  if (!widget.viewOnly)
+                    WTextField(
+                      enable: !widget.viewOnly,
+                      label: "Backup Code",
+                      hintText: "xxxxxxx xxxxxx xxxxxx\nxxxxxxx xxxxxx",
+                      minLines: 2,
+                      maxLines: 5,
+                      textInputAction: TextInputAction.newline,
+                      controller: backupController,
+                      suffixIcon: Column(
+                        mainAxisSize: MainAxisSize.min,
+      
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          IconButton(
+                            onPressed: syncBCode,
+                            icon: Icon(
+                              Icons.published_with_changes_outlined,
+                              color: context.button?.primary,
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                        ],
+                      ),
+                    ),
+                  WTextField(
+                    enable: !widget.viewOnly,
+                    label: "Note",
+                    controller: noteController,
+                    maxLines: 6,
+                    minLines: 1,
                     textInputAction: TextInputAction.newline,
-                    controller: backupController,
-                    suffixIcon: Column(
-                      mainAxisSize: MainAxisSize.min,
-    
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                  gapY(50),
+                  if (!widget.viewOnly)
+                    PowerBuilder<CPasskey>(
+                      builder: (cPasskey) => WPrimaryButton(
+                        text: "Submit",
+                        onTap: submit,
+                        isLoading: cPasskey.isLoadingMore,
+                      ),
+                    ),
+      
+                  if (widget.viewOnly)
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        IconButton(
-                          onPressed: syncBCode,
-                          icon: Icon(
-                            Icons.published_with_changes_outlined,
-                            color: context.button?.primary,
-                          ),
+                        // just to take full size of width,
+                        // otherwise we can't saw in left.
+                        Row(children: []),
+                        Text("Info", style: context.textTheme?.titleSmall),
+                        SizedBox.shrink().pDivider().pB(),
+                        showDateAsFormated(
+                          "Updated At",
+                          widget.mPasskey?.updatedAt ??
+                              widget.mPasskey?.updatedAt,
+                          context: context,
                         ),
-                        SizedBox(height: 20),
+                        showDateAsFormated(
+                          "Created At",
+                          widget.mPasskey?.createdAt ??
+                              widget.mPasskey?.createdAt,
+                          doNotShowIfNull: false,
+                          context: context,
+                        ),
                       ],
                     ),
-                  ),
-                WTextField(
-                  enable: !widget.viewOnly,
-                  label: "Note",
-                  controller: noteController,
-                  maxLines: 6,
-                  minLines: 1,
-                  textInputAction: TextInputAction.newline,
-                ),
-                gapY(50),
-                if (!widget.viewOnly)
-                  PowerBuilder<CPasskey>(
-                    builder: (cPasskey) => WPrimaryButton(
-                      text: "Submit",
-                      onTap: submit,
-                      isLoading: cPasskey.isLoadingMore,
-                    ),
-                  ),
-    
-                if (widget.viewOnly)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // just to take full size of width,
-                      // otherwise we can't saw in left.
-                      Row(children: []),
-                      Text("Info", style: context.textTheme?.titleSmall),
-                      SizedBox.shrink().pDivider().pB(),
-                      showDateAsFormated(
-                        "Updated At",
-                        widget.mPasskey?.updatedAt ??
-                            widget.mPasskey?.updatedAt,
-                        context: context,
-                      ),
-                      showDateAsFormated(
-                        "Created At",
-                        widget.mPasskey?.createdAt ??
-                            widget.mPasskey?.createdAt,
-                        doNotShowIfNull: false,
-                        context: context,
-                      ),
-                    ],
-                  ),
-              ],
-            ).pAll(),
+                ],
+              ).pAll(),
+            ),
           ),
         ),
       ),
