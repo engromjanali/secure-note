@@ -416,7 +416,7 @@ class _WTaskSectionState extends State<WTaskSection> {
       // delete
       WDialog.show(
         title: "Confirm Delete?",
-        content: "if you delete you will not avail to restore it again!",
+        content: "Once deleted, this cannot be recovered.",
         context: context,
         onConfirm: () {
           cTask.deleteTask(mTask.id!);
