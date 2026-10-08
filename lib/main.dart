@@ -44,9 +44,8 @@ Future<void> _init() async {
   await ScreenUtil.ensureScreenSize();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseAppCheck.instance.activate(
-    androidProvider: kReleaseMode
-        ? AndroidProvider.playIntegrity
-        : AndroidProvider.debug,
+    androidProvider: kReleaseMode ? AndroidProvider.playIntegrity : AndroidProvider.debug,
+    appleProvider: AppleProvider.debug, // 👈 for your personal device
     // set to true to use the default providers configured in console
     // webProvider: ReCaptchaV3Provider('your-site-key'), // only for web if applicable
   );

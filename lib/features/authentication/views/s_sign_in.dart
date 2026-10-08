@@ -388,6 +388,16 @@ class _SocialButtons extends StatelessWidget {
         ),
         Expanded(
           child: WPrimaryButton.icon(
+            onTap: () {
+              if (isAgree.value == false && isSignUp.value == true) {
+                showSnackBar(
+                  "You must agree to continue",
+                  snackBarType: SnackBarType.warning,
+                );
+              } else {
+                cAuth.signInWithSocial(SocialMediaType.apple);
+              }
+            },
             gradientColors: [Colors.grey.shade300, Colors.grey.shade300],
             iconSVG: Assets.logo.apple,
           ),
